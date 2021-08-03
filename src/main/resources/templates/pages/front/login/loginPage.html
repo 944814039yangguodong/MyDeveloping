@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>大创信息管理平台-登录页面</title>
+  <!-- 引入layui前端框架 -->
+  <!-- 服务器所能连接到的路径,注意前面要加一条斜杠 -->
+  <link rel="stylesheet" href="/layui/css/layui.css">
+  <script src="/layui/layui.js"></script>
+  <!-- 项目调试所能连接到的路径 -->
+  <link rel="stylesheet" href="../../../../static/layui/css/layui.css">
+  <script src="../../../../static/layui/layui.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="/common.js" charset="utf-8"></script>
+  <script src="../../../../static/common.js" charset="utf-8"></script>
+</head>
+<body>
+<div id="todoapp" style="display: flex;justify-content: center;margin-top: 10%">
+  <form class="layui-form">
+    <div class="layui-form-item">
+      <label class="layui-form-label">账号</label>
+      <div class="layui-input-block">
+        <input type="text" v-model="userIdLocal" name="userId" placeholder="请输入用户名即学工号" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">密码</label>
+      <div class="layui-input-block">
+        <input type="password" v-model="userPasswordLocal" name="userPassword" placeholder="请输入密码" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button type="button" @click="loginSubmit" class="layui-btn" >立即登录</button>
+        <button type="button" @click="clearSubmit" class="layui-btn layui-btn-primary">重置</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  var app = new Vue({
+    el: '#todoapp',
+    data: {
+      userIdLocal:"",
+      userPasswordLocal:"",
+      userTypeLocal:0,
+      successLocal:false
+    },
+    methods:{
+      loginSubmit:function(){
+        var that = this;
+        console.log(that.userIdLocal+" "+that.userPasswordLocal+" "+that.userTypeLocal+" "+that.successLocal);
+        axios.post('http://'+IP+'/api/user/login',{
+          userId: that.userIdLocal,
+          userPassword: that.userPasswordLocal
+        })
+                .then(function (response) {
+                  console.log(response);
+                  if(response.data.success===true){
+                    if(response.data.data.userInfo.userType>0){
+                      alert(response.data.message+"! 教师："+response.data.data.userInfo.userName);
+                      window.location='/teacher/myProjectPage';
+                    }else{
+                      alert(response.data.message+"! 学生："+response.data.data.userInfo.userName);
+                      window.location='/student/myProjectPage';
+                    }
+                  }else{
+                    alert(response.data.message);
+                  }
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
+      },
+      clearSubmit:function(){
+        this.userIdLocal="";
+        this.userPasswordLocal="";
+      }
+    }
+  })
+</script>
+</body>
+</html>

@@ -2,7 +2,6 @@ package cn.ncepu.mydeveloping.controller;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
-import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.ncepu.mydeveloping.pojo.entity.User;
@@ -13,9 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -39,7 +36,13 @@ public class UserController {
 
     @ApiOperation("用户登录接口")
     @PostMapping("login")
-    public R userLogin(LoginRequestVo loginUser){
+    public R userLogin(@RequestBody LoginRequestVo loginUser){
+        if(ObjectUtils.isEmpty(loginUser.getUserId())){
+            return R.error().message("账号不得为空，请输入账号！");
+        }
+        if(ObjectUtils.isEmpty(loginUser.getUserPassword())){
+            return R.error().message("密码不得为空，请输入密码！");
+        }
         //获取用户Id
         String userId = loginUser.getUserId();
         //获取用户封装信息
@@ -52,17 +55,17 @@ public class UserController {
                 BeanUtils.copyProperties(user,userInfo);
                 return R.ok().data(StpUtil.getTokenName(),StpUtil.getTokenValue()).data("userInfo",userInfo);
             }else {
-                return R.error().message("密码错误 请重新输入");
+                return R.error().message("密码错误，请重新输入！");
             }
         }else {
-            return R.error().message("没有该用户");
+            return R.error().message("没有该用户！");
         }
     }
 
     @ApiOperation(value = "校级负责人新增用户")
     @PostMapping("userInsert")
     @SaCheckPermission("department-operation")
-    R userInsert(UserAddRequestVO userAddRequestVO){
+    R userInsert(@RequestBody UserAddRequestVO userAddRequestVO){
         if (ObjectUtils.isEmpty(userAddRequestVO.getUserId()))
             return R.error().message("学工号不得为空！");
         if (!ObjectUtils.isEmpty(userService.getById(userAddRequestVO.getUserId())))
@@ -81,9 +84,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "校级负责人(逻辑)删除用户信息")
-    @DeleteMapping("userDelete/{userId}")
+    @DeleteMapping("userDelete")
     @SaCheckPermission("department-operation")
-    R userDelete(@PathVariable String userId){
+    R userDelete(String userId){
         if (ObjectUtils.isEmpty(userService.getById(userId))) {
             return R.error().message("未找到该用户信息，无法删除！");
         }
@@ -95,9 +98,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "系级负责人修改用户信息（包含修改密码）")
-    @PostMapping("userModify/{userId}")
+    @PostMapping("userModify")
     @SaCheckPermission("department-operation")
-    R userModify(@PathVariable String userId, UserAlterRequestVO userAlterRequestVO){
+    R userModify(String userId, UserAlterRequestVO userAlterRequestVO){
         User user = userService.getById(userId);
         if (ObjectUtils.isEmpty(user)){
             return R.error().message("未找到该用户信息，无法修改！");
@@ -115,9 +118,9 @@ public class UserController {
     }
 
     @ApiOperation(value = "管理员分页模糊查询用户信息")
-    @GetMapping("userSelectPage/{current}/{limit}/{property}")
+    @GetMapping("userSelectPage")
     @SaCheckPermission("department-operation")
-    R userSelectPage(@PathVariable long current, @PathVariable long limit,@PathVariable String property, UserRequestVO userRequestVO){
+    R userSelectPage(long current, long limit, String property, UserRequestVO userRequestVO){
         if(property.equals("gmt_create")||property.equals("user_id")||property.equals("user_name")||property.equals("user_type")||property.equals("department")||property.equals("major")){
             Page< User > userPage =
                     userService.userPerPageByOrder(current,limit,property,userRequestVO);
@@ -137,10 +140,23 @@ public class UserController {
         return R.ok().data("userInfo",userInfo);
     }
 
+    @ApiOperation("获取某Id的用户信息")
+    @GetMapping("getUserInfoById")
+    public R getUserInfoById(String userId){
+        User user = userService.getById(userId);
+        UserInfoResponseVo userInfo = new UserInfoResponseVo();
+        BeanUtils.copyProperties(user,userInfo);
+        return R.ok().data("userInfo",userInfo);
+    }
+
     @ApiOperation(value = "修改密码")
-    @PostMapping("PasswordModify/{userPassword}")
-    R PasswordModify(@PathVariable String userPassword){
-        User user = userService.getById((String) StpUtil.getLoginId());
+    @PostMapping("PasswordModify")
+    R PasswordModify(String userId, String userPassword){
+        if(ObjectUtils.isEmpty(userPassword))
+            return R.error().message("新密码不能为空！");
+        if(!userId.equals((String) StpUtil.getLoginId()))
+            return R.error().message("输入账号与当前登录账号不一致！");
+        User user = userService.getById(userId);
         String MD5Password = SaSecureUtil.md5(userPassword);
         user.setUserPassword(MD5Password);
         boolean res = userService.updateById(user);
@@ -148,15 +164,6 @@ public class UserController {
             return R.ok().message("重置密码成功！");
         }
         return R.error().message("重置密码失败！");
-    }
-
-    @ApiOperation(value = "检验用户信息完整性")
-    @PostMapping("checkIntegrity")
-    R checkIntegrity(String userId) {
-        if (StringUtils.isEmpty(userId)) {//学号/教工号为空
-            return R.error().message("学号或教工号为空，无法校验！");
-        }
-        return userService.checkIntegrity(userId);
     }
 }
 

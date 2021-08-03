@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>我的项目</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+  <link rel="stylesheet" href="../../../../static/layui/css/layui.css" media="all">
+  <script src="/layui/layui.js" charset="utf-8"></script>
+  <script src="../../../../static/layui/layui.js" charset="utf-8"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="/common.js" charset="utf-8"></script>
+  <script src="../../../../static/common.js" charset="utf-8"></script>
+</head>
+<body>
+<div id="app">
+  <form class="layui-form" action="" style="margin-top: 30px;margin-right: 30px">
+    <div class="layui-form-item">
+      <label class="layui-form-label">项目名称</label>
+      <div class="layui-input-block">
+        <input v-model="projectInfo.projectName" class="layui-input" disabled="">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">项目编号</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.projectId" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">项目类别</label>
+        <div class="layui-input-inline">
+          <input v-model="projectTypeName" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">负责人</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.headName" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">院系</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.headDepartment" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">专业</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.headMajor" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">学号</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.headId" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">分工</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.headJob" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.headPhone" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-form-item" v-if="projectInfo.secondId!=''">
+      <div class="layui-inline">
+        <label class="layui-form-label">成员二</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.secondName" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">院系</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.secondDepartment" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">专业</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.secondMajor" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">学号</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.secondId" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">分工</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.secondJob" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.secondPhone" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-form-item" v-if="projectInfo.thirdId!=''">
+      <div class="layui-inline">
+        <label class="layui-form-label">成员三</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.thirdName" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">院系</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.thirdDepartment" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">专业</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.thirdMajor" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">学号</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.thirdId" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">分工</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.thirdJob" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.thirdPhone" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-form-item" v-if="projectInfo.fourthId!=''">
+      <div class="layui-inline">
+        <label class="layui-form-label">成员四</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fourthName" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">院系</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fourthDepartment" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">专业</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fourthMajor" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">学号</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fourthId" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">分工</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fourthJob" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fourthPhone" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-form-item" v-if="projectInfo.fifthId!=''">
+      <div class="layui-inline">
+        <label class="layui-form-label">成员五</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fifthName" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">院系</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fifthDepartment" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">专业</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fifthMajor" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">学号</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fifthId" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">分工</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fifthJob" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.fifthPhone" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">指导老师</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.teacherName" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">院系</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.teacherDepartment" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">专业</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.teacherMajor" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">工号</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.teacherId" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">分工</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.teacherJob" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.teacherPhone" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+      <label class="layui-form-label">项目简介</label>
+      <div class="layui-input-block">
+        <textarea v-model="projectInfo.projectIntroduction" class="layui-textarea" disabled=""></textarea>
+      </div>
+    </div>
+  </form>
+</div>
+<script>
+  //获取最后一个PathParam
+  var pathP =location.href;//获取全部路径
+  var temp = pathP.split("/");
+  var requestPathP = temp[temp.length-1];
+
+  var app = new Vue({
+    el: '#app',
+    data: {
+      projectInfo:{
+        projectId:"",
+        projectName:"",
+        projectType:"",
+        projectClass:"",
+        startTime:"",
+        endTime:"",
+        projectIntroduction:"",
+        projectPhase:"",
+        department:"",
+        teacherId:"",
+        teacherName:"",
+        teacherDepartment:"",
+        teacherMajor:"",
+        teacherJob:"",
+        teacherPhone:"",
+        headId:"",
+        headName:"",
+        headDepartment:"",
+        headMajor:"",
+        headJob:"",
+        headPhone:"",
+        secondId:"",
+        secondName:"",
+        secondDepartment:"",
+        secondMajor:"",
+        secondJob:"",
+        secondPhone:"",
+        thirdId:"",
+        thirdName:"",
+        thirdDepartment:"",
+        thirdMajor:"",
+        thirdJob:"",
+        thirdPhone:"",
+        fourthId:"",
+        fourthName:"",
+        fourthDepartment:"",
+        fourthMajor:"",
+        fourthJob:"",
+        fourthPhone:"",
+        fifthId:"",
+        fifthName:"",
+        fifthDepartment:"",
+        fifthMajor:"",
+        fifthJob:"",
+        fifthPhone:"",
+        enterpriseTutorName:"",
+        enterpriseTutorPlace:"",
+        enterpriseTutorMajor:"",
+        enterpriseTutorTitle:"",
+        enterpriseTutorWork:"",
+        enterpriseTutorPhone:"",
+        startStatus:"",
+        midtermStatus:"",
+        endStatus:""
+      },
+      projectTypeName:""
+    },
+    mounted:function (){
+      var that = this;
+      axios.get('http://'+IP+'/api/project/projectInfo',{
+        params:{
+          projectId:requestPathP
+        }
+      })
+              .then(function (response) {
+                if(response.data.success===true){
+                  console.log(response);
+                  that.projectInfo=response.data.data.projectInfo;
+                  switch (response.data.data.projectInfo.projectType){
+                    case 0:
+                      that.projectTypeName="创新训练";
+                      break;
+                    case 1:
+                      that.projectTypeName="创业训练";
+                      break;
+                    case 2:
+                      that.projectTypeName="创业实践";
+                      break;
+                  }
+                }else{
+                  console.log(response);
+                }
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+    },
+    methods:{
+    }
+  })
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DoCTYPE html>
+<html lang=“en” >
+<head>
+    <meta charset="UTF-8">
+    <title>大创信息管理平台-首页</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../static/layui/css/layui.css"  media="all">
+    <script src="/layui/layui.js" charset="utf-8"></script>
+    <script src="../static/layui/layui.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/common.js" charset="utf-8"></script>
+    <script src="../static/common.js" charset="utf-8"></script>
+</head>
+<style>
+    body{margin: 10px;}
+    .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+</style>
+<body>
+<section id="app">
+    <div style="display: flex;align-items: center; height: 50px">
+        <button class="layui-btn layui-btn-primary layui-border-green" onclick="window.location='/loginPage'" style="cursor: pointer;margin-left: 50%;transform: translateX(-50%);">
+            登录
+        </button>
+    </div>
+    <div class="layui-tab-content" >
+        <div class="layui-tab-item layui-show" >
+            <div class="layui-carousel" id="test1" >
+                <div carousel-item >
+                    <div @click="toInfo(0)" style="cursor: pointer"><p class="layui-bg-green demo-carousel">绿1</p></div>
+                    <div @click="toInfo(1)" style="cursor: pointer"><p class="layui-bg-red demo-carousel">红2</p></div>
+                    <div @click="toInfo(2)" style="cursor: pointer"><p class="layui-bg-blue demo-carousel">蓝3</p></div>
+                    <div @click="toInfo(3)" style="cursor: pointer"><p class="layui-bg-orange demo-carousel">橙4</p></div>
+                    <div @click="toInfo(4)" style="cursor: pointer"><p class="layui-bg-cyan demo-carousel">青5</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="display: flex;margin-top: 10px;margin-bottom: 5px;margin-right:5px;float:right">
+        <input type="text" placeholder="公告标题查找" v-model="noticeNameSearch" class="layui-input" style="width: 500px">
+        <button @click="getData" class="layui-btn layui-btn-primary">搜索</button>
+    </div>
+    <table id="table" class="layui-table" lay-skin="line">
+        <colgroup>
+            <col width="110">
+            <col width>
+            <col width="100">
+            <col width="100">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>发布时间</th>
+            <th>公告名称</th>
+            <th>公告编号</th>
+            <th>查看详情</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-show="isNull(0)">
+            <td>{{list[0].gmtCreate}}</td>
+            <td>{{list[0].noticeName}}</td>
+            <td>{{list[0].noticeId}}</td>
+            <td><a @click="toInfo(0)" style="cursor: pointer">详情</a></td>
+        </tr>
+        <tr v-show="isNull(1)">
+            <td>{{list[1].gmtCreate}}</td>
+            <td>{{list[1].noticeName}}</td>
+            <td>{{list[1].noticeId}}</td>
+            <td><a @click="toInfo(1)" style="cursor: pointer">详情</a></td>
+        </tr>
+        <tr v-show="isNull(2)">
+            <td>{{list[2].gmtCreate}}</td>
+            <td>{{list[2].noticeName}}</td>
+            <td>{{list[2].noticeId}}</td>
+            <td><a @click="toInfo(2)" style="cursor: pointer">详情</a></td>
+        </tr>
+        <tr v-show="isNull(3)">
+            <td>{{list[3].gmtCreate}}</td>
+            <td>{{list[3].noticeName}}</td>
+            <td>{{list[3].noticeId}}</td>
+            <td><a @click="toInfo(3)" style="cursor: pointer">详情</a></td>
+        </tr>
+        <tr v-show="isNull(4)">
+            <td>{{list[4].gmtCreate}}</td>
+            <td>{{list[4].noticeName}}</td>
+            <td>{{list[4].noticeId}}</td>
+            <td><a @click="toInfo(4)" style="cursor: pointer">详情</a></td>
+        </tr>
+        <tr v-show="isNull(5)">
+            <td>{{list[5].gmtCreate}}</td>
+            <td>{{list[5].noticeName}}</td>
+            <td>{{list[5].noticeId}}</td>
+            <td><a @click="toInfo(5)" style="cursor: pointer">详情</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="float:right">
+        <button @click="previous" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+        <label style="text-align: center;margin: 5px">{{current}}/{{pageCount}}</label>
+        <button @click="next" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+    </div>
+
+</section>
+<script>
+    //加载模块
+    layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
+                          //得到各种内置组件
+        var carousel = layui.carousel //轮播
+        //执行一个轮播实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '100%' //设置容器宽度
+            ,height: 150
+            ,arrow: 'none' //不显示箭头
+            ,anim: 'fade' //切换动画方式
+        });
+    });
+    var app = new Vue({
+        el: '#app',
+        data: {
+            total:0,
+            list: [
+                {noticeId:null,noticeName:"",gmtCreate:""},
+                {noticeId:null,noticeName:"",gmtCreate:""},
+                {noticeId:null,noticeName:"",gmtCreate:""},
+                {noticeId:null,noticeName:"",gmtCreate:""},
+                {noticeId:null,noticeName:"",gmtCreate:""},
+                {noticeId:null,noticeName:"",gmtCreate:""}
+            ],
+            current:1,
+            limit:6,
+            property:"gmt_create",
+            pageCount:1,
+
+            noticeIdSearch:"",
+            userIdSearch:"",
+            noticeNameSearch:"",
+        },
+        mounted:function (){
+            this.getData();
+        },
+        methods:{
+            toInfo:function (index){
+                window.open('/api/notice/public/noticeInfoPage/'+this.list[index].noticeId);
+            },
+            previous:function (){
+                if(this.current>1)
+                    this.current--;
+                this.getData();
+            },
+            next:function (){
+                if(this.current<this.pageCount)
+                    this.current++;
+                this.getData();
+            },
+            getData:function (){
+                var that = this;
+                axios.get('http://'+IP+'/api/notice/public/noticeSelectPage',{
+                    params:{
+                        current:that.current,
+                        limit:that.limit,
+                        property:that.property,
+                        noticeId: that.noticeIdSearch,
+                        userId: that.userIdSearch,
+                        noticeName: that.noticeNameSearch,
+                    }
+                })
+                    .then(function (response) {
+                        if(response.data.success===true){
+                            for(var i=0;i<that.limit;i++){
+                                if(response.data.data.rows.length>i){
+                                    that.list[i].noticeId = response.data.data.rows[i].noticeId;
+                                    that.list[i].noticeName = response.data.data.rows[i].noticeName;
+                                    that.list[i].gmtCreate = response.data.data.rows[i].gmtCreate;
+                                }else {
+                                    that.list[i].noticeId = null;
+                                    that.list[i].noticeName = null;
+                                    that.list[i].gmtCreate = null;
+                                }
+                            }
+                            that.total=response.data.data.total;
+                            that.pageCount=Math.ceil(that.total/that.limit);
+                        }else{
+                            console.log(response);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            isNull:function (index){
+                if(this.list[index].noticeId===null)
+                    return false;
+                else
+                    return true;
+            }
+        }
+    })
+</script>
+</body>
+</html>

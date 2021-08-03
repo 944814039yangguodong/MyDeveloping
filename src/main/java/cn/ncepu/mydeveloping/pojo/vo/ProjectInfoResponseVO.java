@@ -15,11 +15,11 @@ public class ProjectInfoResponseVO {
     @ApiModelProperty(value = "项目全称")
     private String projectName;
 
-    @ApiModelProperty(value = "创新训练、创业训练、创业实践")
-    private String projectType;
+    @ApiModelProperty(value = "0创新训练、1创业训练、2创业实践")
+    private Integer projectType;
 
-    @ApiModelProperty(value = "校级、省级、国家级，初始为校级，中期后根据评分排名升级")
-    private String projectClass;
+    @ApiModelProperty(value = "0校级、1省级、2国家级")
+    private Integer projectClass;
 
     @ApiModelProperty(value = "项目起始时间")
     private Date startTime;
@@ -30,14 +30,23 @@ public class ProjectInfoResponseVO {
     @ApiModelProperty(value = "项目简介，不超过200字")
     private String projectIntroduction;
 
-    @ApiModelProperty(value = "立项申请、中期检查、结项审核、延期结项、已结项、已取消")
-    private String projectPhase;
+    @ApiModelProperty(value = "0立项申请、1中期检查、2结项审核、3延期结项、4已结项、5已取消")
+    private Integer projectPhase;
 
     @ApiModelProperty(value = "项目所属院系")
     private String department;
 
     @ApiModelProperty(value = "指导老师的职工号")
     private String teacherId;
+
+    @ApiModelProperty(value = "指导老师的姓名")
+    private String teacherName;
+
+    @ApiModelProperty(value = "指导老师的院系")
+    private String teacherDepartment;
+
+    @ApiModelProperty(value = "指导老师的专业")
+    private String teacherMajor;
 
     @ApiModelProperty(value = "指导老师的分工")
     private String teacherJob;
@@ -48,6 +57,15 @@ public class ProjectInfoResponseVO {
     @ApiModelProperty(value = "负责人的学生编号")
     private String headId;
 
+    @ApiModelProperty(value = "负责人的姓名")
+    private String headName;
+
+    @ApiModelProperty(value = "负责人的院系")
+    private String headDepartment;
+
+    @ApiModelProperty(value = "负责人的专业")
+    private String headMajor;
+
     @ApiModelProperty(value = "负责人的分工")
     private String headJob;
 
@@ -56,6 +74,15 @@ public class ProjectInfoResponseVO {
 
     @ApiModelProperty(value = "成员二的学生编号")
     private String secondId;
+
+    @ApiModelProperty(value = "成员二的姓名")
+    private String secondName;
+
+    @ApiModelProperty(value = "成员二的院系")
+    private String secondDepartment;
+
+    @ApiModelProperty(value = "成员二的专业")
+    private String secondMajor;
 
     @ApiModelProperty(value = "成员二的分工")
     private String secondJob;
@@ -66,6 +93,15 @@ public class ProjectInfoResponseVO {
     @ApiModelProperty(value = "成员三的学生编号")
     private String thirdId;
 
+    @ApiModelProperty(value = "成员三的姓名")
+    private String thirdName;
+
+    @ApiModelProperty(value = "成员三的院系")
+    private String thirdDepartment;
+
+    @ApiModelProperty(value = "成员三的专业")
+    private String thirdMajor;
+
     @ApiModelProperty(value = "成员三的分工")
     private String thirdJob;
 
@@ -75,6 +111,15 @@ public class ProjectInfoResponseVO {
     @ApiModelProperty(value = "成员四的学生编号")
     private String fourthId;
 
+    @ApiModelProperty(value = "成员四的姓名")
+    private String fourthName;
+
+    @ApiModelProperty(value = "成员四的院系")
+    private String fourthDepartment;
+
+    @ApiModelProperty(value = "成员四的专业")
+    private String fourthMajor;
+
     @ApiModelProperty(value = "成员四的分工")
     private String fourthJob;
 
@@ -83,6 +128,15 @@ public class ProjectInfoResponseVO {
 
     @ApiModelProperty(value = "成员五的学生编号")
     private String fifthId;
+
+    @ApiModelProperty(value = "成员五的姓名")
+    private String fifthName;
+
+    @ApiModelProperty(value = "成员五的院系")
+    private String fifthDepartment;
+
+    @ApiModelProperty(value = "成员五的专业")
+    private String fifthMajor;
 
     @ApiModelProperty(value = "成员五的分工")
     private String fifthJob;
@@ -108,13 +162,13 @@ public class ProjectInfoResponseVO {
     @ApiModelProperty(value = "企业导师联系电话")
     private String enterpriseTutorPhone;
 
-    @ApiModelProperty(value = "等待审核、立项成功、立项驳回")
-    private String startStatus;
+    @ApiModelProperty(value = "0等待审核、1立项成功、2立项驳回")
+    private Integer startStatus;
 
-    @ApiModelProperty(value = "未中期审核、中期审核、中期审核通过、中期审核未通过")
-    private String midtermStatus;
+    @ApiModelProperty(value = "0未中期审核、1中期审核、2中期审核通过、3中期审核未通过")
+    private Integer midtermStatus;
 
-    @ApiModelProperty(value = "未结项审核、结项审核、结项审核通过、延期结项、延期项目审核、结项审核未通过")
-    private String endStatus;
+    @ApiModelProperty(value = "0未结项审核、1结项审核、2结项审核通过、3延期结项、4延期项目审核、5结项审核未通过")
+    private Integer endStatus;
 
 }

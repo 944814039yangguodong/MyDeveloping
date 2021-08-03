@@ -9,23 +9,23 @@ import cn.ncepu.mydeveloping.pojo.vo.*;
 import cn.ncepu.mydeveloping.result.R;
 import cn.ncepu.mydeveloping.service.ProjectService;
 import cn.ncepu.mydeveloping.service.UserService;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
-import static cn.ncepu.mydeveloping.consts.Constant.ROOT_PATH;
-import static cn.ncepu.mydeveloping.consts.Constant.SDF;
+import static cn.ncepu.mydeveloping.consts.Constant.*;
 import static cn.ncepu.mydeveloping.utils.FileUtil.fileUploads;
 
 /**
@@ -39,7 +39,7 @@ import static cn.ncepu.mydeveloping.utils.FileUtil.fileUploads;
 @Api(value = "项目控制",tags={"项目控制"})
 @RestController
 @CrossOrigin
-@RequestMapping("/mydeveloping/project")
+@RequestMapping("/api/project")
 public class ProjectController {
     @Resource
     ProjectService projectService;
@@ -73,21 +73,33 @@ public class ProjectController {
         BeanUtils.copyProperties(pstartVO,project);
         if (StringUtils.isEmpty(project.getSecondId())){
             project.setSecondId("");
+            project.setSecondName("");
+            project.setSecondDepartment("");
+            project.setSecondMajor("");
             project.setSecondJob("");
             project.setSecondPhone("");
         }
         if (StringUtils.isEmpty(project.getThirdId())){
             project.setThirdId("");
+            project.setThirdName("");
+            project.setThirdDepartment("");
+            project.setThirdMajor("");
             project.setThirdJob("");
             project.setThirdPhone("");
         }
         if (StringUtils.isEmpty(project.getFourthId())){
             project.setFourthId("");
+            project.setFourthName("");
+            project.setFourthDepartment("");
+            project.setFourthMajor("");
             project.setFourthJob("");
             project.setFourthPhone("");
         }
         if (StringUtils.isEmpty(project.getFifthId())){
             project.setFifthId("");
+            project.setFifthName("");
+            project.setFifthDepartment("");
+            project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
         }
@@ -96,11 +108,11 @@ public class ProjectController {
         project.setLogNotReadCount(0);//设置初始日志未阅读数为0
         BigDecimal temp = new BigDecimal(0);
         project.setReimbursementAmount(temp);//设置初始项目报销金额为0
-        project.setProjectPhase("立项申请");//设置初始项目阶段为立项申请
-        project.setProjectClass("校级");//设置初始项目等级为校级
-        project.setStartStatus("等待审核");//设置初始立项状态为等待审核
-        project.setMidtermStatus("未中期审核");//设置初始中期状态为未中期审核
-        project.setEndStatus("未结项审核");//设置初始结项状态为未结项审核
+        project.setProjectPhase(PHASE_START);//设置初始项目阶段为立项申请
+        project.setProjectClass(CLASS_SCHOOL);//设置初始项目等级为校级
+        project.setStartStatus(START_REVIEW);//设置初始立项状态为等待审核
+        project.setMidtermStatus(MIDTERM_WAITING);//设置初始中期状态为未中期审核
+        project.setEndStatus(END_WAITING);//设置初始结项状态为未结项审核
         //文件上传
         String userFolder = (String) StpUtil.getLoginId();
         String fileClass= "start";
@@ -147,7 +159,7 @@ public class ProjectController {
             String newFileName =ROOT_PATH + fileUploads(additionalFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"MidtermAdditionalFile");
             project.setMidtermAdditionalFile(newFileName);
         }
-        project.setMidtermStatus("中期审核");//设置初始中期状态为中期审核
+        project.setMidtermStatus(MIDTERM_REVIEW);//设置初始中期状态为中期审核
         boolean res = projectService.updateById(project);
         if (res){
             return R.ok().message("申请中期成功！");
@@ -155,7 +167,7 @@ public class ProjectController {
         return R.error().message("申请中期失败！");
     }
 
-    @ApiOperation(value = "申请结项")
+    @ApiOperation(value = "申请结项/延期结项")
     @PostMapping("projectEnd")
     @SaCheckPermission("student-operation")
     R projectEnd(String projectId, PendVO pendVO, MultipartFile reportFile, MultipartFile conclusionFile, MultipartFile tableFile, MultipartFile fileFile, MultipartFile pptFile, MultipartFile summaryFile, MultipartFile extensionFile, MultipartFile additionalFile){
@@ -192,10 +204,10 @@ public class ProjectController {
             String newFileName =ROOT_PATH + fileUploads(additionalFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndAdditionalFile");
             project.setEndAdditionalFile(newFileName);
         }
-        if(project.getEndStatus().equals("未结项审核"))
-            project.setEndStatus("结项审核");//设置结项状态为结项审核
+        if(project.getEndStatus().equals(END_WAITING))
+            project.setEndStatus(END_REVIEW);//设置结项状态为结项审核
         else
-            project.setEndStatus("延期项目审核");//若为延期结项则改结项状态为延期项目审核
+            project.setEndStatus(END_EXTENSION_REVIEW);//若为延期结项则改结项状态为延期项目审核
         boolean res = projectService.updateById(project);
         if (res){
             return R.ok().message("申请结项成功！");
@@ -216,7 +228,7 @@ public class ProjectController {
             String newFileName =ROOT_PATH + fileUploads(extensionFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ExtensionApplication");
             project.setExtensionApplication(newFileName);
         } else return R.error().message("延期申请表不得为空！");
-        project.setEndStatus("延期结项");//设置结项状态为延期结项
+        project.setEndStatus(END_EXTENSION_WAITING);//设置结项状态为延期结项
         boolean res = projectService.updateById(project);
         if (res){
             return R.ok().message("申请结项成功！");
@@ -225,43 +237,73 @@ public class ProjectController {
     }
 
     @ApiOperation(value = "删除项目成员")
-    @PostMapping("memberDelete/{projectId}/{memberId}")
+    @PostMapping("memberDelete")
     @SaCheckPermission("student-operation")
-    R memberDelete(@PathVariable String projectId, @PathVariable String memberId){
+    R memberDelete(String projectId, String memberId){
         Project project = projectService.getById(projectId);
         if(project.getSecondId().equals(memberId)){
             project.setSecondId(project.getThirdId());
+            project.setSecondName(project.getThirdName());
+            project.setSecondDepartment(project.getThirdDepartment());
+            project.setSecondMajor(project.getThirdMajor());
             project.setSecondJob(project.getThirdJob());
             project.setSecondPhone(project.getThirdPhone());
             project.setThirdId(project.getFourthId());
+            project.setThirdName(project.getFourthName());
+            project.setThirdDepartment(project.getFourthDepartment());
+            project.setThirdMajor(project.getFourthMajor());
             project.setThirdJob(project.getFourthJob());
             project.setThirdPhone(project.getFourthPhone());
             project.setFourthId(project.getFifthId());
+            project.setFourthName(project.getFifthName());
+            project.setFourthDepartment(project.getFifthDepartment());
+            project.setFourthMajor(project.getFifthMajor());
             project.setFourthJob(project.getFifthJob());
             project.setFourthPhone(project.getFifthPhone());
             project.setFifthId("");
+            project.setFifthName("");
+            project.setFifthDepartment("");
+            project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
         }
         else if(project.getThirdId().equals(memberId)){
             project.setThirdId(project.getFourthId());
+            project.setThirdName(project.getFourthName());
+            project.setThirdDepartment(project.getFourthDepartment());
+            project.setThirdMajor(project.getFourthMajor());
             project.setThirdJob(project.getFourthJob());
             project.setThirdPhone(project.getFourthPhone());
             project.setFourthId(project.getFifthId());
+            project.setFourthName(project.getFifthName());
+            project.setFourthDepartment(project.getFifthDepartment());
+            project.setFourthMajor(project.getFifthMajor());
             project.setFourthJob(project.getFifthJob());
             project.setFourthPhone(project.getFifthPhone());
             project.setFifthId("");
+            project.setFifthName("");
+            project.setFifthDepartment("");
+            project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
         }else if(project.getFourthId().equals(memberId)){
             project.setFourthId(project.getFifthId());
+            project.setFourthName(project.getFifthName());
+            project.setFourthDepartment(project.getFifthDepartment());
+            project.setFourthMajor(project.getFifthMajor());
             project.setFourthJob(project.getFifthJob());
             project.setFourthPhone(project.getFifthPhone());
             project.setFifthId("");
+            project.setFifthName("");
+            project.setFifthDepartment("");
+            project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
         }else if(project.getFifthId().equals(memberId)){
             project.setFifthId("");
+            project.setFifthName("");
+            project.setFifthDepartment("");
+            project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
         }else
@@ -272,35 +314,48 @@ public class ProjectController {
     }
 
     @ApiOperation(value = "添加项目成员")
-    @PostMapping("memberInsert/{projectId}/{memberId}")
+    @PostMapping("memberInsert")
     @SaCheckPermission("student-operation")
-    R memberInsert(@PathVariable String projectId, @PathVariable String memberId, String job, String phone){
+    R memberInsert(String projectId, String memberId, String Name,  String Department, String Major, String job, String phone){
         Project project = projectService.getById(projectId);
         if(project.getSecondId().equals("")){
             project.setSecondId(memberId);
+            project.setSecondId(Name);
+            project.setSecondId(Department);
+            project.setSecondId(Major);
             project.setSecondJob(job);
             project.setSecondPhone(phone);
         }else if(project.getThirdId().equals("")){
             project.setThirdId(memberId);
+            project.setThirdId(Name);
+            project.setThirdId(Department);
+            project.setThirdId(Major);
             project.setThirdJob(job);
             project.setThirdPhone(phone);
         }else if(project.getFourthId().equals("")){
             project.setFourthId(memberId);
+            project.setFourthId(Name);
+            project.setFourthId(Department);
+            project.setFourthId(Major);
             project.setFourthJob(job);
             project.setFourthPhone(phone);
         }else if(project.getFifthId().equals("")){
             project.setFifthId(memberId);
+            project.setFifthId(Name);
+            project.setFifthId(Department);
+            project.setFifthId(Major);
             project.setFifthJob(job);
             project.setFifthPhone(phone);
         }else
-            return R.error().message("成员数量以达到上限！");
+            return R.error().message("成员数量已达到上限！");
+        projectService.updateById(project);
         return R.ok().message("添加成员成功！");
     }
 
     @ApiOperation(value = "学生提交日志")
-    @PostMapping("logSubmit/{projectId}")
+    @PostMapping("logSubmit")
     @SaCheckPermission("student-operation")
-    R logSubmit(@PathVariable String projectId){
+    R logSubmit(String projectId){
         Project project = projectService.getById(projectId);
         project.setLogSubmitCount(project.getLogSubmitCount()+1);
         project.setLogNotReadCount(project.getLogNotReadCount()+1);
@@ -310,9 +365,9 @@ public class ProjectController {
     }
 
     @ApiOperation(value = "学生提交财务报销单")
-    @PostMapping("financeSubmit/{projectId}")
+    @PostMapping("financeSubmit")
     @SaCheckPermission("student-operation")
-    R financeSubmit(@PathVariable String projectId, @RequestParam BigDecimal amount, MultipartFile tableFile){
+    R financeSubmit(String projectId, BigDecimal amount, MultipartFile tableFile){
         Project project = projectService.getById(projectId);
         //文件上传
         String userFolder = (String) StpUtil.getLoginId();
@@ -333,9 +388,9 @@ public class ProjectController {
      * 普通教师操作
      */
     @ApiOperation(value = "导师查阅日志")
-    @PostMapping("logRead/{projectId}")
+    @PostMapping("logRead")
     @SaCheckPermission("teacher-operation")
-    R logRead(@PathVariable String projectId){
+    R logRead(String projectId){
         Project project = projectService.getById(projectId);
         if(project.getLogNotReadCount()>0){
             project.setLogNotReadCount(project.getLogNotReadCount()-1);
@@ -350,14 +405,14 @@ public class ProjectController {
      * 审核教师操作
      */
     @ApiOperation(value = "立项审核")
-    @PostMapping("startEvaluation/{projectId}")
+    @PostMapping("startEvaluation")
     @SaCheckPermission("reviewer-operation")
-    R startEvaluation(@PathVariable String projectId, @RequestParam boolean isApproved, Integer grade, String failureDetails){
+    R startEvaluation(String projectId, boolean isApproved, Integer grade, String failureDetails){
         Project project = projectService.getById(projectId);
         if(isApproved){
-            project.setStartStatus("立项成功");
+            project.setStartStatus(START_SUCCESS);
         }else {
-            project.setStartStatus("立项驳回");
+            project.setStartStatus(START_REJECT);
             project.setStartFailureDetails(failureDetails);
         }
         project.setStartGrade(grade);
@@ -368,14 +423,14 @@ public class ProjectController {
     }
 
     @ApiOperation(value = "中期审核")
-    @PostMapping("midtermEvaluation/{projectId}")
+    @PostMapping("midtermEvaluation")
     @SaCheckPermission("reviewer-operation")
-    R midtermEvaluation(@PathVariable String projectId, @RequestParam boolean isApproved, Integer grade, String failureDetails){
+    R midtermEvaluation(String projectId, boolean isApproved, Integer grade, String failureDetails){
         Project project = projectService.getById(projectId);
         if(isApproved){
-            project.setMidtermStatus("中期审核通过");
+            project.setMidtermStatus(MIDTERM_SUCCESS);
         }else {
-            project.setMidtermStatus("中期审核未通过");
+            project.setMidtermStatus(MIDTERM_REJECT);
             project.setMidtermFailureDetails(failureDetails);
         }
         project.setMidtermGrade(grade);
@@ -386,14 +441,14 @@ public class ProjectController {
     }
 
     @ApiOperation(value = "结项审核")
-    @PostMapping("endEvaluation/{projectId}")
+    @PostMapping("endEvaluation")
     @SaCheckPermission("reviewer-operation")
-    R endEvaluation(@PathVariable String projectId, @RequestParam boolean isApproved, Integer grade, String failureDetails){
+    R endEvaluation(String projectId, boolean isApproved, Integer grade, String failureDetails){
         Project project = projectService.getById(projectId);
         if(isApproved){
-            project.setEndStatus("结项审核通过");
+            project.setEndStatus(END_SUCCESS);
         }else {
-            project.setEndStatus("延期结项");
+            project.setEndStatus(END_EXTENSION_WAITING);
             project.setExtensionDetails(failureDetails);
         }
         project.setEndGrade(grade);
@@ -404,14 +459,14 @@ public class ProjectController {
     }
 
     @ApiOperation(value = "延期审核")
-    @PostMapping("extensionEvaluation/{projectId}")
+    @PostMapping("extensionEvaluation")
     @SaCheckPermission("reviewer-operation")
-    R extensionEvaluation(@PathVariable String projectId, @RequestParam boolean isApproved, Integer grade, String failureDetails){
+    R extensionEvaluation(String projectId, boolean isApproved, Integer grade, String failureDetails){
         Project project = projectService.getById(projectId);
         if(isApproved){
-            project.setEndStatus("结项审核通过");
+            project.setEndStatus(END_SUCCESS);
         }else {
-            project.setEndStatus("结项审核未通过");
+            project.setEndStatus(END_REJECT);
             project.setEndFailureDetails(failureDetails);
         }
         project.setExtensionGrade(grade);
@@ -432,10 +487,7 @@ public class ProjectController {
     @PostMapping("enterMidterm")
     @SaCheckPermission("school-operation")
     R enterMidterm(){
-        String originalPhase = "立项申请";
-        String originalStatus = "立项成功";
-        String newPhase = "中期检查";
-        if(projectService.updatePhase(originalPhase,originalStatus,newPhase))
+        if(projectService.updatePhase(PHASE_START,START_SUCCESS,PHASE_MIDTERM))
             return R.ok().message("操作成功！");
         else
             return R.error().message("操作失败！");
@@ -462,10 +514,7 @@ public class ProjectController {
     @PostMapping("enterEnd")
     @SaCheckPermission("school-operation")
     R enterEnd(){
-        String originalPhase = "中期检查";
-        String originalStatus = "中期审核通过";
-        String newPhase = "结项审核";
-        if(projectService.updatePhase(originalPhase,originalStatus,newPhase))
+        if(projectService.updatePhase(PHASE_MIDTERM,MIDTERM_SUCCESS,PHASE_END))
             return R.ok().message("操作成功！");
         else
             return R.error().message("操作失败！");
@@ -475,23 +524,17 @@ public class ProjectController {
     @PostMapping("end")
     @SaCheckPermission("school-operation")
     R end(){
-        String originalPhase = "结项审核";
-        String originalStatus = "结项审核通过";
-        String newPhase = "已结项";
-        if(projectService.updatePhase(originalPhase,originalStatus,newPhase))
+        if(projectService.updatePhase(PHASE_END,END_SUCCESS,PHASE_OVER))
             return R.ok().message("操作成功！");
         else
             return R.error().message("操作失败！");
     }
 
-    @ApiOperation(value = "所有延期结项审核未通过项目转入已取消状态")
-    @PostMapping("extension")
+    @ApiOperation(value = "所有立项、中期、延期、结项审核未通过项目转入已取消状态")
+    @PostMapping("enterCancel")
     @SaCheckPermission("school-operation")
-    R extension(){
-        String originalPhase = "结项审核";
-        String originalStatus = "结项审核未通过";
-        String newPhase = "已取消";
-        if(projectService.updatePhase(originalPhase,originalStatus,newPhase))
+    R enterCancel(){
+        if(projectService.updatePhase(PHASE_END,END_REJECT,PHASE_CANCEL)&&projectService.updatePhase(PHASE_MIDTERM,MIDTERM_REJECT,PHASE_CANCEL)&&projectService.updatePhase(PHASE_START,MIDTERM_REJECT,PHASE_CANCEL))
             return R.ok().message("操作成功！");
         else
             return R.error().message("操作失败！");
@@ -501,26 +544,35 @@ public class ProjectController {
      * 公用操作
      */
     @ApiOperation(value = "按属性排序分页模糊获取当前用户参与项目列表（系级以上负责人查看全部）")
-    @GetMapping("projectSelect/{current}/{limit}/{property}")
-    R projectSelect(@PathVariable long current, @PathVariable long limit,@PathVariable String property, ProjectRequestVO projectRequestVO){
+    @GetMapping("projectSelect")
+    R projectSelect(long current, long limit, String property, ProjectRequestVO projectRequestVO){
         Project project = new Project();
         BeanUtils.copyProperties(projectRequestVO,project);
         String memberId = (String) StpUtil.getLoginId();
         User user = userService.getById(memberId);
         Page<Project> projectPage;
-        if(user.getUserType().equals(3)||user.getUserType().equals(4)){
+        if(user.getUserType().equals(DEPARTMENT)||user.getUserType().equals(SCHOOL)){
             projectPage = projectService.projectPerPageByOrder(current,limit,property, project, null);
         }else{
             projectPage = projectService.projectPerPageByOrder(current,limit,property, project, memberId);
         }
-        Page<ProjectListResponseVO> projectListPage = new Page<>();
-        BeanUtils.copyProperties(projectPage,projectListPage);
-        return R.ok().data("total",projectListPage.getTotal()).data("rows",projectListPage.getRecords());
+        List<ProjectListResponseVO> projectList = new ArrayList<>();
+        for(int i=0;i<projectPage.getRecords().size();i++){
+            ProjectListResponseVO temp = new ProjectListResponseVO();
+            BeanUtils.copyProperties(projectPage.getRecords().get(i),temp);
+            if(ObjectUtils.isEmpty(temp.getHeadName())||ObjectUtils.isEmpty(temp.getTeacherName())){
+                temp.setTeacherName(userService.getById(temp.getTeacherId()).getUserName());
+                temp.setHeadName(userService.getById(temp.getHeadId()).getUserName());
+            }
+            projectList.add(temp);
+        }
+
+        return R.ok().data("total",projectPage.getTotal()).data("rows",projectList);
     }
 
     @ApiOperation(value = "获取项目详细信息")
-    @GetMapping("projectInfo/{projectId}")
-    R projectSelect(@PathVariable String projectId){
+    @GetMapping("projectInfo")
+    R projectSelect(String projectId){
         Project project = projectService.getById(projectId);
         ProjectInfoResponseVO projectInfoResponseVO = new ProjectInfoResponseVO();
         BeanUtils.copyProperties(project,projectInfoResponseVO);
@@ -541,4 +593,3 @@ public class ProjectController {
         return R.error().message("删除项目失败！");
     }
 }
-

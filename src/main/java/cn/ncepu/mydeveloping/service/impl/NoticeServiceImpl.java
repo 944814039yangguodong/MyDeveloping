@@ -41,10 +41,10 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
             noticeQueryWrapper.like("notice_name",noticeRequestVO.getNoticeName());
         if (!ObjectUtils.isEmpty(noticeRequestVO.getUserId()))
             noticeQueryWrapper.like("user_id",noticeRequestVO.getUserId());
-        if (!ObjectUtils.isEmpty(noticeRequestVO.getNoticeContent()))
-            noticeQueryWrapper.like("notice_content",noticeRequestVO.getNoticeContent());
-        if (!ObjectUtils.isEmpty(noticeRequestVO.getGmtCreate()))
-            noticeQueryWrapper.like("gmt_create",noticeRequestVO.getGmtCreate());
+//        if (!ObjectUtils.isEmpty(noticeRequestVO.getNoticeContent()))
+//            noticeQueryWrapper.like("notice_content",noticeRequestVO.getNoticeContent());
+//        if (!ObjectUtils.isEmpty(noticeRequestVO.getGmtCreate()))
+//            noticeQueryWrapper.like("gmt_create",noticeRequestVO.getGmtCreate());
         noticeQueryWrapper.orderByDesc(property);
         noticeMapper.selectPage(noticePage,noticeQueryWrapper);
         BeanUtils.copyProperties(noticePage,infoPage);

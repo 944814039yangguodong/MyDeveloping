@@ -20,4 +20,7 @@ public class UserInfoResponseVo {
     @ApiModelProperty(value = "所在专业")
     private String major;
 
+    @ApiModelProperty(value = "身份标识值：0学生，1普通（指导）老师，2审核老师，3系级负责人，4校级负责人")
+    private Integer userType;
+
 }

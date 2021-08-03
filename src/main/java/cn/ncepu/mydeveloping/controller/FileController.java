@@ -14,8 +14,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static cn.ncepu.mydeveloping.consts.Constant.SDF;
-import static cn.ncepu.mydeveloping.consts.Constant.ROOT_PATH;
+import static cn.ncepu.mydeveloping.consts.Constant.*;
 import static cn.ncepu.mydeveloping.utils.FileUtil.download;
 
 @RestController

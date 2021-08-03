@@ -1,0 +1,135 @@
+<!DoCTYPE html>
+<html lang=“en” >
+<head>
+    <meta charset="UTF-8">
+    <title>大创信息管理平台-公告详情</title>
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../../../../static/layui/css/layui.css">
+    <script src="/layui/layui.js" charset="utf-8"></script>
+    <script src="../../../../static/layui/layui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/common.js" charset="utf-8"></script>
+    <script src="../../../../static/common.js" charset="utf-8"></script>
+</head>
+<body>
+<section id="app">
+    <div class="layui-bg-gray" style="padding: 30px;">
+        <div class="layui-row layui-col-space15" >
+            <div class="layui-col-md6" style="width: 1000px;margin-left: 50%;transform: translateX(-50%);">
+                <div class="layui-card" style="padding: 30px;">
+                    <div class="layui-card-header" style="width: 900px;margin-left: 50%;transform: translateX(-50%);">
+                        <h2 style="text-align:center">
+                        {{noticeName}}
+                        </h2>
+                    </div>
+                    <div class="layui-card-header" style="width: 900px;margin-left: 50%;transform: translateX(-50%);">
+                    </div>
+                    <div class="layui-card-header" style="width: 900px;margin-left: 50%;transform: translateX(-50%);">
+                    </div>
+                    <div class="layui-card-header" style="width: 400px;margin-left: 50%;transform: translateX(-50%);">
+                        <p style="text-align:center">发布时间：{{gmtCreate}}&nbsp&nbsp&nbsp&nbsp浏览量：{{noticeReadCount}}</p>
+                    </div>
+                    <div class="layui-card-body">
+                        <div v-html="noticeContent" style="text-indent:2em;"></div><br>
+                        <a @click="download(0)" v-if="one" style="cursor: pointer">附件：{{nameOne}}</a><br>
+                        <a @click="download(1)" v-if="two" style="cursor: pointer">附件：{{nameTwo}}</a><br>
+                        <a @click="download(2)" v-if="three" style="cursor: pointer">附件：{{nameThree}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    //获取最后一个PathParam
+    var pathP =location.href;//获取全部路径
+    var temp = pathP.split("/");
+    var requestPathP = temp[temp.length-1];
+
+    //获取UrlParam
+    var urlP = location.search;//获取url中“?”及其后的字符串
+    var requestUrlP = {};
+    if(urlP.indexOf("?")!==-1){
+        var str = urlP.substr(1);//去掉“?”
+        var strs = str.split("&");//以&分割多个url参数
+        for(var i=0;i<strs.length;i++){
+            requestUrlP[strs[i].split("=")[0]]=(strs[i].split("=")[1]);
+        }
+    }
+    var app = new Vue({
+        el: '#app',
+        data: {
+            noticeId:null,
+            noticeName:"",
+            noticeContent:"",
+            gmtCreate:"",
+            noticeReadCount:0,
+            noticeAttachmentOne:"",
+            noticeAttachmentTwo:"",
+            noticeAttachmentThree:"",
+            nameOne:"",
+            nameTwo:"",
+            nameThree:"",
+            one:false,
+            two:false,
+            three:false
+        },
+        mounted:function (){//和window.onload=function()差不多
+            var that = this;
+            axios.get('http://'+IP+'/api/notice/public/getNotice',{
+                params:{
+                    noticeId:requestPathP
+                }
+            })
+                .then(function (response) {
+                    if(response.data.success===true){
+                        console.log(response);
+                        that.noticeId = response.data.data.noticeInfo.noticeId;
+                        that.noticeName = response.data.data.noticeInfo.noticeName;
+                        that.noticeContent = response.data.data.noticeInfo.noticeContent;
+                        that.gmtCreate = response.data.data.noticeInfo.gmtCreate;
+                        that.noticeReadCount = response.data.data.noticeInfo.noticeReadCount;
+                        that.noticeAttachmentOne = response.data.data.noticeInfo.noticeAttachmentOne;
+                        that.noticeAttachmentTwo = response.data.data.noticeInfo.noticeAttachmentTwo;
+                        that.noticeAttachmentThree = response.data.data.noticeInfo.noticeAttachmentThree;
+                        if(that.noticeAttachmentOne != null && that.noticeAttachmentOne != ""){
+                            var str1 = that.noticeAttachmentOne.split("/");
+                            that.nameOne = str1[str1.length-1];
+                            that.one = true;
+                        }
+                        if(that.noticeAttachmentTwo != null && that.noticeAttachmentTwo != ""){
+                            var str2 = that.noticeAttachmentTwo.split("/");
+                            that.nameTwo = str2[str2.length-1];
+                            that.two = true;
+                        }
+                        if(that.noticeAttachmentThree != null && that.noticeAttachmentThree != ""){
+                            var str3 = that.noticeAttachmentThree.split("/");
+                            that.nameThree = str3[str3.length-1];
+                            that.three = true;
+                        }
+                        console.log(that);
+                    }else{
+                        console.log(response);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        methods:{
+            download:function (index){
+                if(index===0)
+                    window.open("/api/file/download?path="+this.noticeAttachmentOne);
+                else if(index===1)
+                    window.open("/api/file/download?path="+this.noticeAttachmentTwo);
+                else if(index===2)
+                    window.open("/api/file/download?path="+this.noticeAttachmentThree);
+                else
+                    alert("该附件不存在！");
+            }
+        }
+    })
+</script>
+</body>
+</html>

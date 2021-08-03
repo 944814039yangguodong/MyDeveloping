@@ -4,6 +4,7 @@ package cn.ncepu.mydeveloping.controller;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.ncepu.mydeveloping.pojo.entity.Notice;
+import cn.ncepu.mydeveloping.pojo.vo.NoticeAddRequestVO;
 import cn.ncepu.mydeveloping.pojo.vo.NoticeListResponseVO;
 import cn.ncepu.mydeveloping.pojo.vo.NoticeRequestVO;
 import cn.ncepu.mydeveloping.pojo.vo.NoticeInfoResponseVO;
@@ -23,8 +24,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 
-import static cn.ncepu.mydeveloping.consts.Constant.SDF;
-import static cn.ncepu.mydeveloping.consts.Constant.ROOT_PATH;
+import static cn.ncepu.mydeveloping.consts.Constant.*;
 import static cn.ncepu.mydeveloping.utils.FileUtil.fileUploads;
 
 /**
@@ -48,11 +48,11 @@ public class NoticeController {
     @ApiOperation(value = "系级以上负责人发布公告")
     @PostMapping("noticeInsert")
     @SaCheckPermission("department-operation")
-    R noticeInsert(String noticeName,String noticeContent, MultipartFile fileOne, MultipartFile fileTwo, MultipartFile fileThree) throws IOException {
+    R noticeInsert(NoticeAddRequestVO noticeAddRequestVO, MultipartFile fileOne, MultipartFile fileTwo, MultipartFile fileThree) throws IOException {
         Notice notice=new Notice();
         notice.setUserId((String) StpUtil.getLoginId());
-        notice.setNoticeName(noticeName);
-        notice.setNoticeContent(noticeContent);
+        notice.setNoticeName(noticeAddRequestVO.getNoticeName());
+        notice.setNoticeContent(noticeAddRequestVO.getNoticeContent());
         if (ObjectUtils.isEmpty(notice.getNoticeName()))
             return R.error().message("公告标题不得为空！");
         if (ObjectUtils.isEmpty(notice.getNoticeContent()))
@@ -82,9 +82,9 @@ public class NoticeController {
     }
 
     @ApiOperation(value = "系级以上负责人(逻辑)删除公告")
-    @DeleteMapping("noticeDelete/{noticeId}")
+    @DeleteMapping("noticeDelete")
     @SaCheckPermission("department-operation")
-    R noticeDelete(@PathVariable Integer noticeId){
+    R noticeDelete(Integer noticeId){
         if (ObjectUtils.isEmpty(noticeService.getById(noticeId))) {
             return R.error().message("未找到该公告信息，无法删除！");
         }
@@ -96,17 +96,17 @@ public class NoticeController {
     }
 
     @ApiOperation(value = "系级以上负责人修改公告")
-    @PostMapping("noticeModify/{noticeId}")
+    @PostMapping("noticeModify")
     @SaCheckPermission("department-operation")
-    R noticeModify(@PathVariable Integer noticeId, String noticeName,String noticeContent, MultipartFile fileOne, MultipartFile fileTwo, MultipartFile fileThree){
+    R noticeModify(Integer noticeId, NoticeAddRequestVO noticeAddRequestVO, MultipartFile fileOne, MultipartFile fileTwo, MultipartFile fileThree){
         Notice notice = noticeService.getById(noticeId);
         if (ObjectUtils.isEmpty(notice)){
             return R.error().message("未找到该公告信息，无法修改！");
         }
-        if(noticeName!=null)
-            notice.setNoticeName(noticeName);
-        if(noticeContent!=null)
-            notice.setNoticeContent(noticeContent);
+        if(noticeAddRequestVO.getNoticeName()!=null)
+            notice.setNoticeName(noticeAddRequestVO.getNoticeName());
+        if(noticeAddRequestVO.getNoticeContent()!=null)
+            notice.setNoticeContent(noticeAddRequestVO.getNoticeContent());
         //文件上传
         String userFolder = (String) StpUtil.getLoginId();
         String fileClass= "notice";
@@ -130,8 +130,8 @@ public class NoticeController {
     }
 
     @ApiOperation(value = "属性排序分页模糊查询公告简要信息")
-    @GetMapping("noticeSelectPage/{current}/{limit}/{property}")
-    R noticeSelectPage(@PathVariable long current, @PathVariable long limit, @PathVariable String property, NoticeRequestVO noticeRequestVO){
+    @GetMapping("/public/noticeSelectPage")
+    R noticeSelectPage(long current, long limit, String property, NoticeRequestVO noticeRequestVO){
         if(property.equals("gmt_create")||property.equals("notice_name")||property.equals("notice_content")){
             Page<NoticeListResponseVO> noticePage =
                     noticeService.noticePerPageByOrder(current,limit,property,noticeRequestVO);
@@ -143,11 +143,13 @@ public class NoticeController {
     }
 
     @ApiOperation("获取单个公告内容详情")
-    @GetMapping("getNotice/{noticeId}")
-    public R getNotice(@PathVariable Integer noticeId){
+    @GetMapping("/public/getNotice")
+    public R getNotice(Integer noticeId){
         Notice notice = noticeService.getById(noticeId);
         NoticeInfoResponseVO noticeInfoResponseVO = new NoticeInfoResponseVO();
         BeanUtils.copyProperties(notice, noticeInfoResponseVO);
+        notice.setNoticeReadCount(notice.getNoticeReadCount()+1);//每次获取公告内容详情阅读数加一
+        noticeService.updateById(notice);
         return R.ok().data("noticeInfo", noticeInfoResponseVO);
     }
 }

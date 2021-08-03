@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>发布公告</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../../../static/layui/css/layui.css"  media="all">
+    <script src="/layui/layui.js" charset="utf-8"></script>
+    <script src="../../../static/layui/layui.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/common.js" charset="utf-8"></script>
+    <script src="../../../static/common.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin" id="app">
+    <!-- 头部区域水平导航 -->
+    <div class="layui-header">
+        <div onclick="window.location='/'" style="cursor: pointer" class="layui-logo">大创信息管理平台</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-username"></i>
+                    {{userTypeName}} {{userInfo.userName}}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a onclick="window.location='/teacher/userInfoPage'" style="cursor: pointer">个人信息</a></dd>
+                    <dd><a onclick="window.location='/teacher/userPasswordPage'" style="cursor: pointer">修改密码</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a onclick="window.location='/logout'" style="cursor: pointer">退出登录</a></li>
+        </ul>
+    </div>
+    <!-- 左侧导航区域垂直导航 -->
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree">
+                <li v-if="userInfo.userType>=4" class="layui-nav-item">
+                    <a style="cursor: pointer"><i class="layui-icon layui-icon-user"></i> 用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a onclick="window.location='/teacher/userSelectPage'" style="cursor: pointer">用户查询</a></dd>
+                        <dd><a onclick="window.location='/teacher/userAddPage'" style="cursor: pointer">添加用户</a></dd>
+                    </dl>
+                </li>
+                <li v-if="userInfo.userType>=4" class="layui-nav-item">
+                    <a onclick="window.location='/teacher/timePublicPage'" style="cursor: pointer"><i class="layui-icon layui-icon-date"></i> 时间发布</a>
+                </li>
+                <li v-if="userInfo.userType>=3" class="layui-nav-item layui-nav-itemed">
+                    <a style="cursor: pointer"><i class="layui-icon layui-icon-notice"></i> 公告管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a onclick="window.location='/teacher/noticeSelectPage'" style="cursor: pointer">公告查询</a></dd>
+                        <dd><a onclick="window.location='/teacher/noticeAddPage'" style="cursor: pointer">添加公告</a></dd>
+                    </dl>
+                </li>
+                <li v-if="userInfo.userType>=1" class="layui-nav-item">
+                    <a onclick="window.location='/teacher/myProjectPage'" style="cursor: pointer"><i class="layui-icon layui-icon-home"></i> 我的项目</a>
+                </li>
+                <li v-if="userInfo.userType>=2" class="layui-nav-item">
+                    <a style="cursor: pointer"><i class="layui-icon layui-icon-read"></i> 项目审核</a>
+                    <dl class="layui-nav-child">
+                        <dd><a onclick="window.location='/teacher/pstartPage'" style="cursor: pointer">立项审核</a></dd>
+                        <dd><a onclick="window.location='/teacher/processPage'" style="cursor: pointer">进展记录</a></dd>
+                        <dd><a onclick="window.location='/teacher/pmidtermPage'" style="cursor: pointer">中期审核</a></dd>
+                        <dd><a onclick="window.location='/teacher/promotePage'" style="cursor: pointer">项目升级</a></dd>
+                        <dd><a onclick="window.location='/teacher/pendPage'" style="cursor: pointer">结项审核</a></dd>
+                        <dd><a onclick="window.location='/teacher/pextensionPage'" style="cursor: pointer">延期审核</a></dd>
+                    </dl>
+                </li>
+                <li v-if="userInfo.userType>=1" class="layui-nav-item">
+                    <a onclick="window.location='/teacher/moneyPage'" style="cursor: pointer"><i class="layui-icon layui-icon-rmb"></i> 财务统计</a>
+                </li>
+                <li v-if="userInfo.userType>=1" class="layui-nav-item">
+                    <a onclick="window.location='/teacher/fileDownloadPage'" style="cursor: pointer"><i class="layui-icon layui-icon-download-circle"></i> 文档下载</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 内容主体区域 -->
+    <div class="layui-body" >
+        <form class="layui-form">
+            <div style="">
+                <div class="layui-form-item" style="padding: 20px;">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">公告名称</label>
+                        <div class="layui-input-inline" style="width: 650px">
+                            <input type="text" placeholder="请输入标题" v-model="noticeNameLocal" class="layui-input" maxlength="100" >
+                        </div>
+                        <label class="layui-word-aux layui-input-inline" style="margin-left: 110px">*限制100字</label>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text" style="padding: 20px;">
+                    <label class="layui-form-label">公告内容</label>
+                    <div class="layui-input-block" style="width: 650px">
+                        <textarea placeholder="请输入内容" v-model="Content" class="layui-textarea" style="height: 800px"></textarea>
+                    </div>
+                </div>
+                <div style="padding: 20px;">
+                    <div class="layui-form-item" >
+                        <div class="layui-inline">
+                            <label class="layui-form-label">附件一</label>
+                            <div class="layui-input-inline">
+                                <input type="file" @change="getFileOne($event)" style="border-radius: 5px;border:solid grey;width: 600px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">附件二</label>
+                            <div class="layui-input-inline">
+                                <input type="file" @change="getFileTwo($event)" style="border-radius: 5px;border:solid grey;width: 600px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">附件三</label>
+                            <div class="layui-input-inline">
+                                <input type="file" @change="getFileThree($event)" style="border-radius: 5px;border:solid grey;width: 600px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                            <label class="layui-word-aux" style="margin-left: 50px">*最多上传三个附件，如需上传更多文件，请将文件压缩为压缩包后上传</label>
+                    </div>
+                </div>
+            </div>
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+            </fieldset>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="button" @click="noticeSubmit" class="layui-btn ">确定添加</button>
+                    <button type="button" @click="noticeClear" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+            <div style="height: 500px"></div>
+        </form>
+    </div>
+    <!-- 底部固定区域 -->
+    <div class="layui-footer" style="text-align: center">
+        @杨国栋的大创信息管理平台
+    </div>
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            noticeNameLocal:"",
+            noticeContentLocal:"",
+            fileOneLocal:null,
+            fileTwoLocal:null,
+            fileThreeLocal:null,
+            Content:"",
+            userInfo:{
+                userId:null,
+                userName:"姓名",
+                userType:4,
+                department:null,
+                major:null
+            },
+            userTypeName:"老师"
+        },
+        mounted:function (){
+            var that = this;
+            axios.get('http://'+IP+'/api/user/getUserInfo')
+                .then(function (response) {
+                    if(response.data.success===true){
+                        that.userInfo=response.data.data.userInfo;
+                        if(response.data.data.userInfo.userType===1)
+                            that.userTypeName="老师";
+                        else if(response.data.data.userInfo.userType===2)
+                            that.userTypeName="审核老师";
+                        else if(response.data.data.userInfo.userType===3)
+                            that.userTypeName="系级负责人";
+                        else if(response.data.data.userInfo.userType===4)
+                            that.userTypeName="校级负责人";
+                        else
+                            that.userTypeName="学生";
+                    }else{
+                        console.log(response);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        methods:{
+            noticeSubmit:function(){
+                let arr = [];
+                this.Content.split('\n').forEach(item=>arr.push(`<p>${item.trim()}</p>`));
+                this.noticeContentLocal = arr.join('<br>');
+                let formData = new FormData();
+                formData.append('noticeName', this.noticeNameLocal);
+                formData.append('noticeContent', this.noticeContentLocal);
+                formData.append('fileOne', this.fileOneLocal);
+                formData.append('fileTwo', this.fileTwoLocal);
+                formData.append('fileThree', this.fileThreeLocal);
+                const that = this;
+                axios.post('http://'+IP+'/api/notice/noticeInsert', formData)
+                    .then(function (response) {
+                        if(response.data.success===true){
+                            layer.alert(response.data.message);
+                        }else{
+                            layer.alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            noticeClear:function(){
+                this.noticeNameLocal="";
+                this.noticeContentLocal="";
+                this.fileOneLocal=null;
+                this.fileTwoLocal=null;
+                this.fileThreeLocal=null;
+            },
+            getFileOne(event) {
+                this.fileOneLocal = event.target.files[0];
+                console.log(this.fileOneLocal);
+            },
+            getFileTwo(event) {
+                this.fileTwoLocal = event.target.files[0];
+                console.log(this.fileTwoLocal);
+            },
+            getFileThree(event) {
+                this.fileThreeLocal = event.target.files[0];
+                console.log(this.fileThreeLocal);
+            }
+        }
+    })
+</script>
+</body>
+</html>

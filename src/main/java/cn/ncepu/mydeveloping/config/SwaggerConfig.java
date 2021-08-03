@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -23,9 +24,9 @@ public class SwaggerConfig {
     @Bean
     public Docket webApiConfig(){
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("网页接口文档")
                 .apiInfo(webApiInfo())
                 .select()
+                .apis(RequestHandlerSelectors.basePackage("cn.ncepu.mydeveloping.controller"))//扫描该包下面的API注解
                 .paths(Predicates.not(PathSelectors.regex("/admin/.*")))
                 .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build();
@@ -33,13 +34,10 @@ public class SwaggerConfig {
 
     private ApiInfo webApiInfo(){
         return new ApiInfoBuilder()
-                .title("工训项目API文档")
+                .title("大创信息管理平台项目API文档")
                 .description("本文档描述了后台数据传输接口定义")
                 .version("1.0")
                 .contact(new Contact("Guodong", "http://baidu.com", "944814039@qq.com"))
                 .build();
     }
-    @Bean
-    public Docket docket(){
-        return new Docket(DocumentationType.SWAGGER_2).groupName("Guodong"); }
 }

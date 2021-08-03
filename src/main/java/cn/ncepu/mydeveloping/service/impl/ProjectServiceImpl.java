@@ -7,11 +7,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static cn.ncepu.mydeveloping.consts.Constant.*;
 
 /**
  * <p>
@@ -26,6 +29,16 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
 
     @Resource
     ProjectMapper projectMapper;
+
+    @Override
+    public boolean updateById(Project project) {
+        return SqlHelper.retBool(projectMapper.updateById(project));
+    }
+
+    @Override
+    public boolean save(Project project) {
+        return SqlHelper.retBool(projectMapper.insert(project));
+    }
 
     @Override
     public Page<Project> projectPerPageByOrder(long current, long limit, String property, Project project, String memberId) {
@@ -56,7 +69,7 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     }
 
     @Override
-    public boolean updatePhase(String originalPhase, String originalStatus, String newPhase) {
+    public boolean updatePhase(Integer originalPhase, Integer originalStatus, Integer newPhase) {
         //修改值
         Project project = new Project();
         project.setProjectPhase(newPhase);
@@ -65,17 +78,17 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         UpdateWrapper<Project> projectUpdateWrapper = new UpdateWrapper<>();
         projectUpdateWrapper.eq("project_phase", originalPhase);
         switch (originalPhase) {
-            case "立项申请":
-                projectUpdateWrapper.eq("start_status", originalPhase);
+            case 0:
+                projectUpdateWrapper.eq("start_status", originalStatus);
                 break;
-            case "中期检查":
-                projectUpdateWrapper.eq("midterm_status", originalPhase);
+            case 1:
+                projectUpdateWrapper.eq("midterm_status", originalStatus);
                 break;
-            case "结项审核":
-                projectUpdateWrapper.eq("end_status", originalPhase);
+            case 2:
+                projectUpdateWrapper.eq("end_status", originalStatus);
                 break;
-            case "延期结项":
-                projectUpdateWrapper.eq("end_status", originalPhase);
+            case 3:
+                projectUpdateWrapper.eq("end_status", originalStatus);
                 break;
         }
         int res = projectMapper.update(project, projectUpdateWrapper);
@@ -89,22 +102,22 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     public boolean updateTop(Integer province, Integer nation) {
         QueryWrapper<Project> projectQueryWrapper = new QueryWrapper<>();
         projectQueryWrapper.last("limit "+province)
-                .eq("project_phase", "中期检查")
-                .eq("midterm_status", "中期审核通过")
+                .eq("project_phase", PHASE_MIDTERM)
+                .eq("midterm_status", MIDTERM_SUCCESS)
                 .orderByDesc("midterm_grade");
         List<Project> projectList = projectMapper.selectList(projectQueryWrapper);
         for (Project temp : projectList) {
-            temp.setProjectClass("省级");
+            temp.setProjectClass(CLASS_PROVINCE);
             projectMapper.updateById(temp);
         }
         QueryWrapper<Project> projectQueryWrapper2 = new QueryWrapper<>();
         projectQueryWrapper2.last("limit "+nation)
-                .eq("project_phase", "中期检查")
-                .eq("midterm_status", "中期审核通过")
+                .eq("project_phase", PHASE_MIDTERM)
+                .eq("midterm_status", MIDTERM_SUCCESS)
                 .orderByDesc("midterm_grade");
         List<Project> projectList2 = projectMapper.selectList(projectQueryWrapper2);
         for (Project temp : projectList2) {
-            temp.setProjectClass("国家级");
+            temp.setProjectClass(CLASS_NATION);
             projectMapper.updateById(temp);
         }
         return true;
@@ -112,11 +125,10 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
 
     @Override
     public List<Project> selectTop(Integer top) {
-
         QueryWrapper<Project> projectQueryWrapper = new QueryWrapper<>();
         projectQueryWrapper.last("limit "+top)
-                .eq("project_phase", "中期检查")
-                .eq("midterm_status", "中期审核通过")
+                .eq("project_phase", PHASE_MIDTERM)
+                .eq("midterm_status", MIDTERM_SUCCESS)
                 .orderByDesc("midterm_grade");
         return projectMapper.selectList(projectQueryWrapper);
     }

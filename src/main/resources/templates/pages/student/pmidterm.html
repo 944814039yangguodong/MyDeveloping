@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>我的项目</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../../../static/layui/css/layui.css"  media="all">
+    <script src="/layui/layui.js" charset="utf-8"></script>
+    <script src="../../../static/layui/layui.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/common.js" charset="utf-8"></script>
+    <script src="../../../static/common.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin" id="app">
+    <!-- 头部区域水平导航 -->
+    <div class="layui-header">
+        <div onclick="window.location='/'" style="cursor: pointer" class="layui-logo">大创信息管理平台</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-username"></i>
+                    学生 {{userInfo.userName}}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a onclick="window.location='/student/userInfoPage'" style="cursor: pointer">个人信息</a></dd>
+                    <dd><a onclick="window.location='/student/userPasswordPage'" style="cursor: pointer">修改密码</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a onclick="window.location='/logout'" style="cursor: pointer">退出登录</a></li>
+        </ul>
+    </div>
+    <!-- 左侧导航区域垂直导航 -->
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree">
+                <li class="layui-nav-item">
+                    <a onclick="window.location='/student/pstartPage'" style="cursor: pointer"><i class="layui-icon layui-icon-form"></i> 项目申报</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a onclick="window.location='/student/myProjectPage'" style="cursor: pointer"><i class="layui-icon layui-icon-home"></i> 我的项目</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a onclick="window.location='/student/processPage'" style="cursor: pointer"><i class="layui-icon layui-icon-list"></i> 进展记录</a>
+                </li>
+                <li class="layui-nav-item layui-nav-itemed">
+                    <a onclick="window.location='/student/pmidtermPage'" style="cursor: pointer"><i class="layui-icon layui-icon-log"></i> 中期审核</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a onclick="window.location='/student/pendPage'" style="cursor: pointer"><i class="layui-icon layui-icon-ok-circle"></i> 结项审核</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a onclick="window.location='/student/moneyPage'" style="cursor: pointer"><i class="layui-icon layui-icon-rmb"></i> 财务报销</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 内容主体区域 -->
+    <div class="layui-body" >
+    </div>
+    <!-- 底部固定区域 -->
+    <div class="layui-footer" style="text-align: center">
+        @杨国栋的大创信息管理平台
+    </div>
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            userInfo:{
+                userId:null,
+                userName:"姓名",
+                userType:0,
+                department:null,
+                major:null
+            },
+        },
+        mounted:function (){
+            var that = this;
+            axios.get('http://'+IP+'/api/user/getUserInfo')
+                .then(function (response) {
+                    if(response.data.success===true){
+                        that.userInfo=response.data.data.userInfo;
+                    }else{
+                        console.log(response);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
+        methods:{
+        }
+    })
+</script>
+</body>
+</html>

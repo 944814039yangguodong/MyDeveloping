@@ -16,9 +16,13 @@ import java.util.List;
  */
 public interface ProjectService extends IService<Project> {
 
+    boolean updateById(Project project);
+
+    boolean save(Project project);
+
     Page<Project> projectPerPageByOrder(long current, long limit, String property, Project project, String memberId);
 
-    boolean updatePhase(String originalPhase, String originalStatus, String newPhase);
+    boolean updatePhase(Integer originalPhase, Integer originalStatus, Integer newPhase);
 
     boolean updateTop(Integer province, Integer nation);
 

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>立项审核</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../../../../static/layui/css/layui.css" media="all">
+    <script src="/layui/layui.js" charset="utf-8"></script>
+    <script src="../../../../static/layui/layui.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/common.js" charset="utf-8"></script>
+    <script src="../../../../static/common.js" charset="utf-8"></script>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin" id="app">
+    <!-- 头部区域水平导航 -->
+    <div class="layui-header">
+        <div onclick="window.location='/'" style="cursor: pointer" class="layui-logo">大创信息管理平台</div>
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-username"></i>
+                    {{userTypeName}} {{userInfo.userName}}
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a onclick="window.location='/teacher/userInfoPage'" style="cursor: pointer">个人信息</a></dd>
+                    <dd><a onclick="window.location='/teacher/userPasswordPage'" style="cursor: pointer">修改密码</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a onclick="window.location='/logout'" style="cursor: pointer">退出登录</a></li>
+        </ul>
+    </div>
+    <!-- 左侧导航区域垂直导航 -->
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <ul class="layui-nav layui-nav-tree">
+                <li v-if="userInfo.userType>=3" class="layui-nav-item">
+                    <a style="cursor: pointer"><i class="layui-icon layui-icon-user"></i> 用户管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a onclick="window.location='/teacher/userSelectPage'" style="cursor: pointer">用户查询</a></dd>
+                        <dd><a onclick="window.location='/teacher/userAddPage'" style="cursor: pointer">添加用户</a></dd>
+                    </dl>
+                </li>
+                <li v-if="userInfo.userType>=4" class="layui-nav-item">
+                    <a onclick="window.location='/teacher/timePublicPage'" style="cursor: pointer"><i class="layui-icon layui-icon-date"></i> 时间发布</a>
+                </li>
+                <li v-if="userInfo.userType>=3" class="layui-nav-item">
+                    <a style="cursor: pointer"><i class="layui-icon layui-icon-notice"></i> 公告管理</a>
+                    <dl class="layui-nav-child">
+                        <dd><a onclick="window.location='/teacher/noticeSelectPage'" style="cursor: pointer">公告查询</a></dd>
+                        <dd><a onclick="window.location='/teacher/noticeAddPage'" style="cursor: pointer">添加公告</a></dd>
+                    </dl>
+                </li>
+                <li v-if="userInfo.userType>=1" class="layui-nav-item">
+                    <a onclick="window.location='/teacher/myProjectPage'" style="cursor: pointer"><i class="layui-icon layui-icon-home"></i> 我的项目</a>
+                </li>
+                <li v-if="userInfo.userType>=2" class="layui-nav-item layui-nav-itemed">
+                    <a style="cursor: pointer"><i class="layui-icon layui-icon-read"></i> 项目审核</a>
+                    <dl class="layui-nav-child">
+                        <dd><a onclick="window.location='/teacher/pstartPage'" style="cursor: pointer">立项审核</a></dd>
+                        <dd><a onclick="window.location='/teacher/processPage'" style="cursor: pointer">进展记录</a></dd>
+                        <dd><a onclick="window.location='/teacher/pmidtermPage'" style="cursor: pointer">中期审核</a></dd>
+                        <dd><a onclick="window.location='/teacher/promotePage'" style="cursor: pointer">项目升级</a></dd>
+                        <dd><a onclick="window.location='/teacher/pendPage'" style="cursor: pointer">结项审核</a></dd>
+                        <dd><a onclick="window.location='/teacher/pextensionPage'" style="cursor: pointer">延期审核</a></dd>
+                    </dl>
+                </li>
+                <li v-if="userInfo.userType>=1" class="layui-nav-item">
+                    <a onclick="window.location='/teacher/moneyPage'" style="cursor: pointer"><i class="layui-icon layui-icon-rmb"></i> 财务统计</a>
+                </li>
+                <li v-if="userInfo.userType>=1" class="layui-nav-item">
+                    <a onclick="window.location='/teacher/fileDownloadPage'" style="cursor: pointer"><i class="layui-icon layui-icon-download-circle"></i> 文档下载</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- 内容主体区域 -->
+    <div class="layui-body" >
+        <section v-show="judgeProjectId==''">
+            <table id="table" class="layui-table" lay-skin="line">
+                <colgroup>
+                    <col width="60">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>项目名称</th>
+                    <th>项目编号</th>
+                    <th>指导老师</th>
+                    <th>负责人</th>
+                    <th>系别</th>
+                    <th>项目类型</th>
+                    <th>申报时间</th>
+                    <th>项目状态</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-show="isNull(0)">
+                    <td>1</td>
+                    <td>{{list[0].projectName}}</td>
+                    <td>{{list[0].projectId}}</td>
+                    <td>{{list[0].teacherName}}</td>
+                    <td>{{list[0].headName}}</td>
+                    <td>{{list[0].department}}</td>
+                    <td>{{list[0].projectClassName}}</td>
+                    <td>{{list[0].startTime}}</td>
+                    <td>{{list[0].projectPhaseName}}</td>
+                    <td><a @click="toInfo(0)" style="cursor: pointer">详情</a></td>
+                    <td><a @click="toJudge(0)" style="cursor: pointer">打分</a></td>
+                </tr>
+                <tr v-show="isNull(1)">
+                    <td>2</td>
+                    <td>{{list[1].projectName}}</td>
+                    <td>{{list[1].projectId}}</td>
+                    <td>{{list[1].teacherName}}</td>
+                    <td>{{list[1].headName}}</td>
+                    <td>{{list[1].department}}</td>
+                    <td>{{list[1].projectClassName}}</td>
+                    <td>{{list[1].startTime}}</td>
+                    <td>{{list[1].projectPhaseName}}</td>
+                    <td><a @click="toInfo(1)" style="cursor: pointer">详情</a></td>
+                    <td><a @click="toJudge(1)" style="cursor: pointer">打分</a></td>
+                </tr>
+                <tr v-show="isNull(2)">
+                    <td>3</td>
+                    <td>{{list[2].projectName}}</td>
+                    <td>{{list[2].projectId}}</td>
+                    <td>{{list[2].teacherName}}</td>
+                    <td>{{list[2].headName}}</td>
+                    <td>{{list[2].department}}</td>
+                    <td>{{list[2].projectClassName}}</td>
+                    <td>{{list[2].startTime}}</td>
+                    <td>{{list[2].projectPhaseName}}</td>
+                    <td><a @click="toInfo(2)" style="cursor: pointer">详情</a></td>
+                    <td><a @click="toJudge(2)" style="cursor: pointer">打分</a></td>
+                </tr>
+                <tr v-show="isNull(3)">
+                    <td>4</td>
+                    <td>{{list[3].projectName}}</td>
+                    <td>{{list[3].projectId}}</td>
+                    <td>{{list[3].teacherName}}</td>
+                    <td>{{list[3].headName}}</td>
+                    <td>{{list[3].department}}</td>
+                    <td>{{list[3].projectClassName}}</td>
+                    <td>{{list[3].startTime}}</td>
+                    <td>{{list[3].projectPhaseName}}</td>
+                    <td><a @click="toInfo(3)" style="cursor: pointer">详情</a></td>
+                    <td><a @click="toJudge(3)" style="cursor: pointer">打分</a></td>
+                </tr>
+                <tr v-show="isNull(4)">
+                    <td>5</td>
+                    <td>{{list[4].projectName}}</td>
+                    <td>{{list[4].projectId}}</td>
+                    <td>{{list[4].teacherName}}</td>
+                    <td>{{list[4].headName}}</td>
+                    <td>{{list[4].department}}</td>
+                    <td>{{list[4].projectClassName}}</td>
+                    <td>{{list[4].startTime}}</td>
+                    <td>{{list[4].projectPhaseName}}</td>
+                    <td><a @click="toInfo(4)" style="cursor: pointer">详情</a></td>
+                    <td><a @click="toJudge(4)" style="cursor: pointer">打分</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="float:right">
+                <button @click="previous" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+                <label style="text-align: center;margin: 5px">{{current}}/{{pageCount}}</label>
+                <button @click="next" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+            </div>
+        </section>
+
+        <section v-show="judgeProjectId!=''">
+            <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">项目名称</label>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeProjectName" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">项目编号</label>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeProjectId" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">负责人</label>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeHeadName" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">学号</label>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeHeadId" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">指导老师</label>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeTeacherName" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">工号</label>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeTeacherId" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">分数</label>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeGradeOne" class="layui-input" placeholder="分数1" style="width: 114px">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeGradeTwo" class="layui-input" placeholder="分数2" style="width: 114px">
+                        </div>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeGradeThree" class="layui-input" placeholder="分数3" style="width: 114px">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label" >平均分</label>
+                        <div class="layui-input-inline">
+                            <input v-model="judgeGrade" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <label @click="calculateGrade" class="layui-btn">计算平均分</label>
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">项目不通过的评价</label>
+                    <div class="layui-input-block" style="width: 514px">
+                        <textarea placeholder="请输入内容" v-model="failureDetails" class="layui-textarea" style="height: 150px" maxlength="200"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <label @click="reject" class="layui-btn">不通过</label>
+                        <label @click="approve" class="layui-btn">通过</label>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+    <!-- 底部固定区域 -->
+    <div class="layui-footer" style="text-align: center">
+        @杨国栋的大创信息管理平台
+    </div>
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            total:0,
+            list: [
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null}
+            ],
+            current:1,
+            limit:5,
+            property:"start_time",
+            pageCount:1,
+            userInfo:{
+                userId:null,
+                userName:"",
+                userType:4,
+                department:null,
+                major:null
+            },
+            userTypeName:"",
+            projectPhaseSearch:0,
+            statusSearch:0,
+            judgeProjectName:"",
+            judgeProjectId:"",
+            judgeHeadName:"",
+            judgeHeadId:"",
+            judgeTeacherName:"",
+            judgeTeacherId:"",
+            judgeGrade:null,
+            judgeGradeOne:null,
+            judgeGradeTwo:null,
+            judgeGradeThree:null,
+            failureDetails:"",
+        },
+        mounted:function (){
+            var that = this;
+            axios.get('http://'+IP+'/api/user/getUserInfo')
+                .then(function (response) {
+                    if(response.data.success===true){
+                        that.userInfo=response.data.data.userInfo;
+                        if(response.data.data.userInfo.userType===1)
+                            that.userTypeName="老师";
+                        else if(response.data.data.userInfo.userType===2){
+                            that.userTypeName="审核老师";
+                            that.departmentSearch=response.data.data.userInfo.department;
+                        }
+                        else if(response.data.data.userInfo.userType===3)
+                            that.userTypeName="系级负责人";
+                        else if(response.data.data.userInfo.userType===4)
+                            that.userTypeName="校级负责人";
+                        else
+                            that.userTypeName="学生";
+                    }else{
+                        console.log(response);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            this.getData();
+        },
+        methods:{
+            getData:function (){
+                var that = this;
+                console.log("departmentSearch:"+that.departmentSearch);
+                axios.get('http://'+IP+'/api/project/projectReviewSelect',{
+                    params:{
+                        projectPhase:that.projectPhaseSearch,
+                        status:that.statusSearch,
+                        current:that.current,
+                        limit:that.limit,
+                    }
+                })
+                    .then(function (response) {
+                        if(response.data.success===true){
+                            console.log(response);
+                            for(var i=0;i<that.limit;i++){
+                                if(response.data.data.rows.length>i){
+                                    that.list[i].projectName = response.data.data.rows[i].projectName;
+                                    that.list[i].projectId = response.data.data.rows[i].projectId;
+                                    that.list[i].teacherId = response.data.data.rows[i].teacherId;
+                                    that.list[i].headId = response.data.data.rows[i].headId;
+                                    that.list[i].department = response.data.data.rows[i].department;
+                                    that.list[i].projectClass = response.data.data.rows[i].projectClass;
+                                    that.list[i].startTime = response.data.data.rows[i].startTime;
+                                    that.list[i].projectPhase = response.data.data.rows[i].projectPhase;
+                                    that.list[i].teacherName = response.data.data.rows[i].teacherName;
+                                    that.list[i].headName = response.data.data.rows[i].headName;
+                                    switch (response.data.data.rows[i].projectClass){
+                                        case 0:
+                                            that.list[i].projectClassName="校级";
+                                            break;
+                                        case 1:
+                                            that.list[i].projectClassName="省级";
+                                            break;
+                                        case 2:
+                                            that.list[i].projectClassName="国家级";
+                                            break;
+                                    }
+                                    switch (response.data.data.rows[i].projectPhase){
+                                        case 0:
+                                            that.list[i].projectPhaseName="立项申请";
+                                            break;
+                                        case 1:
+                                            that.list[i].projectPhaseName="中期检查";
+                                            break;
+                                        case 2:
+                                            that.list[i].projectPhaseName="结项审核";
+                                            break;
+                                        case 3:
+                                            that.list[i].projectPhaseName="延期结项";
+                                            break;
+                                        case 4:
+                                            that.list[i].projectPhaseName="已结项";
+                                            break;
+                                        case 5:
+                                            that.list[i].projectPhaseName="已取消";
+                                            break;
+                                    }
+                                }else {
+                                    that.list[i].projectName = null;
+                                    that.list[i].projectId = null;
+                                    that.list[i].teacherId = null;
+                                    that.list[i].headId = null;
+                                    that.list[i].department = null;
+                                    that.list[i].projectClass = null;
+                                    that.list[i].startTime = null;
+                                    that.list[i].projectPhase = null;
+                                    that.list[i].teacherName = null;
+                                    that.list[i].headName = null;
+                                }
+                            }
+                            that.total=response.data.data.total;
+                            that.pageCount=Math.ceil(that.total/that.limit);
+                        }else{
+                            console.log(response);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            isNull:function (index){
+                if(this.list[index].projectId===null)
+                    return false;
+                else
+                    return true;
+            },
+            previous:function (){
+                if(this.current>1)
+                    this.current--;
+                this.getData();
+                this.getName();
+            },
+            next:function (){
+                if(this.current<this.pageCount)
+                    this.current++;
+                this.getData();
+                this.getName();
+            },
+            toInfo:function (index){
+                window.open('/project/projectInfoPage/'+this.list[index].projectId);
+            },
+            toJudge:function (index){
+                this.judgeProjectId=this.list[index].projectId;
+                this.judgeProjectName=this.list[index].projectName;
+                this.judgeHeadId=this.list[index].headId;
+                this.judgeHeadName=this.list[index].headName;
+                this.judgeTeacherId=this.list[index].teacherId;
+                this.judgeTeacherName=this.list[index].teacherName;
+            },
+            calculateGrade:function (){
+                this.judgeGrade=Math.round((parseInt(this.judgeGradeOne)+parseInt(this.judgeGradeTwo)+parseInt(this.judgeGradeThree))/3);
+            },
+            approve:function (){
+                let formData = new FormData();
+                formData.append('projectId', this.judgeProjectId);
+                formData.append('isApproved', true);
+                formData.append('grade', this.judgeGrade);
+                axios.post('http://'+IP+'/api/project/startEvaluation',formData)
+                    .then(function (response) {
+                        if(response.data.success===true){
+                            alert(response.data.message);
+                        }else{
+                            alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            reject:function (){
+                let formData = new FormData();
+                formData.append('projectId', this.judgeProjectId);
+                formData.append('isApproved', false);
+                formData.append('grade', this.judgeGrade);
+                formData.append('failureDetails', this.failureDetails);
+                axios.post('http://'+IP+'/api/project/startEvaluation',formData)
+                    .then(function (response) {
+                        if(response.data.success===true){
+                            alert(response.data.message);
+                        }else{
+                            alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        }
+    })
+</script>
+</body>
+</html>

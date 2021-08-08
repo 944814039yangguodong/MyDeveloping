@@ -20,9 +20,9 @@ public  class Constant {
     public static final Integer TYPE_INNOVATION=0;//创新训练
 
     //项目级别
-    public static final Integer CLASS_NATION=2;//立项驳回
-    public static final Integer CLASS_PROVINCE=1;//立项成功
-    public static final Integer CLASS_SCHOOL=0;//等待审核
+    public static final Integer CLASS_NATION=2;//国家级
+    public static final Integer CLASS_PROVINCE=1;//省级
+    public static final Integer CLASS_SCHOOL=0;//校级
 
     //项目阶段
     public static final Integer PHASE_CANCEL=5;//已取消

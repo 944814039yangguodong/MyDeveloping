@@ -20,4 +20,13 @@ public class ProjectRequestVO {
     @ApiModelProperty(value = "0立项申请、1中期检查、2结项审核、3延期结项、4已结项、5已取消")
     private Integer projectPhase;
 
+    @ApiModelProperty(value = "0等待审核、1立项成功、2立项驳回")
+    private Integer startStatus;
+
+    @ApiModelProperty(value = "0未中期审核、1中期审核、2中期审核通过、3中期审核未通过")
+    private Integer midtermStatus;
+
+    @ApiModelProperty(value = "0未结项审核、1结项审核、2结项审核通过、3延期结项、4延期项目审核、5结项审核未通过")
+    private Integer endStatus;
+
 }

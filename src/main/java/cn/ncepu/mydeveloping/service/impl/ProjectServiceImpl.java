@@ -54,6 +54,12 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
             projectQueryWrapper.eq("project_class",project.getProjectClass());
         if (!ObjectUtils.isEmpty(project.getProjectPhase()))
             projectQueryWrapper.eq("project_phase",project.getProjectPhase());
+        if (!ObjectUtils.isEmpty(project.getStartStatus()))
+            projectQueryWrapper.eq("start_status",project.getStartStatus());
+        if (!ObjectUtils.isEmpty(project.getMidtermStatus()))
+            projectQueryWrapper.eq("midterm_status",project.getMidtermStatus());
+        if (!ObjectUtils.isEmpty(project.getEndStatus()))
+            projectQueryWrapper.eq("end_status",project.getEndStatus());
 
         if(!ObjectUtils.isEmpty(memberId))
             projectQueryWrapper.eq("head_id",memberId)

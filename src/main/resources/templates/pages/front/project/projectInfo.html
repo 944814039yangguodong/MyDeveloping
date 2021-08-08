@@ -17,7 +17,7 @@
 </head>
 <body>
 <div id="app">
-  <form class="layui-form" action="" style="margin-top: 30px;margin-right: 30px">
+  <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
     <div class="layui-form-item">
       <label class="layui-form-label">项目名称</label>
       <div class="layui-input-block">
@@ -271,12 +271,192 @@
         </div>
       </div>
     </div>
+
+    <div class="layui-form-item" v-if="projectInfo.enterpriseTutorName!=''">
+      <div class="layui-inline">
+        <label class="layui-form-label">企业导师</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.enterpriseTutorName" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">单位</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.enterpriseTutorPlace" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">专业</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.enterpriseTutorMajor" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">职称</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.enterpriseTutorTitle" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">指导内容</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.enterpriseTutorWork" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">电话</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.enterpriseTutorPhone" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+
     <div class="layui-form-item layui-form-text">
       <label class="layui-form-label">项目简介</label>
       <div class="layui-input-block">
         <textarea v-model="projectInfo.projectIntroduction" class="layui-textarea" disabled=""></textarea>
       </div>
     </div>
+
+    <div v-if="projectInfo.projectPhase>=0">
+      <div class="layui-form-item"  v-if="file0!=''">
+        <label class="layui-form-label">立项申请书</label>
+        <a class="layui-form-mid" @click="download(0)" style="cursor: pointer;text-align: center">{{file0}}</a>
+      </div>
+      <div class="layui-form-item" v-if="file1!=''">
+        <label class="layui-form-label">立项PPT</label>
+        <a class="layui-form-mid" @click="download(1)"  style="cursor: pointer">{{file1}}</a>
+      </div>
+      <div class="layui-form-item" v-if="file2!=''">
+        <label class="layui-form-label">立项额外文件</label>
+        <a class="layui-form-mid" @click="download(2)" style="cursor: pointer">{{file2}}</a><br>
+      </div>
+    </div>
+
+    <div v-if="projectInfo.projectPhase>=1">
+      <div class="layui-form-item"  v-if="file3!=''">
+        <label class="layui-form-label">中期报告</label>
+        <a class="layui-form-mid" @click="download(3)" style="cursor: pointer">{{file3}}</a><br>
+      </div>
+      <div class="layui-form-item" v-if="file4!=''">
+        <label class="layui-form-label">人员变更申请表</label>
+        <a class="layui-form-mid" @click="download(4)" style="cursor: pointer">{{file4}}</a><br>
+      </div>
+      <div class="layui-form-item" v-if="file5!=''">
+        <label class="layui-form-label">中期PPT</label>
+        <a class="layui-form-mid" @click="download(5)" style="cursor: pointer">{{file5}}</a><br>
+      </div>
+      <div class="layui-form-item" v-if="file6!=''">
+        <label class="layui-form-label">中期额外文件</label>
+        <a class="layui-form-mid" @click="download(6)" style="cursor: pointer">{{file6}}</a><br>
+      </div>
+    </div>
+
+    <div v-if="projectInfo.projectPhase>=2">
+
+      <div class="layui-form-item" v-if="projectInfo.paperTitle!=''">
+        <div class="layui-inline">
+          <label class="layui-form-label">论文名称</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.paperTitle" class="layui-input" disabled="">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">发表刊物名称</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.publicationName" class="layui-input" disabled="">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">检索类型</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.retrievalType" class="layui-input" disabled="">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">检索号</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.retrievalNumber" class="layui-input" disabled="">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">论文第一作者</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.paperFirstAuthor" class="layui-input" disabled="">
+          </div>
+        </div>
+      </div>
+
+      <div class="layui-form-item" v-if="projectInfo.patentName!=''">
+        <div class="layui-inline">
+          <label class="layui-form-label">专利名称</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.patentName" class="layui-input" disabled="">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">专利授权时间</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.authorizedTime" class="layui-input" disabled="">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">专利号</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.patentNumber" class="layui-input" disabled="">
+          </div>
+        </div>
+      </div>
+
+      <div class="layui-form-item" v-if="projectInfo.physicalWorksName!=''">
+        <div class="layui-inline">
+          <label class="layui-form-label">实物作品名称</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.physicalWorksName" class="layui-input" disabled="">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">作品第一作者</label>
+          <div class="layui-input-inline">
+            <input v-model="projectInfo.worksFirstAuthor" class="layui-input" disabled="">
+          </div>
+        </div>
+      </div>
+
+      <div class="layui-form-item"  v-if="file7!=''">
+        <label class="layui-form-label">华北电力大学大学生创新创业训练计划结题报告书</label>
+        <a class="layui-form-mid" @click="download(7)" style="cursor: pointer">{{file7}}</a><br>
+      </div>
+      <div class="layui-form-item" v-if="file8!=''">
+        <label class="layui-form-label">大学生创新性实验计划项目研究总结报告</label>
+        <a class="layui-form-mid" @click="download(8)"  style="cursor: pointer">{{file8}}</a><br>
+      </div>
+      <div class="layui-form-item" v-if="file9!=''">
+        <label class="layui-form-label">成果信息表</label>
+        <a class="layui-form-mid" @click="download(9)" style="cursor: pointer">{{file9}}</a><br>
+      </div>
+      <div class="layui-form-item" v-if="file10!=''">
+        <label class="layui-form-label">成果展示文件</label>
+        <a class="layui-form-mid" @click="download(10)" style="cursor: pointer">{{file10}}</a><br>
+      </div>
+      <div class="layui-form-item"  v-if="file11!=''">
+        <label class="layui-form-label">个人总结</label>
+        <a class="layui-form-mid" @click="download(11)" style="cursor: pointer">{{file11}}</a><br>
+      </div>
+      <div class="layui-form-item" v-if="file12!=''">
+        <label class="layui-form-label">结项答辩PPT</label>
+        <a class="layui-form-mid" @click="download(12)"  style="cursor: pointer">{{file12}}</a><br>
+      </div>
+      <div class="layui-form-item" v-if="file13!=''">
+        <label class="layui-form-label">延期申请表</label>
+        <a class="layui-form-mid" @click="download(13)" style="cursor: pointer">{{file13}}</a><br>
+      </div>
+      <div class="layui-form-item" v-if="file14!=''">
+        <label class="layui-form-label">结项额外文件</label>
+        <a class="layui-form-mid" @click="download(14)" style="cursor: pointer">{{file14}}</a><br>
+      </div>
+    </div>
+
   </form>
 </div>
 <script>
@@ -296,7 +476,7 @@
         startTime:"",
         endTime:"",
         projectIntroduction:"",
-        projectPhase:"",
+        projectPhase:0,
         department:"",
         teacherId:"",
         teacherName:"",
@@ -342,9 +522,37 @@
         enterpriseTutorPhone:"",
         startStatus:"",
         midtermStatus:"",
-        endStatus:""
+        endStatus:"",
+        startApplication:null,
+        startPpt:null,
+        startAdditionalFile:null,
+        midtermReport:null,
+        midtermChange:null,
+        midtermPpt:null,
+        midtermAdditionalFile:null,
+        paperTitle:"",
+        publicationName:null,
+        retrievalType:null,
+        retrievalNumber:null,
+        paperFirstAuthor:null,
+        patentName:"",
+        authorizedTime:null,
+        patentNumber:null,
+        physicalWorksName:null,
+        worksFirstAuthor:null,
+        endReport:null,
+        conclusionReport:null,
+        outcomeTable:null,
+        outcomeFile:null,
+        personalSummary:null,
+        endPpt:null,
+        extensionApplication:null,
+        endAdditionalFile:null,
       },
-      projectTypeName:""
+      projectTypeName:"",
+      file0:"123",file1:"",file2:"",file3:"",file4:"",file5:"",
+      file6:"",file7:"",file8:"",file9:"",file10:"",file11:"",
+      file12:"",file13:"",file14:"",
     },
     mounted:function (){
       var that = this;
@@ -368,6 +576,66 @@
                       that.projectTypeName="创业实践";
                       break;
                   }
+                  if(that.projectInfo.startApplication != null){
+                    var str1 = that.projectInfo.startApplication.split("/");
+                    that.file0 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.startPpt != null){
+                    var str1 = that.projectInfo.startPpt.split("/");
+                    that.file1 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.startAdditionalFile != null){
+                    var str1 = that.projectInfo.startAdditionalFile.split("/");
+                    that.file2 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.midtermReport != null){
+                    var str1 = that.projectInfo.midtermReport.split("/");
+                    that.file3 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.midtermChange != null){
+                    var str1 = that.projectInfo.midtermChange.split("/");
+                    that.file4 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.midtermPpt != null){
+                    var str1 = that.projectInfo.midtermPpt.split("/");
+                    that.file5 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.midtermAdditionalFile != null){
+                    var str1 = that.projectInfo.midtermAdditionalFile.split("/");
+                    that.file6 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.endReport != null){
+                    var str1 = that.projectInfo.endReport.split("/");
+                    that.file7 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.conclusionReport != null){
+                    var str1 = that.projectInfo.conclusionReport.split("/");
+                    that.file8 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.outcomeTable != null){
+                    var str1 = that.projectInfo.outcomeTable.split("/");
+                    that.file9 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.outcomeFile != null){
+                    var str1 = that.projectInfo.outcomeFile.split("/");
+                    that.file10 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.personalSummary != null){
+                    var str1 = that.projectInfo.personalSummary.split("/");
+                    that.file11 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.endPpt != null){
+                    var str1 = that.projectInfo.endPpt.split("/");
+                    that.file12 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.extensionApplication != null){
+                    var str1 = that.projectInfo.extensionApplication.split("/");
+                    that.file13 = str1[str1.length-1];
+                  }
+                  if(that.projectInfo.endAdditionalFile != null){
+                    var str1 = that.projectInfo.endAdditionalFile.split("/");
+                    that.file14 = str1[str1.length-1];
+                  }
                 }else{
                   console.log(response);
                 }
@@ -377,6 +645,40 @@
               });
     },
     methods:{
+      download:function (index){
+        if(index===0)
+          window.open("/api/file/download?path="+this.projectInfo.startApplication);
+        else if(index===1)
+          window.open("/api/file/download?path="+this.projectInfo.startPpt);
+        else if(index===2)
+          window.open("/api/file/download?path="+this.projectInfo.startAdditionalFile);
+        else if(index===3)
+          window.open("/api/file/download?path="+this.projectInfo.midtermReport);
+        else if(index===4)
+          window.open("/api/file/download?path="+this.projectInfo.midtermChange);
+        else if(index===5)
+          window.open("/api/file/download?path="+this.projectInfo.midtermPpt);
+        else if(index===6)
+          window.open("/api/file/download?path="+this.projectInfo.midtermAdditionalFile);
+        else if(index===7)
+          window.open("/api/file/download?path="+this.projectInfo.endReport);
+        else if(index===8)
+          window.open("/api/file/download?path="+this.projectInfo.conclusionReport);
+        else if(index===9)
+          window.open("/api/file/download?path="+this.projectInfo.outcomeTable);
+        else if(index===10)
+          window.open("/api/file/download?path="+this.projectInfo.outcomeFile);
+        else if(index===11)
+          window.open("/api/file/download?path="+this.projectInfo.personalSummary);
+        else if(index===12)
+          window.open("/api/file/download?path="+this.projectInfo.endPpt);
+        else if(index===13)
+          window.open("/api/file/download?path="+this.projectInfo.extensionApplication);
+        else if(index===14)
+          window.open("/api/file/download?path="+this.projectInfo.endAdditionalFile);
+        else
+          alert("该文件不存在！");
+      }
     }
   })
 </script>

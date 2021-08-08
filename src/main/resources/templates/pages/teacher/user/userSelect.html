@@ -2,18 +2,18 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>查看公告</title>
+    <title>查看用户</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
-    <link rel="stylesheet" href="../../../static/layui/css/layui.css"  media="all">
+    <link rel="stylesheet" href="../../../../static/layui/css/layui.css" media="all">
     <script src="/layui/layui.js" charset="utf-8"></script>
-    <script src="../../../static/layui/layui.js" charset="utf-8"></script>
+    <script src="../../../../static/layui/layui.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="/common.js" charset="utf-8"></script>
-    <script src="../../../static/common.js" charset="utf-8"></script>
+    <script src="../../../../static/common.js" charset="utf-8"></script>
 </head>
 <body>
 <div class="layui-layout layui-layout-admin" id="app">
@@ -38,7 +38,7 @@
     <div class="layui-side layui-bg-black">
         <div class="layui-side-scroll">
             <ul class="layui-nav layui-nav-tree">
-                <li v-if="userInfo.userType>=4" class="layui-nav-item">
+                <li v-if="userInfo.userType>=3" class="layui-nav-item layui-nav-itemed">
                     <a style="cursor: pointer"><i class="layui-icon layui-icon-user"></i> 用户管理</a>
                     <dl class="layui-nav-child">
                         <dd><a onclick="window.location='/teacher/userSelectPage'" style="cursor: pointer">用户查询</a></dd>
@@ -48,14 +48,14 @@
                 <li v-if="userInfo.userType>=4" class="layui-nav-item">
                     <a onclick="window.location='/teacher/timePublicPage'" style="cursor: pointer"><i class="layui-icon layui-icon-date"></i> 时间发布</a>
                 </li>
-                <li v-if="userInfo.userType>=3" class="layui-nav-item layui-nav-itemed">
+                <li v-if="userInfo.userType>=3" class="layui-nav-item">
                     <a style="cursor: pointer"><i class="layui-icon layui-icon-notice"></i> 公告管理</a>
                     <dl class="layui-nav-child">
                         <dd><a onclick="window.location='/teacher/noticeSelectPage'" style="cursor: pointer">公告查询</a></dd>
                         <dd><a onclick="window.location='/teacher/noticeAddPage'" style="cursor: pointer">添加公告</a></dd>
                     </dl>
                 </li>
-                <li v-if="userInfo.userType>=1" class="layui-nav-item layui-nav-itemed">
+                <li v-if="userInfo.userType>=1" class="layui-nav-item">
                     <a onclick="window.location='/teacher/myProjectPage'" style="cursor: pointer"><i class="layui-icon layui-icon-home"></i> 我的项目</a>
                 </li>
                 <li v-if="userInfo.userType>=2" class="layui-nav-item">
@@ -82,74 +82,91 @@
     <div class="layui-body" >
         <section>
             <div style="display: flex;margin-top: 10px;margin-bottom: 5px;margin-right:5px;float:right">
-                <input type="text" placeholder="公告标题查找" v-model="noticeNameSearch" class="layui-input" style="width: 500px">
+                <input type="text" placeholder="学工号查找" v-model="userIdSearch" class="layui-input" style="width: 200px">
+                <input type="text" placeholder="姓名查找" v-model="userNameSearch" class="layui-input" style="width: 200px">
+                <input type="text" placeholder="院系查找" v-model="departmentSearch" class="layui-input" style="width: 200px">
+                <select v-model="userTypeSearch" class="layui-input" style="width: 200px">
+                    <option value="0">学生</option>
+                    <option value="1">老师</option>
+                    <option value="2">审核老师</option>
+                    <option value="3">系级负责人</option>
+                    <option v-if="userInfo.userType==4" value="4">校级负责人</option>
+                </select>
                 <button @click="getData" class="layui-btn layui-btn-primary">搜索</button>
             </div>
             <table id="table" class="layui-table" lay-skin="line">
                 <colgroup>
-                    <col width="110">
-                    <col width>
+                    <col width="50">
                     <col width="100">
                     <col width="100">
                     <col width="100">
                     <col width="100">
+                    <col width="50">
+                    <col width="50">
                 </colgroup>
                 <thead>
                 <tr>
-                    <th>发布时间</th>
-                    <th>公告名称</th>
-                    <th>公告编号</th>
-                    <th>查看详情</th>
+                    <th>序号</th>
+                    <th>教职工号</th>
+                    <th>教师姓名</th>
+                    <th>系别</th>
+                    <th>权限类别</th>
                     <th></th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-show="isNull(0)">
-                    <td>{{list[0].gmtCreate}}</td>
-                    <td>{{list[0].noticeName}}</td>
-                    <td>{{list[0].noticeId}}</td>
-                    <td><a @click="toInfo(0)" style="cursor: pointer">详情</a></td>
+                    <td>1</td>
+                    <td>{{list[0].userId}}</td>
+                    <td>{{list[0].userName}}</td>
+                    <td>{{list[0].department}}</td>
+                    <td>{{list[0].userTypeName}}</td>
                     <td><a @click="edit(0)" style="cursor: pointer">修改</a></td>
                     <td><a @click="toDelete(0)" style="cursor: pointer">删除</a></td>
                 </tr>
                 <tr v-show="isNull(1)">
-                    <td>{{list[1].gmtCreate}}</td>
-                    <td>{{list[1].noticeName}}</td>
-                    <td>{{list[1].noticeId}}</td>
-                    <td><a @click="toInfo(1)" style="cursor: pointer">详情</a></td>
+                    <td>2</td>
+                    <td>{{list[1].userId}}</td>
+                    <td>{{list[1].userName}}</td>
+                    <td>{{list[1].department}}</td>
+                    <td>{{list[1].userTypeName}}</td>
                     <td><a @click="edit(1)" style="cursor: pointer">修改</a></td>
                     <td><a @click="toDelete(1)" style="cursor: pointer">删除</a></td>
                 </tr>
                 <tr v-show="isNull(2)">
-                    <td>{{list[2].gmtCreate}}</td>
-                    <td>{{list[2].noticeName}}</td>
-                    <td>{{list[2].noticeId}}</td>
-                    <td><a @click="toInfo(2)" style="cursor: pointer">详情</a></td>
+                    <td>3</td>
+                    <td>{{list[2].userId}}</td>
+                    <td>{{list[2].userName}}</td>
+                    <td>{{list[2].department}}</td>
+                    <td>{{list[2].userTypeName}}</td>
                     <td><a @click="edit(2)" style="cursor: pointer">修改</a></td>
                     <td><a @click="toDelete(2)" style="cursor: pointer">删除</a></td>
                 </tr>
                 <tr v-show="isNull(3)">
-                    <td>{{list[3].gmtCreate}}</td>
-                    <td>{{list[3].noticeName}}</td>
-                    <td>{{list[3].noticeId}}</td>
-                    <td><a @click="toInfo(3)" style="cursor: pointer">详情</a></td>
+                    <td>4</td>
+                    <td>{{list[3].userId}}</td>
+                    <td>{{list[3].userName}}</td>
+                    <td>{{list[3].department}}</td>
+                    <td>{{list[3].userTypeName}}</td>
                     <td><a @click="edit(3)" style="cursor: pointer">修改</a></td>
                     <td><a @click="toDelete(3)" style="cursor: pointer">删除</a></td>
                 </tr>
                 <tr v-show="isNull(4)">
-                    <td>{{list[4].gmtCreate}}</td>
-                    <td>{{list[4].noticeName}}</td>
-                    <td>{{list[4].noticeId}}</td>
-                    <td><a @click="toInfo(4)" style="cursor: pointer">详情</a></td>
+                    <td>5</td>
+                    <td>{{list[4].userId}}</td>
+                    <td>{{list[4].userName}}</td>
+                    <td>{{list[4].department}}</td>
+                    <td>{{list[4].userTypeName}}</td>
                     <td><a @click="edit(4)" style="cursor: pointer">修改</a></td>
                     <td><a @click="toDelete(4)" style="cursor: pointer">删除</a></td>
                 </tr>
                 <tr v-show="isNull(5)">
-                    <td>{{list[5].gmtCreate}}</td>
-                    <td>{{list[5].noticeName}}</td>
-                    <td>{{list[5].noticeId}}</td>
-                    <td><a @click="toInfo(5)" style="cursor: pointer">详情</a></td>
+                    <td>6</td>
+                    <td>{{list[5].userId}}</td>
+                    <td>{{list[5].userName}}</td>
+                    <td>{{list[5].department}}</td>
+                    <td>{{list[5].userTypeName}}</td>
                     <td><a @click="edit(5)" style="cursor: pointer">修改</a></td>
                     <td><a @click="toDelete(5)" style="cursor: pointer">删除</a></td>
                 </tr>
@@ -171,23 +188,6 @@
     var app = new Vue({
         el: '#app',
         data: {
-            total:0,
-            list: [
-                {noticeId:null,noticeName:"",gmtCreate:""},
-                {noticeId:null,noticeName:"",gmtCreate:""},
-                {noticeId:null,noticeName:"",gmtCreate:""},
-                {noticeId:null,noticeName:"",gmtCreate:""},
-                {noticeId:null,noticeName:"",gmtCreate:""},
-                {noticeId:null,noticeName:"",gmtCreate:""}
-            ],
-            current:1,
-            limit:6,
-            property:"gmt_create",
-            pageCount:1,
-            noticeIdSearch:"",
-            userIdSearch:"",
-            noticeNameSearch:"",
-
             userInfo:{
                 userId:null,
                 userName:"姓名",
@@ -195,7 +195,24 @@
                 department:null,
                 major:null
             },
-            userTypeName:"老师"
+            userTypeName:"老师",
+            total:0,
+            list: [
+                {userId:null,userName:"",department:"",userType:null,userTypeName:""},
+                {userId:null,userName:"",department:"",userType:null,userTypeName:""},
+                {userId:null,userName:"",department:"",userType:null,userTypeName:""},
+                {userId:null,userName:"",department:"",userType:null,userTypeName:""},
+                {userId:null,userName:"",department:"",userType:null,userTypeName:""},
+                {userId:null,userName:"",department:"",userType:null,userTypeName:""},
+            ],
+            current:1,
+            limit:6,
+            property:"gmt_create",
+            pageCount:1,
+            userIdSearch:"",
+            departmentSearch:"",
+            userNameSearch:"",
+            userTypeSearch:"0",
         },
         mounted:function (){
             var that = this;
@@ -223,24 +240,21 @@
             that.getData();
         },
         methods:{
-            toInfo:function (index){
-                window.open('/api/notice/public/noticeInfoPage/'+this.list[index].noticeId);
-            },
             edit:function (index){
-                window.location='/api/notice/noticeUpdatePage/'+this.list[index].noticeId;
+                window.location='/teacher/userUpdatePage/'+this.list[index].userId;
             },
             toDelete:function (index){
                 var that=this;
-                axios.delete('http://'+IP+'/api/notice/noticeDelete',{
+                axios.delete('http://'+IP+'/api/user/userDelete',{
                     params:{
-                        noticeId:that.list[index].noticeId
+                        userId:that.list[index].userId
                     }
                 })
                     .then(function (response) {
                         if(response.data.success===true){
-                            alert(response.data.message);
+                            layer.alert(response.data.message);
                         }else{
-                            alert(response.data.message);
+                            layer.alert(response.data.message);
                             console.log(response);
                         }
                     })
@@ -260,27 +274,42 @@
             },
             getData:function (){
                 var that = this;
-                axios.get('http://'+IP+'/api/notice/public/noticeSelectPage',{
+                axios.get('http://'+IP+'/api/user/userSelectPage',{
                     params:{
                         current:that.current,
                         limit:that.limit,
                         property:that.property,
-                        noticeId: that.noticeIdSearch,
+                        userName: that.userNameSearch,
                         userId: that.userIdSearch,
-                        noticeName: that.noticeNameSearch,
-                    }
+                        department: that.departmentSearch,
+                        userType: that.userTypeSearch
+                    }//params格式适用于get请求传参
                 })
                     .then(function (response) {
                         if(response.data.success===true){
+                            console.log(response);
                             for(var i=0;i<that.limit;i++){
                                 if(response.data.data.rows.length>i){
-                                    that.list[i].noticeId = response.data.data.rows[i].noticeId;
-                                    that.list[i].noticeName = response.data.data.rows[i].noticeName;
-                                    that.list[i].gmtCreate = response.data.data.rows[i].gmtCreate;
+                                    that.list[i].userId = response.data.data.rows[i].userId;
+                                    that.list[i].userName = response.data.data.rows[i].userName;
+                                    that.list[i].department = response.data.data.rows[i].department;
+                                    that.list[i].userType = response.data.data.rows[i].userType;
+                                    if(that.list[i].userType===1)
+                                        that.list[i].userTypeName="老师";
+                                    else if(that.list[i].userType===2)
+                                        that.list[i].userTypeName="审核老师";
+                                    else if(that.list[i].userType===3)
+                                        that.list[i].userTypeName="系级负责人";
+                                    else if(that.list[i].userType===4)
+                                        that.list[i].userTypeName="校级负责人";
+                                    else
+                                        that.list[i].userTypeName="学生";
                                 }else {
-                                    that.list[i].noticeId = null;
-                                    that.list[i].noticeName = null;
-                                    that.list[i].gmtCreate = null;
+                                    that.list[i].userId = null;
+                                    that.list[i].userName = null;
+                                    that.list[i].department = null;
+                                    that.list[i].userType = null;
+                                    that.list[i].userTypeName = null;
                                 }
                             }
                             that.total=response.data.data.total;
@@ -294,10 +323,7 @@
                     });
             },
             isNull:function (index){
-                if(this.list[index].noticeId===null)
-                    return false;
-                else
-                    return true;
+                return this.list[index].userId !== null;
             }
         }
     })

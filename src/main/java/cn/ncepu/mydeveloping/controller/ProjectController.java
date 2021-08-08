@@ -103,7 +103,7 @@ public class ProjectController {
             project.setFifthJob("");
             project.setFifthPhone("");
         }
-        project.setHeadId((String) StpUtil.getLoginId());
+        //project.setHeadId((String) StpUtil.getLoginId());
         project.setLogSubmitCount(0);//设置初始日志提交数为0
         project.setLogNotReadCount(0);//设置初始日志未阅读数为0
         BigDecimal temp = new BigDecimal(0);
@@ -228,6 +228,7 @@ public class ProjectController {
             String newFileName =ROOT_PATH + fileUploads(extensionFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ExtensionApplication");
             project.setExtensionApplication(newFileName);
         } else return R.error().message("延期申请表不得为空！");
+        project.setProjectPhase(PHASE_EXTENSION);//设置项目阶段为延期结项
         project.setEndStatus(END_EXTENSION_WAITING);//设置结项状态为延期结项
         boolean res = projectService.updateById(project);
         if (res){
@@ -404,6 +405,44 @@ public class ProjectController {
     /**
      * 审核教师操作
      */
+    @ApiOperation(value = "分页获取当前用户可审核项目列表（校级以上负责人查看全部）")
+    @GetMapping("projectReviewSelect")
+    @SaCheckPermission("reviewer-operation")
+    R projectReviewSelect(long current, long limit, Integer projectPhase, Integer status){
+        Project project = new Project();
+        switch (projectPhase){
+            case 0:
+                project.setStartStatus(status);break;
+            case 1:
+                project.setMidtermStatus(status);break;
+            case 2:
+            case 3:
+                project.setEndStatus(status);break;
+        }
+        String memberId = (String) StpUtil.getLoginId();
+        User user = userService.getById(memberId);
+        Page<Project> projectPage;
+        if(user.getUserType().equals(DEPARTMENT)||user.getUserType().equals(REVIEWER)){
+            project.setDepartment(user.getDepartment());
+            projectPage = projectService.projectPerPageByOrder(current,limit,"start_time", project, null);
+        }else if(user.getUserType().equals(SCHOOL)){
+            projectPage = projectService.projectPerPageByOrder(current,limit,"start_time", project, null);
+        }else{
+            return R.error().message("该用户无审核权限！");
+        }
+        List<ProjectListResponseVO> projectList = new ArrayList<>();
+        for(int i=0;i<projectPage.getRecords().size();i++){
+            ProjectListResponseVO temp = new ProjectListResponseVO();
+            BeanUtils.copyProperties(projectPage.getRecords().get(i),temp);
+            if(ObjectUtils.isEmpty(temp.getHeadName())||ObjectUtils.isEmpty(temp.getTeacherName())){
+                temp.setTeacherName(userService.getById(temp.getTeacherId()).getUserName());
+                temp.setHeadName(userService.getById(temp.getHeadId()).getUserName());
+            }
+            projectList.add(temp);
+        }
+        return R.ok().data("total",projectPage.getTotal()).data("rows",projectList);
+    }
+
     @ApiOperation(value = "立项审核")
     @PostMapping("startEvaluation")
     @SaCheckPermission("reviewer-operation")
@@ -440,7 +479,7 @@ public class ProjectController {
         return R.error().message("中期审核操作失败！");
     }
 
-    @ApiOperation(value = "结项审核")
+    @ApiOperation(value = "结项审核（失败自动转入延期审核阶段）")
     @PostMapping("endEvaluation")
     @SaCheckPermission("reviewer-operation")
     R endEvaluation(String projectId, boolean isApproved, Integer grade, String failureDetails){
@@ -450,6 +489,7 @@ public class ProjectController {
         }else {
             project.setEndStatus(END_EXTENSION_WAITING);
             project.setExtensionDetails(failureDetails);
+            project.setProjectPhase(PHASE_EXTENSION);
         }
         project.setEndGrade(grade);
         project.setEndReviewerId((String) StpUtil.getLoginId());
@@ -520,21 +560,21 @@ public class ProjectController {
             return R.error().message("操作失败！");
     }
 
-    @ApiOperation(value = "所有结项成功项目转入已结项状态")
+    @ApiOperation(value = "所有结项/延期结项成功项目转入已结项状态")
     @PostMapping("end")
     @SaCheckPermission("school-operation")
     R end(){
-        if(projectService.updatePhase(PHASE_END,END_SUCCESS,PHASE_OVER))
+        if(projectService.updatePhase(PHASE_END,END_SUCCESS,PHASE_OVER)||projectService.updatePhase(PHASE_EXTENSION,END_SUCCESS,PHASE_OVER))
             return R.ok().message("操作成功！");
         else
             return R.error().message("操作失败！");
     }
 
-    @ApiOperation(value = "所有立项、中期、延期、结项审核未通过项目转入已取消状态")
+    @ApiOperation(value = "所有立项、中期、延期审核未通过项目转入已取消状态")
     @PostMapping("enterCancel")
     @SaCheckPermission("school-operation")
     R enterCancel(){
-        if(projectService.updatePhase(PHASE_END,END_REJECT,PHASE_CANCEL)&&projectService.updatePhase(PHASE_MIDTERM,MIDTERM_REJECT,PHASE_CANCEL)&&projectService.updatePhase(PHASE_START,MIDTERM_REJECT,PHASE_CANCEL))
+        if(projectService.updatePhase(PHASE_EXTENSION,END_REJECT,PHASE_CANCEL)||projectService.updatePhase(PHASE_MIDTERM,MIDTERM_REJECT,PHASE_CANCEL)||projectService.updatePhase(PHASE_START,MIDTERM_REJECT,PHASE_CANCEL))
             return R.ok().message("操作成功！");
         else
             return R.error().message("操作失败！");

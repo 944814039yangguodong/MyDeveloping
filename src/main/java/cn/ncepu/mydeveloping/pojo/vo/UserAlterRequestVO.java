@@ -7,6 +7,9 @@ import lombok.Data;
 @Data
 @ApiModel(value="修改用户请求信息")
 public class UserAlterRequestVO {
+    @ApiModelProperty(value = "用户学工号")
+    private String userId;
+
     @ApiModelProperty(value = "用户密码，初始默认为123456")
     private String userPassword;
 

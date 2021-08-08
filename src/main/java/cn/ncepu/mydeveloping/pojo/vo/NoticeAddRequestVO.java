@@ -15,12 +15,4 @@ public class NoticeAddRequestVO {
     @ApiModelProperty(value = "公告内容")
     private String noticeContent;
 
-//    @ApiModelProperty(value = "附件一")
-//    private MultipartFile fileOne;
-//
-//    @ApiModelProperty(value = "附件二")
-//    private MultipartFile fileTwo;
-//
-//    @ApiModelProperty(value = "附件三")
-//    private MultipartFile fileThree;
 }

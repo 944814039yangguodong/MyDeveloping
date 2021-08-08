@@ -69,9 +69,13 @@ public class UserController {
         if (ObjectUtils.isEmpty(userAddRequestVO.getUserId()))
             return R.error().message("学工号不得为空！");
         if (!ObjectUtils.isEmpty(userService.getById(userAddRequestVO.getUserId())))
-            return R.error().message("该教工号已经注册！");
+            return R.error().message("该学工号已经注册！");
         if (ObjectUtils.isEmpty(userAddRequestVO.getUserPassword()))
             userAddRequestVO.setUserPassword("123456");//初始密码为123456
+        if (ObjectUtils.isEmpty(userAddRequestVO.getUserType()))
+            return R.error().message("用户类别不得为空！");
+        if (ObjectUtils.isEmpty(userAddRequestVO.getDepartment()))
+            return R.error().message("所在院系不得为空！");
         User user = new User();
         BeanUtils.copyProperties(userAddRequestVO,user);
         String MD5Password = SaSecureUtil.md5(userAddRequestVO.getUserPassword());
@@ -100,14 +104,21 @@ public class UserController {
     @ApiOperation(value = "系级负责人修改用户信息（包含修改密码）")
     @PostMapping("userModify")
     @SaCheckPermission("department-operation")
-    R userModify(String userId, UserAlterRequestVO userAlterRequestVO){
-        User user = userService.getById(userId);
-        if (ObjectUtils.isEmpty(user)){
+    R userModify(@RequestBody UserAlterRequestVO userAlterRequestVO){
+        if (ObjectUtils.isEmpty(userAlterRequestVO.getUserId()))
+            return R.error().message("用户ID不得为空！");
+        if (ObjectUtils.isEmpty(userAlterRequestVO.getUserType()))
+            return R.error().message("用户类别不得为空！");
+        if (ObjectUtils.isEmpty(userAlterRequestVO.getDepartment()))
+            return R.error().message("所在院系不得为空！");
+        User user = userService.getById(userAlterRequestVO.getUserId());
+        if (ObjectUtils.isEmpty(user))
             return R.error().message("未找到该用户信息，无法修改！");
-        }
         if(!ObjectUtils.isEmpty(userAlterRequestVO.getUserPassword())){
             String MD5Password = SaSecureUtil.md5(userAlterRequestVO.getUserPassword());
             userAlterRequestVO.setUserPassword(MD5Password);
+        }else {
+            userAlterRequestVO.setUserPassword(user.getUserPassword());
         }
         BeanUtils.copyProperties(userAlterRequestVO,user);
         boolean res = userService.updateById(user);
@@ -150,8 +161,8 @@ public class UserController {
     }
 
     @ApiOperation(value = "修改密码")
-    @PostMapping("PasswordModify")
-    R PasswordModify(String userId, String userPassword){
+    @PostMapping("passwordModify")
+    R passwordModify(String userId, String userPassword){
         if(ObjectUtils.isEmpty(userPassword))
             return R.error().message("新密码不能为空！");
         if(!userId.equals((String) StpUtil.getLoginId()))
@@ -161,9 +172,9 @@ public class UserController {
         user.setUserPassword(MD5Password);
         boolean res = userService.updateById(user);
         if (res){
-            return R.ok().message("重置密码成功！");
+            return R.ok().message("修改密码成功！");
         }
-        return R.error().message("重置密码失败！");
+        return R.error().message("修改密码失败！");
     }
 }
 

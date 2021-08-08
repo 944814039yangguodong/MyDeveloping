@@ -162,13 +162,141 @@ public class ProjectInfoResponseVO {
     @ApiModelProperty(value = "企业导师联系电话")
     private String enterpriseTutorPhone;
 
+    @ApiModelProperty(value = "项目报销表单文件存储路径")
+    private String reimbursementTable;
+
+    @ApiModelProperty(value = "项目报销总金额，初始为0")
+    private BigDecimal reimbursementAmount;
+
+    @ApiModelProperty(value = "项目报销提交时间")
+    private Date reimbursementDate;
+
+    @ApiModelProperty(value = "项目日志提交数，初始为0，每提交一次加一")
+    private Integer logSubmitCount;
+
+    @ApiModelProperty(value = "项目日志审阅数，初始为0，不可为负，每提交一次加一，每查阅一次减一")
+    private Integer logNotReadCount;
+
     @ApiModelProperty(value = "0等待审核、1立项成功、2立项驳回")
     private Integer startStatus;
+
+    @ApiModelProperty(value = "立项申请表文件存储路径")
+    private String startApplication;
+
+    @ApiModelProperty(value = "立项答辩PPT文件存储路径")
+    private String startPpt;
+
+    @ApiModelProperty(value = "立项额外文件存储路径")
+    private String startAdditionalFile;
+
+    @ApiModelProperty(value = "立项评分")
+    private Integer startGrade;
+
+    @ApiModelProperty(value = "立项驳回的原因")
+    private String startFailureDetails;
+
+    @ApiModelProperty(value = "立项审核教师职工号")
+    private String startReviewerId;
 
     @ApiModelProperty(value = "0未中期审核、1中期审核、2中期审核通过、3中期审核未通过")
     private Integer midtermStatus;
 
+    @ApiModelProperty(value = "中期报告文件存储路径")
+    private String midtermReport;
+
+    @ApiModelProperty(value = "成员变动申请表文件存储路径，0代表已删除")
+    private String midtermChange;
+
+    @ApiModelProperty(value = "中期答辩PPT文件存储路径")
+    private String midtermPpt;
+
+    @ApiModelProperty(value = "中期额外文件存储路径")
+    private String midtermAdditionalFile;
+
+    @ApiModelProperty(value = "中期评分")
+    private Integer midtermGrade;
+
+    @ApiModelProperty(value = "中期审核失败的原因")
+    private String midtermFailureDetails;
+
+    @ApiModelProperty(value = "中期审核教师职工号")
+    private String midtermReviewerId;
+
     @ApiModelProperty(value = "0未结项审核、1结项审核、2结项审核通过、3延期结项、4延期项目审核、5结项审核未通过")
     private Integer endStatus;
 
+    @ApiModelProperty(value = "论文名称")
+    private String paperTitle;
+
+    @ApiModelProperty(value = "发表刊物名称")
+    private String publicationName;
+
+    @ApiModelProperty(value = "检索类型")
+    private String retrievalType;
+
+    @ApiModelProperty(value = "检索号")
+    private String retrievalNumber;
+
+    @ApiModelProperty(value = "论文第一作者")
+    private String paperFirstAuthor;
+
+    @ApiModelProperty(value = "专利名称")
+    private String patentName;
+
+    @ApiModelProperty(value = "专利授权时间")
+    private String authorizedTime;
+
+    @ApiModelProperty(value = "专利号")
+    private String patentNumber;
+
+    @ApiModelProperty(value = "实物作品名称")
+    private String physicalWorksName;
+
+    @ApiModelProperty(value = "作品第一作者")
+    private String worksFirstAuthor;
+
+    @ApiModelProperty(value = "华北电力大学大学生创新创业训练计划结题报告书文件存储路径")
+    private String endReport;
+
+    @ApiModelProperty(value = "大学生创新性实验计划项目研究总结报告文件存储路径")
+    private String conclusionReport;
+
+    @ApiModelProperty(value = "成果信息表文件存储路径")
+    private String outcomeTable;
+
+    @ApiModelProperty(value = "成果展示文件存储路径")
+    private String outcomeFile;
+
+    @ApiModelProperty(value = "个人总结文件存储路径")
+    private String personalSummary;
+
+    @ApiModelProperty(value = "结项答辩PPT文件存储路径")
+    private String endPpt;
+
+    @ApiModelProperty(value = "延期申请表文件存储路径")
+    private String extensionApplication;
+
+    @ApiModelProperty(value = "结项额外文件存储路径")
+    private String endAdditionalFile;
+
+    @ApiModelProperty(value = "结项评分")
+    private Integer endGrade;
+
+    @ApiModelProperty(value = "申请延期原因")
+    private String extensionReason;
+
+    @ApiModelProperty(value = "结项审核延期的原因")
+    private String extensionDetails;
+
+    @ApiModelProperty(value = "结项审核教师职工号")
+    private String endReviewerId;
+
+    @ApiModelProperty(value = "延期评分")
+    private Integer extensionGrade;
+
+    @ApiModelProperty(value = "结项审核失败的原因")
+    private String endFailureDetails;
+
+    @ApiModelProperty(value = "延期审核教师职工号")
+    private String extensionReviewerId;
 }

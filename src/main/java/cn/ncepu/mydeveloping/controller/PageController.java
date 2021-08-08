@@ -40,11 +40,6 @@ public class PageController {
         return "pages/front/notice/noticeInfo";
     }
 
-    @RequestMapping("/api/notice/noticeUpdatePage/{noticeId}")
-    String noticeUpdatePage(){
-        return "pages/teacher/noticeUpdate";
-    }
-
     @RequestMapping("/project/projectInfoPage/{projectId}")
     String projectInfoPage(){
         return "pages/front/project/projectInfo";
@@ -53,81 +48,97 @@ public class PageController {
     /**
      * 教师端页面控制
      */
+    //公告操作
+    @RequestMapping("/teacher/noticeSelectPage")
+    String noticeSelectPage(){
+        return "pages/teacher/notice/noticeSelect";
+    }
+
+    @RequestMapping("/teacher/noticeAddPage")
+    String noticeAddPage(){
+        return "pages/teacher/notice/noticeAdd";
+    }
+
+    @RequestMapping("/api/notice/noticeUpdatePage/{noticeId}")
+    String noticeUpdatePage(){
+        return "pages/teacher/notice/noticeUpdate";
+    }
+
+    //用户操作
     @RequestMapping("/teacher/userInfoPage")
     String teacherUserInfoPage(){
-        return "pages/teacher/teacherUserInfo";
+        return "pages/teacher/user/teacherUserInfo";
     }
 
     @RequestMapping("/teacher/userPasswordPage")
     String teacherUserPasswordPage(){
-        return "pages/teacher/teacherUserPassword";
+        return "pages/teacher/user/teacherUserPassword";
     }
 
     @RequestMapping("/teacher/userSelectPage")
     String userSelectPage(){
-        return "pages/teacher/userSelect";
+        return "pages/teacher/user/userSelect";
     }
 
     @RequestMapping("/teacher/userAddPage")
     String userAddPage(){
-        return "pages/teacher/userAdd";
+        return "pages/teacher/user/userAdd";
     }
 
+    @RequestMapping("/teacher/userUpdatePage/{userId}")
+    String userUpdatePage(){
+        return "pages/teacher/user/userUpdate";
+    }
+
+    //时间操作
     @RequestMapping("/teacher/timePublicPage")
     String timePublicPage(){
         return "pages/teacher/timePublic";
     }
 
-    @RequestMapping("/teacher/noticeSelectPage")
-    String noticeSelectPage(){
-        return "pages/teacher/noticeSelect";
-    }
-
-    @RequestMapping("/teacher/noticeAddPage")
-    String noticeAddPage(){
-        return "pages/teacher/noticeAdd";
-    }
-
+    //项目操作
     @RequestMapping("/teacher/myProjectPage")
     String teacherMyProject(){
-        return "pages/teacher/teacherMyProject";
+        return "pages/teacher/project/teacherMyProject";
     }
 
     @RequestMapping("/teacher/pstartPage")
     String teacherPstartPage(){
-        return "pages/teacher/teacherPstart";
+        return "pages/teacher/project/teacherPstart";
     }
 
     @RequestMapping("/teacher/processPage")
     String teacherProcessPage(){
-        return "pages/teacher/teacherProcess";
+        return "pages/teacher/project/teacherProcess";
     }
 
     @RequestMapping("/teacher/pmidtermPage")
     String teacherPmidtermPage(){
-        return "pages/teacher/teacherPmidterm";
+        return "pages/teacher/project/teacherPmidterm";
     }
 
     @RequestMapping("/teacher/promotePage")
     String teacherPromotePage(){
-        return "pages/teacher/teacherPromote";
+        return "pages/teacher/project/teacherPromote";
     }
 
     @RequestMapping("/teacher/pendPage")
     String teacherPendPage(){
-        return "pages/teacher/teacherPend";
+        return "pages/teacher/project/teacherPend";
     }
 
     @RequestMapping("/teacher/pextensionPage")
     String teacherPextensionPage(){
-        return "pages/teacher/teacherPextension";
+        return "pages/teacher/project/teacherPextension";
     }
 
+    //财务操作
     @RequestMapping("/teacher/moneyPage")
     String teacherMoneyPage(){
         return "pages/teacher/teacherMoney";
     }
 
+    //文件操作
     @RequestMapping("/teacher/fileDownloadPage")
     String teacherFileDownloadPage(){
         return "pages/teacher/teacherFileDownload";
@@ -164,6 +175,16 @@ public class PageController {
     @RequestMapping("/student/moneyPage")
     String moneyPage(){
         return "pages/student/money";
+    }
+
+    @RequestMapping("/student/userInfoPage")
+    String userInfoPage(){
+        return "pages/student/userInfo";
+    }
+
+    @RequestMapping("/student/userPasswordPage")
+    String userPasswordPage(){
+        return "pages/student/userPassword";
     }
 
 }

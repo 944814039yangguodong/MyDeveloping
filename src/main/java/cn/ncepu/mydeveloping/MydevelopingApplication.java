@@ -7,10 +7,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * @author Guodong
+ */
 @EnableSwagger2
 @SpringBootApplication
 @ComponentScan(basePackages = {"cn.ncepu"})
-@MapperScan("cn.ncepu.mydeveloping.mapper")
 @EnableTransactionManagement
 public class MydevelopingApplication {
 
@@ -19,3 +21,4 @@ public class MydevelopingApplication {
     }
 
 }
+//@MapperScan("cn.ncepu.mydeveloping.mapper")//在MyBatisPlusConfig里面注释一次即可

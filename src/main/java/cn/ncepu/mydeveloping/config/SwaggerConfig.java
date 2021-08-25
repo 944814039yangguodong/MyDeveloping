@@ -26,7 +26,8 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(webApiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("cn.ncepu.mydeveloping.controller"))//扫描该包下面的API注解
+                //扫描该包下面的API注解
+                .apis(RequestHandlerSelectors.basePackage("cn.ncepu.mydeveloping.controller"))
                 .paths(Predicates.not(PathSelectors.regex("/admin/.*")))
                 .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build();
@@ -37,7 +38,7 @@ public class SwaggerConfig {
                 .title("大创信息管理平台项目API文档")
                 .description("本文档描述了后台数据传输接口定义")
                 .version("1.0")
-                .contact(new Contact("Guodong", "http://baidu.com", "944814039@qq.com"))
+                .contact(new Contact("Guodong", "https://baidu.com", "944814039@qq.com"))
                 .build();
     }
 }

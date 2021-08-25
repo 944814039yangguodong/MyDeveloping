@@ -2,6 +2,7 @@ package cn.ncepu.mydeveloping.service.impl;
 
 import cn.ncepu.mydeveloping.mapper.ProjectMapper;
 import cn.ncepu.mydeveloping.pojo.entity.Project;
+import cn.ncepu.mydeveloping.pojo.entity.User;
 import cn.ncepu.mydeveloping.service.ProjectService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -12,13 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.util.List;
 
 import static cn.ncepu.mydeveloping.consts.Constant.*;
 
 /**
  * <p>
- *  服务实现类
+ *  项目服务实现类
  * </p>
  *
  * @author Guodong
@@ -41,33 +43,52 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     }
 
     @Override
+    public boolean removeById(Serializable id) {
+        return SqlHelper.retBool(projectMapper.deleteById(id));
+    }
+
+    @Override
+    public Project getById(Serializable id) {
+        return projectMapper.selectById(id);
+    }
+
+    @Override
     public Page<Project> projectPerPageByOrder(long current, long limit, String property, Project project, String memberId) {
         Page<Project> projectPage = new Page<>(current,limit);
         QueryWrapper<Project> projectQueryWrapper = new QueryWrapper<>();
-        if (!ObjectUtils.isEmpty(project.getProjectName()))
+        if (!ObjectUtils.isEmpty(project.getProjectName())) {
             projectQueryWrapper.like("project_name",project.getProjectName());
-        if (!ObjectUtils.isEmpty(project.getDepartment()))
+        }
+        if (!ObjectUtils.isEmpty(project.getDepartment())) {
             projectQueryWrapper.eq("department",project.getDepartment());
-        if (!ObjectUtils.isEmpty(project.getProjectType()))
+        }
+        if (!ObjectUtils.isEmpty(project.getProjectType())) {
             projectQueryWrapper.eq("project_type",project.getProjectType());
-        if (!ObjectUtils.isEmpty(project.getProjectClass()))
+        }
+        if (!ObjectUtils.isEmpty(project.getProjectClass())) {
             projectQueryWrapper.eq("project_class",project.getProjectClass());
-        if (!ObjectUtils.isEmpty(project.getProjectPhase()))
+        }
+        if (!ObjectUtils.isEmpty(project.getProjectPhase())) {
             projectQueryWrapper.eq("project_phase",project.getProjectPhase());
-        if (!ObjectUtils.isEmpty(project.getStartStatus()))
+        }
+        if (!ObjectUtils.isEmpty(project.getStartStatus())) {
             projectQueryWrapper.eq("start_status",project.getStartStatus());
-        if (!ObjectUtils.isEmpty(project.getMidtermStatus()))
+        }
+        if (!ObjectUtils.isEmpty(project.getMidtermStatus())) {
             projectQueryWrapper.eq("midterm_status",project.getMidtermStatus());
-        if (!ObjectUtils.isEmpty(project.getEndStatus()))
+        }
+        if (!ObjectUtils.isEmpty(project.getEndStatus())) {
             projectQueryWrapper.eq("end_status",project.getEndStatus());
+        }
 
-        if(!ObjectUtils.isEmpty(memberId))
+        if(!ObjectUtils.isEmpty(memberId)) {
             projectQueryWrapper.eq("head_id",memberId)
                     .or().eq("second_id",memberId)
                     .or().eq("third_id",memberId)
                     .or().eq("fourth_id",memberId)
                     .or().eq("fifth_id",memberId)
                     .or().eq("teacher_id",memberId);
+        }
 
         projectQueryWrapper.orderByDesc(property);
         projectMapper.selectPage(projectPage,projectQueryWrapper);
@@ -91,17 +112,14 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
                 projectUpdateWrapper.eq("midterm_status", originalStatus);
                 break;
             case 2:
-                projectUpdateWrapper.eq("end_status", originalStatus);
-                break;
             case 3:
                 projectUpdateWrapper.eq("end_status", originalStatus);
                 break;
+            default:
+                return false;
         }
         int res = projectMapper.update(project, projectUpdateWrapper);
-        if(res==0)
-            return false;
-        else
-            return true;
+        return res != 0;
     }
 
     @Override

@@ -1,7 +1,7 @@
 # 服务端口
 spring:
   profiles:
-    active: dev
+    active: prod
   #数据库连接池
   datasource:
     hikari:
@@ -55,6 +55,6 @@ mybatis-plus:
     db-config:
       logic-delete-field: gmtDeleted  # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
       logic-delete-value: now() # 逻辑已删除值(默认为 1)
-      logic-not-delete-value: "NULL" # 辑未删除值(逻默认为 0)
+      logic-not-delete-value: "NULL" # 逻辑未删除值(逻默认为 0)
   #配置mapper xml文件的路径
-  mapper-locations: classpath:cn/university/mydeveloping/mapper/xml/*.xml
+  mapper-locations: classpath:cn/ncepu/mydeveloping/mapper/xml/*.xml

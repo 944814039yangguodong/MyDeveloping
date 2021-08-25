@@ -53,12 +53,15 @@ public class NoticeController {
         notice.setUserId((String) StpUtil.getLoginId());
         notice.setNoticeName(noticeAddRequestVO.getNoticeName());
         notice.setNoticeContent(noticeAddRequestVO.getNoticeContent());
-        if (ObjectUtils.isEmpty(notice.getNoticeName()))
+        if (ObjectUtils.isEmpty(notice.getNoticeName())) {
             return R.error().message("公告标题不得为空！");
-        if (ObjectUtils.isEmpty(notice.getNoticeContent()))
+        }
+        if (ObjectUtils.isEmpty(notice.getNoticeContent())) {
             return R.error().message("公告内容不得为空！");
+        }
         long count = 0;
-        notice.setNoticeReadCount(count);//自动设置初始浏览量为0
+        //自动设置初始浏览量为0
+        notice.setNoticeReadCount(count);
         //文件上传
         String userFolder = (String) StpUtil.getLoginId();
         String fileClass= "notice";
@@ -103,10 +106,12 @@ public class NoticeController {
         if (ObjectUtils.isEmpty(notice)){
             return R.error().message("未找到该公告信息，无法修改！");
         }
-        if(noticeAddRequestVO.getNoticeName()!=null)
+        if(noticeAddRequestVO.getNoticeName()!=null) {
             notice.setNoticeName(noticeAddRequestVO.getNoticeName());
-        if(noticeAddRequestVO.getNoticeContent()!=null)
+        }
+        if(noticeAddRequestVO.getNoticeContent()!=null) {
             notice.setNoticeContent(noticeAddRequestVO.getNoticeContent());
+        }
         //文件上传
         String userFolder = (String) StpUtil.getLoginId();
         String fileClass= "notice";
@@ -135,8 +140,10 @@ public class NoticeController {
         if(property.equals("gmt_create")||property.equals("notice_name")||property.equals("notice_content")){
             Page<NoticeListResponseVO> noticePage =
                     noticeService.noticePerPageByOrder(current,limit,property,noticeRequestVO);
-            long total = noticePage.getTotal();//总记录数
-            List<NoticeListResponseVO> records = noticePage.getRecords();//数据list集合
+            //总记录数
+            long total = noticePage.getTotal();
+            //数据list集合
+            List<NoticeListResponseVO> records = noticePage.getRecords();
             return R.ok().data("total",total).data("rows",records);
         }
         return R.error().message("不允许以属性:"+property+"排序，仅允许以属性‘gmt_create’,'notice_name','notice_content'排序");
@@ -148,7 +155,8 @@ public class NoticeController {
         Notice notice = noticeService.getById(noticeId);
         NoticeInfoResponseVO noticeInfoResponseVO = new NoticeInfoResponseVO();
         BeanUtils.copyProperties(notice, noticeInfoResponseVO);
-        notice.setNoticeReadCount(notice.getNoticeReadCount()+1);//每次获取公告内容详情阅读数加一
+        //每次获取公告内容详情阅读数加一
+        notice.setNoticeReadCount(notice.getNoticeReadCount()+1);
         noticeService.updateById(notice);
         return R.ok().data("noticeInfo", noticeInfoResponseVO);
     }

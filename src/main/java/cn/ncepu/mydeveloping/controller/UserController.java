@@ -66,16 +66,22 @@ public class UserController {
     @PostMapping("userInsert")
     @SaCheckPermission("department-operation")
     R userInsert(@RequestBody UserAddRequestVO userAddRequestVO){
-        if (ObjectUtils.isEmpty(userAddRequestVO.getUserId()))
+        if (ObjectUtils.isEmpty(userAddRequestVO.getUserId())) {
             return R.error().message("学工号不得为空！");
-        if (!ObjectUtils.isEmpty(userService.getById(userAddRequestVO.getUserId())))
+        }
+        if (!ObjectUtils.isEmpty(userService.getById(userAddRequestVO.getUserId()))) {
             return R.error().message("该学工号已经注册！");
-        if (ObjectUtils.isEmpty(userAddRequestVO.getUserPassword()))
-            userAddRequestVO.setUserPassword("123456");//初始密码为123456
-        if (ObjectUtils.isEmpty(userAddRequestVO.getUserType()))
+        }
+        if (ObjectUtils.isEmpty(userAddRequestVO.getUserPassword())) {
+            //初始密码为123456
+            userAddRequestVO.setUserPassword("123456");
+        }
+        if (ObjectUtils.isEmpty(userAddRequestVO.getUserType())) {
             return R.error().message("用户类别不得为空！");
-        if (ObjectUtils.isEmpty(userAddRequestVO.getDepartment()))
+        }
+        if (ObjectUtils.isEmpty(userAddRequestVO.getDepartment())) {
             return R.error().message("所在院系不得为空！");
+        }
         User user = new User();
         BeanUtils.copyProperties(userAddRequestVO,user);
         String MD5Password = SaSecureUtil.md5(userAddRequestVO.getUserPassword());
@@ -105,15 +111,19 @@ public class UserController {
     @PostMapping("userModify")
     @SaCheckPermission("department-operation")
     R userModify(@RequestBody UserAlterRequestVO userAlterRequestVO){
-        if (ObjectUtils.isEmpty(userAlterRequestVO.getUserId()))
+        if (ObjectUtils.isEmpty(userAlterRequestVO.getUserId())) {
             return R.error().message("用户ID不得为空！");
-        if (ObjectUtils.isEmpty(userAlterRequestVO.getUserType()))
+        }
+        if (ObjectUtils.isEmpty(userAlterRequestVO.getUserType())) {
             return R.error().message("用户类别不得为空！");
-        if (ObjectUtils.isEmpty(userAlterRequestVO.getDepartment()))
+        }
+        if (ObjectUtils.isEmpty(userAlterRequestVO.getDepartment())) {
             return R.error().message("所在院系不得为空！");
+        }
         User user = userService.getById(userAlterRequestVO.getUserId());
-        if (ObjectUtils.isEmpty(user))
+        if (ObjectUtils.isEmpty(user)) {
             return R.error().message("未找到该用户信息，无法修改！");
+        }
         if(!ObjectUtils.isEmpty(userAlterRequestVO.getUserPassword())){
             String MD5Password = SaSecureUtil.md5(userAlterRequestVO.getUserPassword());
             userAlterRequestVO.setUserPassword(MD5Password);
@@ -135,8 +145,10 @@ public class UserController {
         if(property.equals("gmt_create")||property.equals("user_id")||property.equals("user_name")||property.equals("user_type")||property.equals("department")||property.equals("major")){
             Page< User > userPage =
                     userService.userPerPageByOrder(current,limit,property,userRequestVO);
-            long total = userPage.getTotal();//总记录数
-            List<User> records = userPage.getRecords();//数据list集合
+            //总记录数
+            long total = userPage.getTotal();
+            //数据list集合
+            List<User> records = userPage.getRecords();
             return R.ok().data("total",total).data("rows",records);
         }
         return R.error().message("不允许以属性:"+property+"排序，仅允许以属性‘gmt_create’,'user_id','user_name','user_type','department','major'排序");
@@ -160,13 +172,15 @@ public class UserController {
         return R.ok().data("userInfo",userInfo);
     }
 
-    @ApiOperation(value = "修改密码")
+    @ApiOperation(value = "用户修改个人密码")
     @PostMapping("passwordModify")
     R passwordModify(String userId, String userPassword){
-        if(ObjectUtils.isEmpty(userPassword))
+        if(ObjectUtils.isEmpty(userPassword)) {
             return R.error().message("新密码不能为空！");
-        if(!userId.equals((String) StpUtil.getLoginId()))
+        }
+        if(!userId.equals(StpUtil.getLoginId())) {
             return R.error().message("输入账号与当前登录账号不一致！");
+        }
         User user = userService.getById(userId);
         String MD5Password = SaSecureUtil.md5(userPassword);
         user.setUserPassword(MD5Password);

@@ -41,6 +41,7 @@ import static cn.ncepu.mydeveloping.utils.FileUtil.fileUploads;
 @CrossOrigin
 @RequestMapping("/api/project")
 public class ProjectController {
+
     @Resource
     ProjectService projectService;
     @Resource
@@ -55,23 +56,33 @@ public class ProjectController {
     @PostMapping("projectStart")
     @SaCheckPermission("student-operation")
     R projectStart(PstartVO pstartVO, MultipartFile applicationFile, MultipartFile pptFile, MultipartFile additionalFile){
-        if (StringUtils.isEmpty(pstartVO.getProjectName()))
+        if (ObjectUtils.isEmpty(pstartVO.getProjectName())) {
             return R.error().message("项目名称不得为空！");
-        if (StringUtils.isEmpty(pstartVO.getProjectType()))
+        }
+        if (ObjectUtils.isEmpty(pstartVO.getProjectType())) {
             return R.error().message("项目类别不得为空！");
-        if (StringUtils.isEmpty(pstartVO.getStartTime()))
+        }
+        if (ObjectUtils.isEmpty(pstartVO.getStartTime())) {
             return R.error().message("起始时间不得为空！");
-        if (StringUtils.isEmpty(pstartVO.getEndTime()))
+        }
+        if (ObjectUtils.isEmpty(pstartVO.getEndTime())) {
             return R.error().message("结束时间不得为空！");
-        if (StringUtils.isEmpty(pstartVO.getProjectIntroduction()))
+        }
+        if (ObjectUtils.isEmpty(pstartVO.getProjectIntroduction())) {
             return R.error().message("项目简介不得为空！");
-        if (StringUtils.isEmpty(pstartVO.getDepartment()))
+        }
+        if (ObjectUtils.isEmpty(pstartVO.getDepartment())) {
             return R.error().message("项目所在院系不得为空！");
-        if (StringUtils.isEmpty(pstartVO.getTeacherId()))
+        }
+        if (ObjectUtils.isEmpty(pstartVO.getTeacherId())) {
             return R.error().message("指导老师职工号不得为空！");
+        }
+        if (ObjectUtils.isEmpty(pstartVO.getHeadId())) {
+            return R.error().message("负责人学工号不得为空！");
+        }
         Project project=new Project();
         BeanUtils.copyProperties(pstartVO,project);
-        if (StringUtils.isEmpty(project.getSecondId())){
+        if (ObjectUtils.isEmpty(project.getSecondId())){
             project.setSecondId("");
             project.setSecondName("");
             project.setSecondDepartment("");
@@ -79,7 +90,7 @@ public class ProjectController {
             project.setSecondJob("");
             project.setSecondPhone("");
         }
-        if (StringUtils.isEmpty(project.getThirdId())){
+        if (ObjectUtils.isEmpty(project.getThirdId())){
             project.setThirdId("");
             project.setThirdName("");
             project.setThirdDepartment("");
@@ -87,7 +98,7 @@ public class ProjectController {
             project.setThirdJob("");
             project.setThirdPhone("");
         }
-        if (StringUtils.isEmpty(project.getFourthId())){
+        if (ObjectUtils.isEmpty(project.getFourthId())){
             project.setFourthId("");
             project.setFourthName("");
             project.setFourthDepartment("");
@@ -95,7 +106,7 @@ public class ProjectController {
             project.setFourthJob("");
             project.setFourthPhone("");
         }
-        if (StringUtils.isEmpty(project.getFifthId())){
+        if (ObjectUtils.isEmpty(project.getFifthId())){
             project.setFifthId("");
             project.setFifthName("");
             project.setFifthDepartment("");
@@ -104,26 +115,39 @@ public class ProjectController {
             project.setFifthPhone("");
         }
         //project.setHeadId((String) StpUtil.getLoginId());
-        project.setLogSubmitCount(0);//设置初始日志提交数为0
-        project.setLogNotReadCount(0);//设置初始日志未阅读数为0
+
+        //设置初始日志提交数为0
+        project.setLogSubmitCount(0);
+        //设置初始日志未阅读数为0
+        project.setLogNotReadCount(0);
+        //设置初始项目报销金额为0
         BigDecimal temp = new BigDecimal(0);
-        project.setReimbursementAmount(temp);//设置初始项目报销金额为0
-        project.setProjectPhase(PHASE_START);//设置初始项目阶段为立项申请
-        project.setProjectClass(CLASS_SCHOOL);//设置初始项目等级为校级
-        project.setStartStatus(START_REVIEW);//设置初始立项状态为等待审核
-        project.setMidtermStatus(MIDTERM_WAITING);//设置初始中期状态为未中期审核
-        project.setEndStatus(END_WAITING);//设置初始结项状态为未结项审核
+        project.setReimbursementAmount(temp);
+        //设置初始项目阶段为立项申请
+        project.setProjectPhase(PHASE_START);
+        //设置初始项目等级为校级
+        project.setProjectClass(CLASS_SCHOOL);
+        //设置初始立项状态为等待审核
+        project.setStartStatus(START_REVIEW);
+        //设置初始中期状态为未中期审核
+        project.setMidtermStatus(MIDTERM_WAITING);
+        //设置初始结项状态为未结项审核
+        project.setEndStatus(END_WAITING);
         //文件上传
         String userFolder = (String) StpUtil.getLoginId();
         String fileClass= "start";
         if(applicationFile!=null){
             String newFileName =ROOT_PATH + fileUploads(applicationFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"StartApplication");
             project.setStartApplication(newFileName);
-        } else return R.error().message("立项申请表不得为空！");
+        } else {
+            return R.error().message("立项申请表不得为空！");
+        }
         if(pptFile!=null){
             String newFileName =ROOT_PATH + fileUploads(pptFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"StartPpt");
             project.setStartPpt(newFileName);
-        } else return R.error().message("答辩PPT不得为空！");
+        } else {
+            return R.error().message("答辩PPT不得为空！");
+        }
         if(additionalFile!=null){
             String newFileName =ROOT_PATH + fileUploads(additionalFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"StartAdditionalFile");
             project.setStartAdditionalFile(newFileName);
@@ -146,11 +170,15 @@ public class ProjectController {
         if(reportFile!=null){
             String newFileName =ROOT_PATH + fileUploads(reportFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"MidtermReport");
             project.setMidtermReport(newFileName);
-        } else return R.error().message("中期报告不得为空！");
+        } else {
+            return R.error().message("中期报告不得为空！");
+        }
         if(pptFile!=null){
             String newFileName =ROOT_PATH + fileUploads(pptFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"MidtermPpt");
             project.setMidtermPpt(newFileName);
-        } else return R.error().message("答辩PPT不得为空！");
+        } else {
+            return R.error().message("答辩PPT不得为空！");
+        }
         if(changeFile!=null){
             String newFileName =ROOT_PATH + fileUploads(changeFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"MidtermChange");
             project.setMidtermChange(newFileName);
@@ -159,7 +187,8 @@ public class ProjectController {
             String newFileName =ROOT_PATH + fileUploads(additionalFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"MidtermAdditionalFile");
             project.setMidtermAdditionalFile(newFileName);
         }
-        project.setMidtermStatus(MIDTERM_REVIEW);//设置初始中期状态为中期审核
+        //设置初始中期状态为中期审核
+        project.setMidtermStatus(MIDTERM_REVIEW);
         boolean res = projectService.updateById(project);
         if (res){
             return R.ok().message("申请中期成功！");
@@ -170,7 +199,7 @@ public class ProjectController {
     @ApiOperation(value = "申请结项/延期结项")
     @PostMapping("projectEnd")
     @SaCheckPermission("student-operation")
-    R projectEnd(String projectId, PendVO pendVO, MultipartFile reportFile, MultipartFile conclusionFile, MultipartFile tableFile, MultipartFile fileFile, MultipartFile pptFile, MultipartFile summaryFile, MultipartFile extensionFile, MultipartFile additionalFile){
+    R projectEnd(String projectId, PendVO pendVO, MultipartFile reportFile, MultipartFile conclusionFile, MultipartFile tableFile, MultipartFile fileFile, MultipartFile pptFile, MultipartFile summaryFile, MultipartFile additionalFile){
         Project project = projectService.getById(projectId);
         BeanUtils.copyProperties(pendVO,project);
         //文件上传
@@ -179,35 +208,50 @@ public class ProjectController {
         if(reportFile!=null){
             String newFileName =ROOT_PATH + fileUploads(reportFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndReport");
             project.setEndReport(newFileName);
-        } else return R.error().message("华北电力大学大学生创新创业训练计划结题报告书不得为空！");
+        } else {
+            return R.error().message("华北电力大学大学生创新创业训练计划结题报告书不得为空！");
+        }
         if(conclusionFile!=null){
             String newFileName =ROOT_PATH + fileUploads(conclusionFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ConclusionReport");
             project.setConclusionReport(newFileName);
-        } else return R.error().message("大学生创新性实验计划项目研究总结报告不得为空！");
+        } else {
+            return R.error().message("大学生创新性实验计划项目研究总结报告不得为空！");
+        }
         if(tableFile!=null){
             String newFileName =ROOT_PATH + fileUploads(tableFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"OutcomeTable");
             project.setOutcomeTable(newFileName);
-        } else return R.error().message("成果信息表不得为空！");
+        } else {
+            return R.error().message("成果信息表不得为空！");
+        }
         if(fileFile!=null){
             String newFileName =ROOT_PATH + fileUploads(fileFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"OutcomeFile");
             project.setOutcomeFile(newFileName);
-        } else return R.error().message("成果展示文件不得为空！");
+        } else {
+            return R.error().message("成果展示文件不得为空！");
+        }
         if(pptFile!=null){
             String newFileName =ROOT_PATH + fileUploads(pptFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndPpt");
             project.setEndPpt(newFileName);
-        } else return R.error().message("答辩PPT不得为空！");
+        } else {
+            return R.error().message("答辩PPT不得为空！");
+        }
         if(summaryFile!=null){
             String newFileName =ROOT_PATH + fileUploads(summaryFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"PersonalSummary");
             project.setPersonalSummary(newFileName);
-        } else return R.error().message("个人总结不得为空！");
+        } else {
+            return R.error().message("个人总结不得为空！");
+        }
         if(additionalFile!=null){
             String newFileName =ROOT_PATH + fileUploads(additionalFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndAdditionalFile");
             project.setEndAdditionalFile(newFileName);
         }
-        if(project.getEndStatus().equals(END_WAITING))
-            project.setEndStatus(END_REVIEW);//设置结项状态为结项审核
-        else
-            project.setEndStatus(END_EXTENSION_REVIEW);//若为延期结项则改结项状态为延期项目审核
+        if(project.getEndStatus().equals(END_WAITING)) {
+            //设置结项状态为结项审核
+            project.setEndStatus(END_REVIEW);
+        } else {
+            //若为延期结项则改结项状态为延期项目审核
+            project.setEndStatus(END_EXTENSION_REVIEW);
+        }
         boolean res = projectService.updateById(project);
         if (res){
             return R.ok().message("申请结项成功！");
@@ -227,9 +271,13 @@ public class ProjectController {
         if(extensionFile!=null){
             String newFileName =ROOT_PATH + fileUploads(extensionFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ExtensionApplication");
             project.setExtensionApplication(newFileName);
-        } else return R.error().message("延期申请表不得为空！");
-        project.setProjectPhase(PHASE_EXTENSION);//设置项目阶段为延期结项
-        project.setEndStatus(END_EXTENSION_WAITING);//设置结项状态为延期结项
+        } else {
+            return R.error().message("延期申请表不得为空！");
+        }
+        //设置项目阶段为延期结项
+        project.setProjectPhase(PHASE_EXTENSION);
+        //设置结项状态为延期结项
+        project.setEndStatus(END_EXTENSION_WAITING);
         boolean res = projectService.updateById(project);
         if (res){
             return R.ok().message("申请结项成功！");
@@ -307,10 +355,12 @@ public class ProjectController {
             project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
-        }else
+        }else {
             return R.error().message("该成员不存在！");
-        if(projectService.updateById(project))
+        }
+        if(projectService.updateById(project)) {
             return R.ok().message("删除成员成功！");
+        }
         return R.error().message("删除成员失败！");
     }
 
@@ -347,8 +397,9 @@ public class ProjectController {
             project.setFifthId(Major);
             project.setFifthJob(job);
             project.setFifthPhone(phone);
-        }else
+        }else {
             return R.error().message("成员数量已达到上限！");
+        }
         projectService.updateById(project);
         return R.ok().message("添加成员成功！");
     }
@@ -360,8 +411,9 @@ public class ProjectController {
         Project project = projectService.getById(projectId);
         project.setLogSubmitCount(project.getLogSubmitCount()+1);
         project.setLogNotReadCount(project.getLogNotReadCount()+1);
-        if(projectService.updateById(project))
+        if(projectService.updateById(project)) {
             return R.error().message("提交日志成功！");
+        }
         return R.error().message("提交日志失败！");
     }
 
@@ -376,7 +428,9 @@ public class ProjectController {
         if(tableFile!=null){
             String newFileName =ROOT_PATH + fileUploads(tableFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ReimbursementTable");
             project.setReimbursementTable(newFileName);
-        } else return R.error().message("财务报销单不得为空！");
+        } else {
+            return R.error().message("财务报销单不得为空！");
+        }
         project.setReimbursementAmount(amount);
         boolean res = projectService.updateById(project);
         if (res){
@@ -395,8 +449,9 @@ public class ProjectController {
         Project project = projectService.getById(projectId);
         if(project.getLogNotReadCount()>0){
             project.setLogNotReadCount(project.getLogNotReadCount()-1);
-            if(projectService.updateById(project))
+            if(projectService.updateById(project)) {
                 return R.ok().message("查阅日志成功！");
+            }
             return R.error().message("查阅日志失败！");
         }
         return R.error().message("待审阅日志数不足！");
@@ -456,8 +511,9 @@ public class ProjectController {
         }
         project.setStartGrade(grade);
         project.setStartReviewerId((String) StpUtil.getLoginId());
-        if(projectService.updateById(project))
+        if(projectService.updateById(project)) {
             return R.ok().message("立项审核操作成功！");
+        }
         return R.error().message("立项审核操作失败！");
     }
 
@@ -474,8 +530,9 @@ public class ProjectController {
         }
         project.setMidtermGrade(grade);
         project.setMidtermReviewerId((String) StpUtil.getLoginId());
-        if(projectService.updateById(project))
+        if(projectService.updateById(project)) {
             return R.ok().message("中期审核操作成功！");
+        }
         return R.error().message("中期审核操作失败！");
     }
 
@@ -493,8 +550,9 @@ public class ProjectController {
         }
         project.setEndGrade(grade);
         project.setEndReviewerId((String) StpUtil.getLoginId());
-        if(projectService.updateById(project))
+        if(projectService.updateById(project)) {
             return R.ok().message("结项审核操作成功！");
+        }
         return R.error().message("结项审核操作失败！");
     }
 
@@ -511,8 +569,9 @@ public class ProjectController {
         }
         project.setExtensionGrade(grade);
         project.setExtensionReviewerId((String) StpUtil.getLoginId());
-        if(projectService.updateById(project))
+        if(projectService.updateById(project)) {
             return R.ok().message("延期审核操作成功！");
+        }
         return R.error().message("延期审核操作失败！");
     }
 
@@ -527,20 +586,22 @@ public class ProjectController {
     @PostMapping("enterMidterm")
     @SaCheckPermission("school-operation")
     R enterMidterm(){
-        if(projectService.updatePhase(PHASE_START,START_SUCCESS,PHASE_MIDTERM))
+        if(projectService.updatePhase(PHASE_START,START_SUCCESS,PHASE_MIDTERM)) {
             return R.ok().message("操作成功！");
-        else
+        } else {
             return R.error().message("操作失败！");
+        }
     }
 
     @ApiOperation(value = "中期结束项目升级")
     @PostMapping("projectPromote")
     @SaCheckPermission("school-operation")
     R projectPromote(@RequestParam Integer province, @RequestParam Integer nation){
-        if(projectService.updateTop(province,nation))
+        if(projectService.updateTop(province,nation)) {
             return R.ok().message("操作成功！");
-        else
+        } else {
             return R.error().message("操作失败！");
+        }
     }
 
     @ApiOperation(value = "中期结束项目成绩排序显示")
@@ -554,30 +615,33 @@ public class ProjectController {
     @PostMapping("enterEnd")
     @SaCheckPermission("school-operation")
     R enterEnd(){
-        if(projectService.updatePhase(PHASE_MIDTERM,MIDTERM_SUCCESS,PHASE_END))
+        if(projectService.updatePhase(PHASE_MIDTERM,MIDTERM_SUCCESS,PHASE_END)) {
             return R.ok().message("操作成功！");
-        else
+        } else {
             return R.error().message("操作失败！");
+        }
     }
 
     @ApiOperation(value = "所有结项/延期结项成功项目转入已结项状态")
     @PostMapping("end")
     @SaCheckPermission("school-operation")
     R end(){
-        if(projectService.updatePhase(PHASE_END,END_SUCCESS,PHASE_OVER)||projectService.updatePhase(PHASE_EXTENSION,END_SUCCESS,PHASE_OVER))
+        if(projectService.updatePhase(PHASE_END,END_SUCCESS,PHASE_OVER)||projectService.updatePhase(PHASE_EXTENSION,END_SUCCESS,PHASE_OVER)) {
             return R.ok().message("操作成功！");
-        else
+        } else {
             return R.error().message("操作失败！");
+        }
     }
 
     @ApiOperation(value = "所有立项、中期、延期审核未通过项目转入已取消状态")
     @PostMapping("enterCancel")
     @SaCheckPermission("school-operation")
     R enterCancel(){
-        if(projectService.updatePhase(PHASE_EXTENSION,END_REJECT,PHASE_CANCEL)||projectService.updatePhase(PHASE_MIDTERM,MIDTERM_REJECT,PHASE_CANCEL)||projectService.updatePhase(PHASE_START,MIDTERM_REJECT,PHASE_CANCEL))
+        if(projectService.updatePhase(PHASE_EXTENSION,END_REJECT,PHASE_CANCEL)||projectService.updatePhase(PHASE_MIDTERM,MIDTERM_REJECT,PHASE_CANCEL)||projectService.updatePhase(PHASE_START,MIDTERM_REJECT,PHASE_CANCEL)) {
             return R.ok().message("操作成功！");
-        else
+        } else {
             return R.error().message("操作失败！");
+        }
     }
 
     /**
@@ -623,7 +687,7 @@ public class ProjectController {
     @DeleteMapping("projectDelete")
     R projectDelete(String projectId){
         Project project = projectService.getById(projectId);
-        if (StringUtils.isEmpty(project)) {
+        if (ObjectUtils.isEmpty(project)) {
             return R.error().message("未找到该项目信息，无法删除！");
         }
         boolean res = projectService.removeById(project);

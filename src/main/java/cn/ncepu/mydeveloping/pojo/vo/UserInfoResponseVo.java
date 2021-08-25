@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * @author Guodong
+ */
 @Data
 @ApiModel(value="用户信息返回类（不含密码、用户类型）", description="当前登录的用户信息")
 public class UserInfoResponseVo {

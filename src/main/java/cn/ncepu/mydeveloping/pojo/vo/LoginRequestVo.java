@@ -4,6 +4,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+/**
+ * @author Guodong
+ */
 @Data
 @ApiModel(value="用户登录请求信息", description="用户登录请求信息")
 public class LoginRequestVo {

@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * @author Guodong
+ */
 @Data
 public class PstartVO {
 

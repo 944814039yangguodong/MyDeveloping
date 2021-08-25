@@ -8,6 +8,7 @@ import java.util.Map;
 
 /**
  * 统一结果集封装
+ * @author Guodong
  */
 @Data
 public class R {

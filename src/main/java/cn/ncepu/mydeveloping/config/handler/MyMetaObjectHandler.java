@@ -8,6 +8,9 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.Date;
 
+/**
+ * @author Guodong
+ */
 @Component
 public class MyMetaObjectHandler implements MetaObjectHandler {
 
@@ -22,7 +25,8 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         this.setFieldValByName("gmtModified", new Date(), metaObject);
-        if(!ObjectUtils.isEmpty(StpUtil.getLoginIdDefaultNull()))
+        if(!ObjectUtils.isEmpty(StpUtil.getLoginIdDefaultNull())) {
             this.setFieldValByName("modifiedUserCode", StpUtil.getLoginId(), metaObject);
+        }
     }
 }

@@ -6,6 +6,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * @author Guodong
+ */
 @Data
 @ApiModel(value="查询公告请求信息")
 public class NoticeInfoResponseVO {

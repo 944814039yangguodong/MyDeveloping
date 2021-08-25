@@ -36,10 +36,12 @@ public class TimeController {
     @SaCheckPermission("school-operation")
     R timeStart(Date startBegin, Date startOver){
         Time timeNow = timeService.selectNow();
-        if(ObjectUtils.isEmpty(startBegin))
+        if(ObjectUtils.isEmpty(startBegin)) {
             return R.error().message("立项开始时间不可以为空！");
-        if(ObjectUtils.isEmpty(startOver))
+        }
+        if(ObjectUtils.isEmpty(startOver)) {
             return R.error().message("立项结束时间不可以为空！");
+        }
         timeNow.setStartBegin(startBegin);
         timeNow.setStartOver(startOver);
         boolean res2 = timeService.updateById(timeNow);
@@ -54,10 +56,12 @@ public class TimeController {
     @SaCheckPermission("school-operation")
     R timeMidterm(Date midtermBegin, Date midtermOver){
         Time timeNow = timeService.selectNow();
-        if(ObjectUtils.isEmpty(midtermBegin))
+        if(ObjectUtils.isEmpty(midtermBegin)) {
             return R.error().message("中期开始时间不可以为空！");
-        if(ObjectUtils.isEmpty(midtermOver))
+        }
+        if(ObjectUtils.isEmpty(midtermOver)) {
             return R.error().message("中期结束时间不可以为空！");
+        }
         timeNow.setMidtermBegin(midtermBegin);
         timeNow.setMidtermOver(midtermOver);
         boolean res2 = timeService.updateById(timeNow);
@@ -72,10 +76,12 @@ public class TimeController {
     @SaCheckPermission("school-operation")
     R timeEnd(Date endBegin, Date endOver){
         Time timeNow = timeService.selectNow();
-        if(ObjectUtils.isEmpty(endBegin))
+        if(ObjectUtils.isEmpty(endBegin)) {
             return R.error().message("结项开始时间不可以为空！");
-        if(ObjectUtils.isEmpty(endOver))
+        }
+        if(ObjectUtils.isEmpty(endOver)) {
             return R.error().message("结项结束时间不可以为空！");
+        }
         timeNow.setEndBegin(endBegin);
         timeNow.setEndOver(endOver);
         boolean res2 = timeService.updateById(timeNow);
@@ -94,8 +100,9 @@ public class TimeController {
             BeanUtils.copyProperties(time, timeVO);
             return R.ok().data("time", timeVO);
         }
-        else
+        else {
             return R.error().message("尚未发布时间");
+        }
     }
 }
 

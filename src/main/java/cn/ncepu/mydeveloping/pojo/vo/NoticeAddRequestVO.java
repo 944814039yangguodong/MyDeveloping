@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * @author Guodong
+ */
 @Data
 @ApiModel(value="新增公告请求信息")
 public class NoticeAddRequestVO {

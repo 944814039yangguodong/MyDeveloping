@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * 自定义权限验证接口扩展
+ * @author Guodong
  */
 @Component    // 保证此类被SpringBoot扫描，完成sa-token的自定义权限验证扩展
 public class StpInterfaceImpl implements StpInterface {
@@ -28,7 +29,6 @@ public class StpInterfaceImpl implements StpInterface {
         User user = userService.getById((String) loginId);
         if(user.getUserType().equals(Constant.STUDENT)){
             list.add("student-operation");
-
         }
         if(user.getUserType().equals(Constant.TEACHER)){
             list.add("student-operation");

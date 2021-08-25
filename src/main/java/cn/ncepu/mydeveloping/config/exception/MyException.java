@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+/**
+ * @author Guodong
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor

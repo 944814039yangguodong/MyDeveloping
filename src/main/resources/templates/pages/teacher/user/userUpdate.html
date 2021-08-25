@@ -117,7 +117,7 @@
                             <option value="1">老师</option>
                             <option value="2">审核老师</option>
                             <option value="3">系级负责人</option>
-                            <option value="4">校级负责人</option>
+                            <option v-if="userInfo.userType==4" value="4">校级负责人</option>
                         </select>
                     </div>
                 </div>

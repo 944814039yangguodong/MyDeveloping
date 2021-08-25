@@ -17,6 +17,9 @@ import java.util.Date;
 import static cn.ncepu.mydeveloping.consts.Constant.*;
 import static cn.ncepu.mydeveloping.utils.FileUtil.download;
 
+/**
+ * @author Guodong
+ */
 @RestController
 @RequestMapping("/api/file")
 @Api(value="文件操作",tags={"文件操作"})

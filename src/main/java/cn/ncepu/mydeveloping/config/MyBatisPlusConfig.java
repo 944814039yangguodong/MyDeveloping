@@ -7,8 +7,11 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author Guodong
+ */
 @Configuration
-@MapperScan("com.university.laboratory.mapper")
+@MapperScan("cn.ncepu.mydeveloping.mapper")
 public class MyBatisPlusConfig {
 
     /**

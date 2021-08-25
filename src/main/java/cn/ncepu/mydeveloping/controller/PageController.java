@@ -8,21 +8,24 @@ import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 首页控制器
+ * @author Guodong
  */
 
 @Controller
 @CrossOrigin
 @ApiIgnore
 public class PageController {
+
     /**
      * 基础页面控制
      */
+
     @RequestMapping("/")
-    //包含thymeleaf模板引擎时可以找名字叫index的(HTML5等)文件，将其直接显示在localhost/页面中
-    //在前面加上@ResponseBody，会使得根目录localhost/下的页面出现index字符串
     String index(){
         return "index";
     }
+    //包含thymeleaf模板引擎时可以找名字叫index的(HTML5等)文件，将其直接显示在localhost/页面中
+    //在前面加上@ResponseBody，会使得根目录localhost/下的页面出现index字符串
 
     @RequestMapping("/loginPage")
     String loginPage(){
@@ -48,7 +51,9 @@ public class PageController {
     /**
      * 教师端页面控制
      */
+
     //公告操作
+
     @RequestMapping("/teacher/noticeSelectPage")
     String noticeSelectPage(){
         return "pages/teacher/notice/noticeSelect";
@@ -59,12 +64,13 @@ public class PageController {
         return "pages/teacher/notice/noticeAdd";
     }
 
-    @RequestMapping("/api/notice/noticeUpdatePage/{noticeId}")
+    @RequestMapping("/teacher/noticeUpdatePage/{noticeId}")
     String noticeUpdatePage(){
         return "pages/teacher/notice/noticeUpdate";
     }
 
     //用户操作
+
     @RequestMapping("/teacher/userInfoPage")
     String teacherUserInfoPage(){
         return "pages/teacher/user/teacherUserInfo";
@@ -91,12 +97,14 @@ public class PageController {
     }
 
     //时间操作
+
     @RequestMapping("/teacher/timePublicPage")
     String timePublicPage(){
         return "pages/teacher/timePublic";
     }
 
     //项目操作
+
     @RequestMapping("/teacher/myProjectPage")
     String teacherMyProject(){
         return "pages/teacher/project/teacherMyProject";
@@ -133,12 +141,14 @@ public class PageController {
     }
 
     //财务操作
+
     @RequestMapping("/teacher/moneyPage")
     String teacherMoneyPage(){
         return "pages/teacher/teacherMoney";
     }
 
     //文件操作
+
     @RequestMapping("/teacher/fileDownloadPage")
     String teacherFileDownloadPage(){
         return "pages/teacher/teacherFileDownload";
@@ -147,6 +157,7 @@ public class PageController {
     /**
      * 学生端页面控制
      */
+
     @RequestMapping("/student/myProjectPage")
     String studentMyProjectPage(){
         return "pages/student/myProject";

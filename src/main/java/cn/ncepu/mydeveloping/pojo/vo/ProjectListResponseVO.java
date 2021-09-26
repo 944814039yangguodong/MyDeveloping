@@ -53,4 +53,43 @@ public class ProjectListResponseVO {
 
     @ApiModelProperty(value = "负责人的姓名")
     private String headName;
+
+    @ApiModelProperty(value = "成员二的学生编号")
+    private String secondId;
+
+    @ApiModelProperty(value = "成员二的姓名")
+    private String secondName;
+
+    @ApiModelProperty(value = "成员三的学生编号")
+    private String thirdId;
+
+    @ApiModelProperty(value = "成员三的姓名")
+    private String thirdName;
+
+    @ApiModelProperty(value = "成员四的学生编号")
+    private String fourthId;
+
+    @ApiModelProperty(value = "成员四的姓名")
+    private String fourthName;
+
+    @ApiModelProperty(value = "成员五的学生编号")
+    private String fifthId;
+
+    @ApiModelProperty(value = "成员五的姓名")
+    private String fifthName;
+
+    @ApiModelProperty(value = "0等待审核、1立项成功、2立项驳回")
+    private Integer startStatus;
+
+    @ApiModelProperty(value = "0未中期审核、1中期审核、2中期审核通过、3中期审核未通过")
+    private Integer midtermStatus;
+
+    @ApiModelProperty(value = "0未结项审核、1结项审核、2结项审核通过、3延期结项、4延期项目审核、5结项审核未通过")
+    private Integer endStatus;
+
+    @ApiModelProperty(value = "项目日志提交数，初始为0，每提交一次加一")
+    private Integer logSubmitCount;
+
+    @ApiModelProperty(value = "项目日志审阅数，初始为0，不可为负，每提交一次加一，每查阅一次减一")
+    private Integer logNotReadCount;
 }

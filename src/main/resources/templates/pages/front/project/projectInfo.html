@@ -38,6 +38,21 @@
         </div>
       </div>
     </div>
+
+    <div class="layui-form-item">
+      <div class="layui-inline">
+        <label class="layui-form-label">项目阶段</label>
+        <div class="layui-input-inline">
+          <input v-model="projectPhaseName" class="layui-input" disabled="">
+        </div>
+      </div>
+      <div class="layui-inline">
+        <label class="layui-form-label">项目状态</label>
+        <div class="layui-input-inline">
+          <input v-model="projectStatusName" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
     <div class="layui-form-item">
       <div class="layui-inline">
         <label class="layui-form-label">负责人</label>
@@ -332,6 +347,22 @@
         <a class="layui-form-mid" @click="download(2)" style="cursor: pointer">{{file2}}</a><br>
       </div>
     </div>
+    <div class="layui-form-item layui-form-text">
+      <div v-if="projectInfo.startStatus>=1">
+        <label class="layui-form-label">立项得分</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.startGrade" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+      <div v-if="projectInfo.startStatus>1">
+        <label class="layui-form-label">立项驳回原因</label>
+        <div class="layui-input-block">
+          <textarea v-model="projectInfo.startFailureDetails" class="layui-textarea" disabled=""></textarea>
+        </div>
+      </div>
+    </div>
 
     <div v-if="projectInfo.projectPhase>=1">
       <div class="layui-form-item"  v-if="file3!=''">
@@ -349,6 +380,23 @@
       <div class="layui-form-item" v-if="file6!=''">
         <label class="layui-form-label">中期额外文件</label>
         <a class="layui-form-mid" @click="download(6)" style="cursor: pointer">{{file6}}</a><br>
+      </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+      <div v-if="projectInfo.midtermStatus>=2">
+        <label class="layui-form-label">中期得分</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.midtermGrade" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+      <div v-if="projectInfo.midtermStatus>2">
+        <label class="layui-form-label">中期审核失败原因</label>
+        <div class="layui-input-block">
+          <textarea v-model="projectInfo.midtermFailureDetails" class="layui-textarea" disabled=""></textarea>
+        </div>
       </div>
     </div>
 
@@ -457,6 +505,47 @@
       </div>
     </div>
 
+    <div class="layui-form-item layui-form-text">
+      <div v-if="projectInfo.midtermStatus>2">
+        <label class="layui-form-label">申请延期原因</label>
+        <div class="layui-input-block">
+          <textarea v-model="projectInfo.extensionReason" class="layui-textarea" disabled=""></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+      <div v-if="projectInfo.endStatus>=2">
+        <label class="layui-form-label">结项得分</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.endGrade" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+      <div v-if="projectInfo.endStatus>2">
+        <label class="layui-form-label">延期结项原因</label>
+        <div class="layui-input-block">
+          <textarea v-model="projectInfo.extensionDetails" class="layui-textarea" disabled=""></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+      <div v-if="projectInfo.endStatus>=2">
+        <label class="layui-form-label">延期结项得分</label>
+        <div class="layui-input-inline">
+          <input v-model="projectInfo.extensionGrade" class="layui-input" disabled="">
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+      <div v-if="projectInfo.endStatus>4">
+        <label class="layui-form-label">结项失败原因</label>
+        <div class="layui-input-block">
+          <textarea v-model="projectInfo.endFailureDetails" class="layui-textarea" disabled=""></textarea>
+        </div>
+      </div>
+    </div>
+
   </form>
 </div>
 <script>
@@ -520,16 +609,20 @@
         enterpriseTutorTitle:"",
         enterpriseTutorWork:"",
         enterpriseTutorPhone:"",
-        startStatus:"",
-        midtermStatus:"",
-        endStatus:"",
+        startStatus:"2",
+        midtermStatus:"3",
+        endStatus:"5",
         startApplication:null,
         startPpt:null,
         startAdditionalFile:null,
+        startGrade:null,
+        startFailureDetails:null,
         midtermReport:null,
         midtermChange:null,
         midtermPpt:null,
         midtermAdditionalFile:null,
+        midtermGrade:null,
+        midtermFailureDetails:null,
         paperTitle:"",
         publicationName:null,
         retrievalType:null,
@@ -548,8 +641,15 @@
         endPpt:null,
         extensionApplication:null,
         endAdditionalFile:null,
+        endGrade:null,
+        extensionReason:null,
+        extensionDetails:null,
+        extensionGrade:null,
+        endFailureDetails:null
       },
       projectTypeName:"",
+      projectPhaseName:"",
+      projectStatusName:"",
       file0:"123",file1:"",file2:"",file3:"",file4:"",file5:"",
       file6:"",file7:"",file8:"",file9:"",file10:"",file11:"",
       file12:"",file13:"",file14:"",
@@ -574,6 +674,93 @@
                       break;
                     case 2:
                       that.projectTypeName="创业实践";
+                      break;
+                  }
+                  switch (response.data.data.projectInfo.projectPhase){
+                    case 0:
+                      that.projectPhaseName="立项申请";
+                      switch (response.data.data.projectInfo.startStatus){
+                        case 0:
+                          that.projectStatusName="等待审核";
+                          break;
+                        case 1:
+                          that.projectStatusName="立项成功";
+                          break;
+                        case 2:
+                          that.projectStatusName="立项驳回";
+                          break;
+                      }
+                      break;
+                    case 1:
+                      that.projectPhaseName="中期检查";
+                      switch (response.data.data.projectInfo.midtermStatus){
+                        case 0:
+                          that.projectStatusName="未中期审核";
+                          break;
+                        case 1:
+                          that.projectStatusName="中期审核";
+                          break;
+                        case 2:
+                          that.projectStatusName="中期审核通过";
+                          break;
+                        case 3:
+                          that.projectStatusName="中期审核未通过";
+                          break;
+                      }
+                      break;
+                    case 2:
+                      that.projectPhaseName="结项审核";
+                      switch (response.data.data.projectInfo.endStatus){
+                        case 0:
+                          that.projectStatusName="未结项审核";
+                          break;
+                        case 1:
+                          that.projectStatusName="结项审核";
+                          break;
+                        case 2:
+                          that.projectStatusName="结项审核通过";
+                          break;
+                        case 3:
+                          that.projectStatusName="延期结项";
+                          break;
+                        case 4:
+                          that.projectStatusName="延期项目审核";
+                          break;
+                        case 5:
+                          that.projectStatusName="结项审核未通过";
+                          break;
+                      }
+                      break;
+                    case 3:
+                      that.projectPhaseName="延期结项";
+                      switch (response.data.data.projectInfo.endStatus){
+                        case 0:
+                          that.projectStatusName="未结项审核";
+                          break;
+                        case 1:
+                          that.projectStatusName="结项审核";
+                          break;
+                        case 2:
+                          that.projectStatusName="结项审核通过";
+                          break;
+                        case 3:
+                          that.projectStatusName="延期结项";
+                          break;
+                        case 4:
+                          that.projectStatusName="延期项目审核";
+                          break;
+                        case 5:
+                          that.projectStatusName="结项审核未通过";
+                          break;
+                      }
+                      break;
+                    case 4:
+                      that.projectPhaseName="已结项";
+                      that.projectStatusName="";
+                      break;
+                    case 5:
+                      that.projectPhaseName="已取消";
+                      that.projectStatusName="";
                       break;
                   }
                   if(that.projectInfo.startApplication != null){

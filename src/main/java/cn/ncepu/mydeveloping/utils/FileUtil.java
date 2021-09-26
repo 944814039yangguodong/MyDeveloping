@@ -36,7 +36,11 @@ public class FileUtil {
         try {
             if (!dest.exists()) {
                 //路径不存在需创建目录
-                dest.mkdirs();
+                boolean res = dest.mkdirs();
+                if(!res){
+                    log.info("创建文件夹失败");
+                    return null;
+                }
             }
             //上传的文件被保存了
             file.transferTo(dest);
@@ -64,7 +68,6 @@ public class FileUtil {
                 response.setHeader("content-type", "application/octet-stream");
                 response.setContentType("application/octet-stream");
                 String originalName = download.getName();
-                //String simpleName = originalName.substring(originalName.lastIndexOf("-") + 1);
                 response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(originalName, "UTF-8"));
                 System.out.println(originalName);
                 inputStream = new BufferedInputStream(new FileInputStream(download));
@@ -93,19 +96,6 @@ public class FileUtil {
         return false;
     }
 
-    // 创建文件
-    public static void createFile(String path, String fileName) {
-        // path表示你所创建文件的路径, fileName为文件名
-        File file = new File(path, fileName);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public static String saveFile(MultipartFile file, String filePath, Logger log) {
         try {
             File root = new File(filePath);
@@ -117,7 +107,10 @@ public class FileUtil {
             String time = format2.format(new Date());
             File target = new File(root.getPath() + "/" + date + "/" +  time + "-" + getFileName(Objects.requireNonNull(file.getOriginalFilename())));
             if (!target.exists()) {
-                target.mkdirs();
+                boolean res = target.mkdirs();
+                if(!res){
+                    return null;
+                }
             }
             log.info(target.getAbsolutePath());
             file.transferTo(target);
@@ -131,7 +124,6 @@ public class FileUtil {
     //获取文件名的方法
     public static String getFileName(String path){
         int index = path.lastIndexOf("\\");
-        String fileName = path.substring(index+1);
-        return fileName;
+        return path.substring(index+1);
     }
 }

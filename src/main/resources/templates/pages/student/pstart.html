@@ -330,7 +330,7 @@
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">工号</label>
+                    <label class="layui-form-label">职工号</label>
                     <div class="layui-input-inline">
                         <input v-model="projectInfo.teacherId" class="layui-input">
                     </div>
@@ -396,13 +396,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">开始时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="startDate" placeholder="yyyy/mm/dd">
+                        <input type="text" class="layui-input" id="startDate" placeholder="yyyy-mm-dd">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">结束时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" class="layui-input" id="endDate" placeholder="yyyy/mm/dd">
+                        <input type="text" class="layui-input" id="endDate" placeholder="yyyy-mm-dd">
                     </div>
                 </div>
                 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
@@ -469,14 +469,16 @@
         var laydate = layui.laydate;
         laydate.render({
             elem: '#startDate'
-            ,format: 'yyyy/MM/dd'
+            ,format: 'yyyy-MM-dd'
+            //,value: new Date()
             ,done: function(value, date, endDate){
                 app.projectInfo.startTime=value;
             }
         });
         laydate.render({
             elem: '#endDate'
-            ,format: 'yyyy/MM/dd'
+            ,format: 'yyyy-MM-dd'
+            //,value: new Date()
             ,done: function(value, date, endDate){
                 app.projectInfo.endTime=value;
             }
@@ -549,6 +551,10 @@
         },
         mounted:function (){
             var that = this;
+            var date = new Date();
+            //that.projectInfo.startTime = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            //that.projectInfo.endTime = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+            //console.log(that.projectInfo.startTime+"----"+that.projectInfo.endTime);
             axios.get('http://'+IP+'/api/user/getUserInfo')
                 .then(function (response) {
                     if(response.data.success===true){
@@ -618,7 +624,6 @@
                 formData.append('applicationFile', this.applicationFile);
                 formData.append('pptFile', this.pptFile);
                 formData.append('additionalFile', this.additionalFile);
-                console.log(formData);
                 axios.post('http://'+IP+'/api/project/projectStart', formData)
                     .then(function (response) {
                         if(response.data.success===true){

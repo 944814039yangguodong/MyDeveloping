@@ -86,6 +86,7 @@
                 <input type="text" placeholder="姓名查找" v-model="userNameSearch" class="layui-input" style="width: 200px">
                 <input type="text" placeholder="院系查找" v-model="departmentSearch" class="layui-input" style="width: 200px">
                 <select v-model="userTypeSearch" class="layui-input" style="width: 200px">
+                    <option value=null>身份查找</option>
                     <option value="0">学生</option>
                     <option value="1">老师</option>
                     <option value="2">审核老师</option>
@@ -212,7 +213,7 @@
             userIdSearch:"",
             departmentSearch:"",
             userNameSearch:"",
-            userTypeSearch:"0",
+            userTypeSearch:null,
         },
         mounted:function (){
             var that = this;
@@ -314,6 +315,9 @@
                             }
                             that.total=response.data.data.total;
                             that.pageCount=Math.ceil(that.total/that.limit);
+                            if(that.pageCount===0){
+                                that.pageCount=1;
+                            }
                         }else{
                             console.log(response);
                         }

@@ -95,6 +95,7 @@
                     <th>系别</th>
                     <th>项目类型</th>
                     <th>申报时间</th>
+                    <th>项目阶段</th>
                     <th>项目状态</th>
                     <th></th>
                 </tr>
@@ -110,6 +111,7 @@
                     <td>{{list[0].projectClassName}}</td>
                     <td>{{list[0].startTime}}</td>
                     <td>{{list[0].projectPhaseName}}</td>
+                    <td>{{list[0].projectStatusName}}</td>
                     <td><a @click="toInfo(0)" style="cursor: pointer">详情</a></td>
                 </tr>
                 <tr v-show="isNull(1)">
@@ -122,6 +124,7 @@
                     <td>{{list[1].projectClassName}}</td>
                     <td>{{list[1].startTime}}</td>
                     <td>{{list[1].projectPhaseName}}</td>
+                    <td>{{list[1].projectStatusName}}</td>
                     <td><a @click="toInfo(1)" style="cursor: pointer">详情</a></td>
                 </tr>
                 <tr v-show="isNull(2)">
@@ -134,6 +137,7 @@
                     <td>{{list[2].projectClassName}}</td>
                     <td>{{list[2].startTime}}</td>
                     <td>{{list[2].projectPhaseName}}</td>
+                    <td>{{list[2].projectStatusName}}</td>
                     <td><a @click="toInfo(2)" style="cursor: pointer">详情</a></td>
                 </tr>
                 <tr v-show="isNull(3)">
@@ -146,6 +150,7 @@
                     <td>{{list[3].projectClassName}}</td>
                     <td>{{list[3].startTime}}</td>
                     <td>{{list[3].projectPhaseName}}</td>
+                    <td>{{list[3].projectStatusName}}</td>
                     <td><a @click="toInfo(3)" style="cursor: pointer">详情</a></td>
                 </tr>
                 <tr v-show="isNull(4)">
@@ -158,6 +163,7 @@
                     <td>{{list[4].projectClassName}}</td>
                     <td>{{list[4].startTime}}</td>
                     <td>{{list[4].projectPhaseName}}</td>
+                    <td>{{list[4].projectStatusName}}</td>
                     <td><a @click="toInfo(4)" style="cursor: pointer">详情</a></td>
                 </tr>
                 </tbody>
@@ -180,11 +186,11 @@
         data: {
             total:0,
             list: [
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null}
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null}
             ],
             current:1,
             limit:5,
@@ -263,21 +269,88 @@
                                     switch (response.data.data.rows[i].projectPhase){
                                         case 0:
                                             that.list[i].projectPhaseName="立项申请";
+                                            switch (response.data.data.rows[i].startStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="等待审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="立项成功";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="立项驳回";
+                                                    break;
+                                            }
                                             break;
                                         case 1:
                                             that.list[i].projectPhaseName="中期检查";
+                                            switch (response.data.data.rows[i].midtermStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="未中期审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="中期审核";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="中期审核通过";
+                                                    break;
+                                                case 3:
+                                                    that.list[i].projectStatusName="中期审核未通过";
+                                                    break;
+                                            }
                                             break;
                                         case 2:
                                             that.list[i].projectPhaseName="结项审核";
+                                            switch (response.data.data.rows[i].endStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="未结项审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="结项审核";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="结项审核通过";
+                                                    break;
+                                                case 3:
+                                                    that.list[i].projectStatusName="延期结项";
+                                                    break;
+                                                case 4:
+                                                    that.list[i].projectStatusName="延期项目审核";
+                                                    break;
+                                                case 5:
+                                                    that.list[i].projectStatusName="结项审核未通过";
+                                                    break;
+                                            }
                                             break;
                                         case 3:
                                             that.list[i].projectPhaseName="延期结项";
+                                            switch (response.data.data.rows[i].endStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="未结项审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="结项审核";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="结项审核通过";
+                                                    break;
+                                                case 3:
+                                                    that.list[i].projectStatusName="延期结项";
+                                                    break;
+                                                case 4:
+                                                    that.list[i].projectStatusName="延期项目审核";
+                                                    break;
+                                                case 5:
+                                                    that.list[i].projectStatusName="结项审核未通过";
+                                                    break;
+                                            }
                                             break;
                                         case 4:
                                             that.list[i].projectPhaseName="已结项";
+                                            that.list[i].projectStatusName="";
                                             break;
                                         case 5:
                                             that.list[i].projectPhaseName="已取消";
+                                            that.list[i].projectStatusName="";
                                             break;
                                     }
                                 }else {
@@ -295,6 +368,9 @@
                             }
                             that.total=response.data.data.total;
                             that.pageCount=Math.ceil(that.total/that.limit);
+                            if(that.pageCount===0){
+                                that.pageCount=1;
+                            }
                         }else{
                             console.log(response);
                         }

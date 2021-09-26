@@ -30,7 +30,7 @@ public class CodeGenerator {
 
         // 2、全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("D:\\JavaCode\\GitNew\\mydeveloping\\src\\main\\java");
+        gc.setOutputDir("D:\\Code\\JavaCode\\GitNew\\mydeveloping\\src\\main\\java");
         gc.setAuthor("Guodong");
         gc.setOpen(false); //生成后是否打开资源管理器
         gc.setFileOverride(false); //重新生成时文件是否覆盖
@@ -55,14 +55,14 @@ public class CodeGenerator {
         pc.setModuleName("mydeveloping"); //模块名
         pc.setParent("cn.ncepu");
         pc.setController("controller");
-        pc.setEntity("pojo");
+        pc.setEntity("pojo.entity");
         pc.setService("service");
         pc.setMapper("mapper");
         mpg.setPackageInfo(pc);
 
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
-        strategy.setInclude("time");
+        strategy.setInclude("paper");
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
         //strategy.setTablePrefix("lab"+ "_"); //生成实体时去掉表前缀
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);//数据库表字段映射到实体的命名策略

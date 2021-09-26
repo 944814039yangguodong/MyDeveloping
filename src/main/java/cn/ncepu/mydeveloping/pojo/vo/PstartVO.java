@@ -2,6 +2,7 @@ package cn.ncepu.mydeveloping.pojo.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -17,9 +18,11 @@ public class PstartVO {
     @ApiModelProperty(value = "0创新训练、1创业训练、2创业实践")
     private Integer projectType;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "项目起始时间")
     private Date startTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "项目结束时间")
     private Date endTime;
 

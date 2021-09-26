@@ -1,9 +1,12 @@
 package cn.ncepu.mydeveloping.consts;
 
+import com.sun.org.apache.xpath.internal.objects.XString;
+
 import java.text.SimpleDateFormat;
 
 /**
  * 常量类
+ * @author Guodong
  */
 public  class Constant {
 
@@ -28,20 +31,6 @@ public  class Constant {
      * 学生
      */
     public static final Integer STUDENT=0;
-
-    //项目类型
-    /**
-     * 创业实践
-     */
-    public static final Integer TYPE_PRACTICE=2;
-    /**
-     * 创业训练
-     */
-    public static final Integer TYPE_TRAINING=1;
-    /**
-     * 创新训练
-     */
-    public static final Integer TYPE_INNOVATION=0;
 
     //项目级别
     /**
@@ -69,7 +58,7 @@ public  class Constant {
     /**
      * 延期结项
      */
-    public static final Integer PHASE_EXTENSION=3;
+    public static final Integer PHASE_EXTENSION=2;
     /**
      * 结项审核
      */
@@ -141,15 +130,14 @@ public  class Constant {
      */
     public static final Integer END_WAITING=0;
 
+
+
     //文件常量
     /**
-     * Linux服务器ROOT_PATH
+     * Linux服务器和window本地ROOT_PATH
      */
-    public static final String ROOT_PATH = "/myFiles/";
-    /**
-     * window本地ROOT_PATH
-     */
-    //public static final String ROOT_PATH = "D:/myFiles/";
+    public static final String ROOT_PATH = "D:/myFiles/";
+    //public static final String ROOT_PATH = "/myFiles/";
     /**
      * 时间格式SDF
      */

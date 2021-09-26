@@ -1,14 +1,15 @@
 package cn.ncepu.mydeveloping.controller;
 
-
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.ncepu.mydeveloping.pojo.entity.Paper;
 import cn.ncepu.mydeveloping.pojo.entity.Project;
 import cn.ncepu.mydeveloping.pojo.entity.User;
 import cn.ncepu.mydeveloping.pojo.vo.*;
 import cn.ncepu.mydeveloping.result.R;
 import cn.ncepu.mydeveloping.service.ProjectService;
 import cn.ncepu.mydeveloping.service.UserService;
+import cn.ncepu.mydeveloping.service.PaperService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,6 +46,8 @@ public class ProjectController {
     ProjectService projectService;
     @Resource
     UserService userService;
+    @Resource
+    PaperService paperService;
 
     private static final Logger logger = LoggerFactory.getLogger(ProjectController.class);
 
@@ -61,12 +63,17 @@ public class ProjectController {
         }
         if (ObjectUtils.isEmpty(pstartVO.getProjectType())) {
             return R.error().message("项目类别不得为空！");
+        }else if((!pstartVO.getProjectType().equals(0))&&(!pstartVO.getProjectType().equals(1))&&(!pstartVO.getProjectType().equals(2))){
+            return R.error().message("项目类别不符合要求！");
         }
         if (ObjectUtils.isEmpty(pstartVO.getStartTime())) {
             return R.error().message("起始时间不得为空！");
         }
         if (ObjectUtils.isEmpty(pstartVO.getEndTime())) {
             return R.error().message("结束时间不得为空！");
+        }
+        if (pstartVO.getStartTime().after(pstartVO.getEndTime())) {
+            return R.error().message("起始时间应在结束时间之前！");
         }
         if (ObjectUtils.isEmpty(pstartVO.getProjectIntroduction())) {
             return R.error().message("项目简介不得为空！");
@@ -77,8 +84,14 @@ public class ProjectController {
         if (ObjectUtils.isEmpty(pstartVO.getTeacherId())) {
             return R.error().message("指导老师职工号不得为空！");
         }
+        if (ObjectUtils.isEmpty(userService.getById(pstartVO.getTeacherId()))) {
+            return R.error().message("指导老师职工号不存在！");
+        }
         if (ObjectUtils.isEmpty(pstartVO.getHeadId())) {
             return R.error().message("负责人学工号不得为空！");
+        }
+        if (ObjectUtils.isEmpty(userService.getById(pstartVO.getHeadId()))) {
+            return R.error().message("负责人学工号不存在！");
         }
         Project project=new Project();
         BeanUtils.copyProperties(pstartVO,project);
@@ -89,6 +102,10 @@ public class ProjectController {
             project.setSecondMajor("");
             project.setSecondJob("");
             project.setSecondPhone("");
+        }else{
+            if (ObjectUtils.isEmpty(userService.getById(project.getSecondId()))) {
+                return R.error().message("成员二学工号不存在！");
+            }
         }
         if (ObjectUtils.isEmpty(project.getThirdId())){
             project.setThirdId("");
@@ -97,6 +114,10 @@ public class ProjectController {
             project.setThirdMajor("");
             project.setThirdJob("");
             project.setThirdPhone("");
+        }else{
+            if (ObjectUtils.isEmpty(userService.getById(project.getThirdId()))) {
+                return R.error().message("成员三学工号不存在！");
+            }
         }
         if (ObjectUtils.isEmpty(project.getFourthId())){
             project.setFourthId("");
@@ -105,6 +126,10 @@ public class ProjectController {
             project.setFourthMajor("");
             project.setFourthJob("");
             project.setFourthPhone("");
+        }else{
+            if (ObjectUtils.isEmpty(userService.getById(project.getFourthId()))) {
+                return R.error().message("成员四学工号不存在！");
+            }
         }
         if (ObjectUtils.isEmpty(project.getFifthId())){
             project.setFifthId("");
@@ -113,6 +138,10 @@ public class ProjectController {
             project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
+        }else{
+            if (ObjectUtils.isEmpty(userService.getById(project.getFifthId()))) {
+                return R.error().message("成员五学工号不存在！");
+            }
         }
         //project.setHeadId((String) StpUtil.getLoginId());
 
@@ -199,7 +228,7 @@ public class ProjectController {
     @ApiOperation(value = "申请结项/延期结项")
     @PostMapping("projectEnd")
     @SaCheckPermission("student-operation")
-    R projectEnd(String projectId, PendVO pendVO, MultipartFile reportFile, MultipartFile conclusionFile, MultipartFile tableFile, MultipartFile fileFile, MultipartFile pptFile, MultipartFile summaryFile, MultipartFile additionalFile){
+    R projectEnd(String projectId, PendVO pendVO,List<PaperAddVO> paperList, MultipartFile reportFile, MultipartFile conclusionFile, MultipartFile tableFile, MultipartFile fileFile, MultipartFile pptFile, MultipartFile summaryFile, MultipartFile additionalFile){
         Project project = projectService.getById(projectId);
         BeanUtils.copyProperties(pendVO,project);
         //文件上传
@@ -253,6 +282,13 @@ public class ProjectController {
             project.setEndStatus(END_EXTENSION_REVIEW);
         }
         boolean res = projectService.updateById(project);
+        //多个论文保存
+        for (PaperAddVO paperAddVO : paperList) {
+            Paper paper = new Paper();
+            BeanUtils.copyProperties(paperAddVO, paper);
+            paper.setUserId((String) StpUtil.getLoginId());
+            paperService.save(paper);
+        }
         if (res){
             return R.ok().message("申请结项成功！");
         }
@@ -280,9 +316,9 @@ public class ProjectController {
         project.setEndStatus(END_EXTENSION_WAITING);
         boolean res = projectService.updateById(project);
         if (res){
-            return R.ok().message("申请结项成功！");
+            return R.ok().message("申请延期成功！");
         }
-        return R.error().message("申请结项失败！");
+        return R.error().message("申请延期失败！");
     }
 
     @ApiOperation(value = "删除项目成员")
@@ -367,34 +403,34 @@ public class ProjectController {
     @ApiOperation(value = "添加项目成员")
     @PostMapping("memberInsert")
     @SaCheckPermission("student-operation")
-    R memberInsert(String projectId, String memberId, String Name,  String Department, String Major, String job, String phone){
+    R memberInsert(String projectId, String memberId, String name,  String department, String major, String job, String phone){
         Project project = projectService.getById(projectId);
-        if(project.getSecondId().equals("")){
+        if("".equals(project.getSecondId())){
             project.setSecondId(memberId);
-            project.setSecondId(Name);
-            project.setSecondId(Department);
-            project.setSecondId(Major);
+            project.setSecondId(name);
+            project.setSecondId(department);
+            project.setSecondId(major);
             project.setSecondJob(job);
             project.setSecondPhone(phone);
-        }else if(project.getThirdId().equals("")){
+        }else if("".equals(project.getThirdId())){
             project.setThirdId(memberId);
-            project.setThirdId(Name);
-            project.setThirdId(Department);
-            project.setThirdId(Major);
+            project.setThirdId(name);
+            project.setThirdId(department);
+            project.setThirdId(major);
             project.setThirdJob(job);
             project.setThirdPhone(phone);
-        }else if(project.getFourthId().equals("")){
+        }else if("".equals(project.getFourthId())){
             project.setFourthId(memberId);
-            project.setFourthId(Name);
-            project.setFourthId(Department);
-            project.setFourthId(Major);
+            project.setFourthId(name);
+            project.setFourthId(department);
+            project.setFourthId(major);
             project.setFourthJob(job);
             project.setFourthPhone(phone);
-        }else if(project.getFifthId().equals("")){
+        }else if("".equals(project.getFifthId())){
             project.setFifthId(memberId);
-            project.setFifthId(Name);
-            project.setFifthId(Department);
-            project.setFifthId(Major);
+            project.setFifthId(name);
+            project.setFifthId(department);
+            project.setFifthId(major);
             project.setFifthJob(job);
             project.setFifthPhone(phone);
         }else {
@@ -412,7 +448,7 @@ public class ProjectController {
         project.setLogSubmitCount(project.getLogSubmitCount()+1);
         project.setLogNotReadCount(project.getLogNotReadCount()+1);
         if(projectService.updateById(project)) {
-            return R.error().message("提交日志成功！");
+            return R.ok().message("提交日志成功！");
         }
         return R.error().message("提交日志失败！");
     }
@@ -473,6 +509,7 @@ public class ProjectController {
             case 2:
             case 3:
                 project.setEndStatus(status);break;
+            default:
         }
         String memberId = (String) StpUtil.getLoginId();
         User user = userService.getById(memberId);
@@ -502,6 +539,20 @@ public class ProjectController {
     @PostMapping("startEvaluation")
     @SaCheckPermission("reviewer-operation")
     R startEvaluation(String projectId, boolean isApproved, Integer grade, String failureDetails){
+        if (ObjectUtils.isEmpty(projectId)) {
+            return R.error().message("项目ID不得为空！");
+        }
+        if (ObjectUtils.isEmpty(isApproved)) {
+            return R.error().message("是否通过不得为空！");
+        }
+        if (ObjectUtils.isEmpty(grade)) {
+            return R.error().message("分数不得为空！");
+        }else if(0>=grade||grade>=100){
+            return R.error().message("分数不符合要求，应在0-100之间！");
+        }
+        if ((!isApproved)&&ObjectUtils.isEmpty(failureDetails)) {
+            return R.error().message("不通过的原因不得为空！");
+        }
         Project project = projectService.getById(projectId);
         if(isApproved){
             project.setStartStatus(START_SUCCESS);
@@ -521,6 +572,20 @@ public class ProjectController {
     @PostMapping("midtermEvaluation")
     @SaCheckPermission("reviewer-operation")
     R midtermEvaluation(String projectId, boolean isApproved, Integer grade, String failureDetails){
+        if (ObjectUtils.isEmpty(projectId)) {
+            return R.error().message("项目ID不得为空！");
+        }
+        if (ObjectUtils.isEmpty(isApproved)) {
+            return R.error().message("是否通过不得为空！");
+        }
+        if (ObjectUtils.isEmpty(grade)) {
+            return R.error().message("分数不得为空！");
+        }else if(0>=grade||grade>=100){
+            return R.error().message("分数不符合要求，应在0-100之间！");
+        }
+        if ((!isApproved)&&ObjectUtils.isEmpty(failureDetails)) {
+            return R.error().message("不通过的原因不得为空！");
+        }
         Project project = projectService.getById(projectId);
         if(isApproved){
             project.setMidtermStatus(MIDTERM_SUCCESS);
@@ -540,6 +605,20 @@ public class ProjectController {
     @PostMapping("endEvaluation")
     @SaCheckPermission("reviewer-operation")
     R endEvaluation(String projectId, boolean isApproved, Integer grade, String failureDetails){
+        if (ObjectUtils.isEmpty(projectId)) {
+            return R.error().message("项目ID不得为空！");
+        }
+        if (ObjectUtils.isEmpty(isApproved)) {
+            return R.error().message("是否通过不得为空！");
+        }
+        if (ObjectUtils.isEmpty(grade)) {
+            return R.error().message("分数不得为空！");
+        }else if(0>=grade||grade>=100){
+            return R.error().message("分数不符合要求，应在0-100之间！");
+        }
+        if ((!isApproved)&&ObjectUtils.isEmpty(failureDetails)) {
+            return R.error().message("不通过的原因不得为空！");
+        }
         Project project = projectService.getById(projectId);
         if(isApproved){
             project.setEndStatus(END_SUCCESS);
@@ -560,6 +639,20 @@ public class ProjectController {
     @PostMapping("extensionEvaluation")
     @SaCheckPermission("reviewer-operation")
     R extensionEvaluation(String projectId, boolean isApproved, Integer grade, String failureDetails){
+        if (ObjectUtils.isEmpty(projectId)) {
+            return R.error().message("项目ID不得为空！");
+        }
+        if (ObjectUtils.isEmpty(isApproved)) {
+            return R.error().message("是否通过不得为空！");
+        }
+        if (ObjectUtils.isEmpty(grade)) {
+            return R.error().message("分数不得为空！");
+        }else if(0>=grade||grade>=100){
+            return R.error().message("分数不符合要求，应在0-100之间！");
+        }
+        if ((!isApproved)&&ObjectUtils.isEmpty(failureDetails)) {
+            return R.error().message("不通过的原因不得为空！");
+        }
         Project project = projectService.getById(projectId);
         if(isApproved){
             project.setEndStatus(END_SUCCESS);
@@ -576,10 +669,6 @@ public class ProjectController {
     }
 
     /**
-     * 系级负责人操作
-     */
-
-    /**
      * 校级负责人操作
      */
     @ApiOperation(value = "所有立项成功的项目转入中期检查状态")
@@ -589,7 +678,7 @@ public class ProjectController {
         if(projectService.updatePhase(PHASE_START,START_SUCCESS,PHASE_MIDTERM)) {
             return R.ok().message("操作成功！");
         } else {
-            return R.error().message("操作失败！");
+            return R.error().message("没有项目被改变！");
         }
     }
 
@@ -618,7 +707,7 @@ public class ProjectController {
         if(projectService.updatePhase(PHASE_MIDTERM,MIDTERM_SUCCESS,PHASE_END)) {
             return R.ok().message("操作成功！");
         } else {
-            return R.error().message("操作失败！");
+            return R.error().message("没有项目被改变！");
         }
     }
 
@@ -629,7 +718,7 @@ public class ProjectController {
         if(projectService.updatePhase(PHASE_END,END_SUCCESS,PHASE_OVER)||projectService.updatePhase(PHASE_EXTENSION,END_SUCCESS,PHASE_OVER)) {
             return R.ok().message("操作成功！");
         } else {
-            return R.error().message("操作失败！");
+            return R.error().message("没有项目被改变！");
         }
     }
 
@@ -640,14 +729,14 @@ public class ProjectController {
         if(projectService.updatePhase(PHASE_EXTENSION,END_REJECT,PHASE_CANCEL)||projectService.updatePhase(PHASE_MIDTERM,MIDTERM_REJECT,PHASE_CANCEL)||projectService.updatePhase(PHASE_START,MIDTERM_REJECT,PHASE_CANCEL)) {
             return R.ok().message("操作成功！");
         } else {
-            return R.error().message("操作失败！");
+            return R.error().message("没有项目被改变！");
         }
     }
 
     /**
      * 公用操作
      */
-    @ApiOperation(value = "按属性排序分页模糊获取当前用户参与项目列表（系级以上负责人查看全部）")
+    @ApiOperation(value = "按属性排序分页模糊获取当前用户参与项目列表（系级以上负责人查看全部，包含报销金额信息）")
     @GetMapping("projectSelect")
     R projectSelect(long current, long limit, String property, ProjectRequestVO projectRequestVO){
         Project project = new Project();
@@ -670,13 +759,33 @@ public class ProjectController {
             }
             projectList.add(temp);
         }
+        return R.ok().data("total",projectPage.getTotal()).data("rows",projectList);
+    }
 
+    @ApiOperation(value = "按属性排序分页模糊获取当前用户负责的项目列表")
+    @GetMapping("projectSelectByHead")
+    R projectSelectByHead(long current, long limit, String property, ProjectRequestVO projectRequestVO){
+        String headId = (String) StpUtil.getLoginId();
+        Project project = new Project();
+        BeanUtils.copyProperties(projectRequestVO,project);
+        Page<Project> projectPage;
+        projectPage = projectService.projectPerPageByOrderAndHead(current,limit,property, project, headId);
+        List<ProjectListResponseVO> projectList = new ArrayList<>();
+        for(int i=0;i<projectPage.getRecords().size();i++){
+            ProjectListResponseVO temp = new ProjectListResponseVO();
+            BeanUtils.copyProperties(projectPage.getRecords().get(i),temp);
+            if(ObjectUtils.isEmpty(temp.getHeadName())||ObjectUtils.isEmpty(temp.getTeacherName())){
+                temp.setTeacherName(userService.getById(temp.getTeacherId()).getUserName());
+                temp.setHeadName(userService.getById(temp.getHeadId()).getUserName());
+            }
+            projectList.add(temp);
+        }
         return R.ok().data("total",projectPage.getTotal()).data("rows",projectList);
     }
 
     @ApiOperation(value = "获取项目详细信息")
     @GetMapping("projectInfo")
-    R projectSelect(String projectId){
+    R projectInfo(String projectId){
         Project project = projectService.getById(projectId);
         ProjectInfoResponseVO projectInfoResponseVO = new ProjectInfoResponseVO();
         BeanUtils.copyProperties(project,projectInfoResponseVO);

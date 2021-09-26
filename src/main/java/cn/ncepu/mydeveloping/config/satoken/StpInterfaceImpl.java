@@ -1,12 +1,12 @@
 package cn.ncepu.mydeveloping.config.satoken;
 
 import cn.dev33.satoken.stp.StpInterface;
+import cn.ncepu.mydeveloping.consts.Constant;
 import cn.ncepu.mydeveloping.pojo.entity.User;
 import cn.ncepu.mydeveloping.service.UserService;
-import cn.ncepu.mydeveloping.consts.Constant;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @Component    // 保证此类被SpringBoot扫描，完成sa-token的自定义权限验证扩展
 public class StpInterfaceImpl implements StpInterface {
 
-    @Autowired
+    @Resource
     private UserService userService;
 
     /**
@@ -25,7 +25,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginKey) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         User user = userService.getById((String) loginId);
         if(user.getUserType().equals(Constant.STUDENT)){
             list.add("student-operation");
@@ -60,7 +60,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getRoleList(Object loginId, String loginKey) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         User user = userService.getById((String) loginId);
         if(user.getUserType().equals(Constant.SCHOOL)){
             list.add("SCHOOL");

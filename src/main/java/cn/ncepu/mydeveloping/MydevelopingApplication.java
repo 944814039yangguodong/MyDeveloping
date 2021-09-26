@@ -1,6 +1,5 @@
 package cn.ncepu.mydeveloping;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,11 +8,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author Guodong
+ * MapperScan("cn.ncepu.mydeveloping.mapper")在MyBatisPlusConfig里面注释@一次即可
  */
 @EnableSwagger2
 @SpringBootApplication
 @ComponentScan(basePackages = {"cn.ncepu"})
 @EnableTransactionManagement
+
 public class MydevelopingApplication {
 
     public static void main(String[] args) {
@@ -21,4 +22,4 @@ public class MydevelopingApplication {
     }
 
 }
-//@MapperScan("cn.ncepu.mydeveloping.mapper")//在MyBatisPlusConfig里面注释一次即可
+

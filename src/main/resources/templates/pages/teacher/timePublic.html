@@ -80,6 +80,167 @@
     </div>
     <!-- 内容主体区域 -->
     <div class="layui-body" >
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>当前时间</legend>
+        </fieldset>
+        <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">立项：</label>
+                    <div class="layui-input-inline">
+                        <input v-model="startBegin" class="layui-input" disabled="">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    -
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input v-model="startOver" class="layui-input" disabled="">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">中期：</label>
+                    <div class="layui-input-inline">
+                        <input v-model="midtermBegin" class="layui-input" disabled="">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    -
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input v-model="midtermOver" class="layui-input" disabled="">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">结项：</label>
+                    <div class="layui-input-inline">
+                        <input v-model="endBegin" class="layui-input" disabled="">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    -
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input v-model="endOver" class="layui-input" disabled="">
+                    </div>
+                </div>
+            </div>
+        </form>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>设定时间</legend>
+        </fieldset>
+        <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">立项：</label>
+                    <div class="layui-input-inline">
+                        <input v-model="newStartBegin" id="startBegin" class="layui-input" placeholder="开始时间">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    -
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input v-model="newStartOver" id="startOver" class="layui-input" placeholder="结束时间">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-block">
+                        <button type="button" @click="startSubmit" class="layui-btn ">提交立项时间</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">中期：</label>
+                    <div class="layui-input-inline">
+                        <input v-model="newMidtermBegin" id="midtermBegin" class="layui-input" placeholder="开始时间">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    -
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input v-model="newMidtermOver" id="midtermOver" class="layui-input" placeholder="结束时间">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-block">
+                        <button type="button" @click="midtermSubmit" class="layui-btn ">提交中期时间</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">结项：</label>
+                    <div class="layui-input-inline">
+                        <input v-model="newEndBegin" id="endBegin" class="layui-input" placeholder="开始时间">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    -
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-inline">
+                        <input v-model="newEndOver" id="endOver" class="layui-input" placeholder="结束时间">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <div class="layui-input-block">
+                        <button type="button" @click="endSubmit" class="layui-btn ">提交结项时间</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>大创阶段操作</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button type="button" @click="enterMidterm" class="layui-btn ">进入中期检查阶段</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button type="button" @click="enterEnd" class="layui-btn ">进入结项审核阶段</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button type="button" @click="end" class="layui-btn ">结项成功的项目转为已结项</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <div class="layui-input-block">
+                    <button type="button" @click="cancel" class="layui-btn ">所有未通过的项目转为已取消</button>
+                </div>
+            </div>
+        </div>
+        <div style="height: 100px"></div>
     </div>
     <!-- 底部固定区域 -->
     <div class="layui-footer" style="text-align: center">
@@ -87,6 +248,51 @@
     </div>
 </div>
 <script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#startBegin'
+            ,format: 'yyyy-MM-dd'
+            ,done: function(value){
+                app.newStartBegin=value;
+            }
+        });
+        laydate.render({
+            elem: '#startOver'
+            ,format: 'yyyy-MM-dd'
+            ,done: function(value){
+                app.newStartOver=value;
+            }
+        });
+        laydate.render({
+            elem: '#midtermBegin'
+            ,format: 'yyyy-MM-dd'
+            ,done: function(value){
+                app.newMidtermBegin=value;
+            }
+        });
+        laydate.render({
+            elem: '#midtermOver'
+            ,format: 'yyyy-MM-dd'
+            ,done: function(value){
+                app.newMidtermOver=value;
+            }
+        });
+        laydate.render({
+            elem: '#endBegin'
+            ,format: 'yyyy-MM-dd'
+            ,done: function(value){
+                app.newEndBegin=value;
+            }
+        });
+        laydate.render({
+            elem: '#endOver'
+            ,format: 'yyyy-MM-dd'
+            ,done: function(value){
+                app.newEndOver=value;
+            }
+        });
+    });
     var app = new Vue({
         el: '#app',
         data: {
@@ -97,7 +303,19 @@
                 department:null,
                 major:null
             },
-            userTypeName:"老师"
+            userTypeName:"老师",
+            startBegin:null,
+            startOver:null,
+            midtermBegin:null,
+            midtermOver:null,
+            endBegin:null,
+            endOver:null,
+            newStartBegin:null,
+            newStartOver:null,
+            newMidtermBegin:null,
+            newMidtermOver:null,
+            newEndBegin:null,
+            newEndOver:null,
         },
         mounted:function (){
             var that = this;
@@ -122,8 +340,133 @@
                 .catch(function (error) {
                     console.log(error);
                 });
+            axios.get('http://'+IP+'/api/time/timeSelect')
+                .then(function (response) {
+                    if(response.data.success===true){
+                        that.startBegin=response.data.data.time.startBegin;
+                        that.startOver=response.data.data.time.startOver;
+                        that.midtermBegin=response.data.data.time.midtermBegin;
+                        that.midtermOver=response.data.data.time.midtermOver;
+                        that.endBegin=response.data.data.time.endBegin;
+                        that.endOver=response.data.data.time.endOver;
+                    }else{
+                        console.log(response);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         },
-        methods:{
+        methods: {
+            startSubmit: function () {
+                var that = this;
+                axios.post('http://' + IP + '/api/time/timeStart',
+                    {
+                        startBegin: that.newStartBegin,
+                        startOver: that.newStartOver
+                    })
+                    .then(function (response) {
+                        if (response.data.success === true) {
+                            alert(response.data.message);
+                            location.reload();
+                        } else {
+                            layer.alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            midtermSubmit: function () {
+                var that = this;
+                axios.post('http://' + IP + '/api/time/timeMidterm',
+                    {
+                        midtermBegin: that.newMidtermBegin,
+                        midtermOver: that.newMidtermOver
+                    })
+                    .then(function (response) {
+                        if (response.data.success === true) {
+                            alert(response.data.message);
+                            location.reload();
+                        } else {
+                            layer.alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            endSubmit: function () {
+                var that = this;
+                axios.post('http://' + IP + '/api/time/timeEnd',
+                    {
+                        endBegin: that.newEndBegin,
+                        endOver: that.newEndOver
+                    })
+                    .then(function (response) {
+                        if (response.data.success === true) {
+                            alert(response.data.message);
+                            location.reload();
+                        } else {
+                            layer.alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            enterMidterm:function (){
+                axios.post('http://' + IP + '/api/project/enterMidterm')
+                    .then(function (response) {
+                        if (response.data.success === true) {
+                            layer.alert(response.data.message);
+                        } else {
+                            layer.alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            enterEnd:function (){
+                axios.post('http://' + IP + '/api/project/enterEnd')
+                    .then(function (response) {
+                        if (response.data.success === true) {
+                            layer.alert(response.data.message);
+                        } else {
+                            layer.alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            end:function (){
+                axios.post('http://' + IP + '/api/project/end')
+                    .then(function (response) {
+                        if (response.data.success === true) {
+                            layer.alert(response.data.message);
+                        } else {
+                            layer.alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            cancel:function (){
+                axios.post('http://' + IP + '/api/project/enterCancel')
+                    .then(function (response) {
+                        if (response.data.success === true) {
+                            layer.alert(response.data.message);
+                        } else {
+                            layer.alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
         }
     })
 </script>

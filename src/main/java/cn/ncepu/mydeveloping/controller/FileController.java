@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static cn.ncepu.mydeveloping.consts.Constant.*;
+import static cn.ncepu.mydeveloping.consts.SuffixConstants.*;
 import static cn.ncepu.mydeveloping.utils.FileUtil.download;
 
 /**
@@ -32,6 +33,7 @@ public class FileController {
         long startTime = System.currentTimeMillis();
         String originalFilename = file.getOriginalFilename();
         logger.info("fileName：" + originalFilename);
+        assert originalFilename != null;
         int lastIndexOf = originalFilename.lastIndexOf(".");
         String fileType = originalFilename.substring(lastIndexOf + 1);
         SimpleDateFormat sdf = SDF;
@@ -39,12 +41,15 @@ public class FileController {
         String path = ROOT_PATH + sdf.format(new Date()) + " " + originalFilename;
         //文件类型判断 doc,docx,jpg,png,xls
         logger.info("截取文件名类型:{}", fileType);
-        if (fileType.equals("jpg") || fileType.equals("png") || fileType.equals("dox") || fileType.equals("docx") || fileType.equals("xls")|| fileType.equals("txt")|| fileType.equals("ppt")|| fileType.equals("pdf")) {
+        if (fileType.equals(JPG) || fileType.equals(PNG) || fileType.equals(DOX) || fileType.equals(DOCX) || fileType.equals(XLS)|| fileType.equals(TXT)|| fileType.equals(PPT)|| fileType.equals(PDF)) {
             File newFile = new File(path);
             try {
                 // 路径不存在需创建目录
                 if (!newFile.exists()) {
-                    newFile.mkdirs();
+                    boolean res = newFile.mkdirs();
+                    if(!res){
+                        return R.error().message("创建文件夹失败！");
+                    }
                 }
                 file.transferTo(newFile);
                 long endTime = System.currentTimeMillis();

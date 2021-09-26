@@ -3,6 +3,9 @@ package cn.ncepu.mydeveloping.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.ncepu.mydeveloping.pojo.entity.Time;
+import cn.ncepu.mydeveloping.pojo.vo.EndTimeVO;
+import cn.ncepu.mydeveloping.pojo.vo.MidtermTimeVO;
+import cn.ncepu.mydeveloping.pojo.vo.StartTimeVO;
 import cn.ncepu.mydeveloping.pojo.vo.TimeVO;
 import cn.ncepu.mydeveloping.result.R;
 import cn.ncepu.mydeveloping.service.TimeService;
@@ -13,7 +16,6 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * <p>
@@ -34,16 +36,19 @@ public class TimeController {
     @ApiOperation(value = "发布立项时间信息")
     @PostMapping("timeStart")
     @SaCheckPermission("school-operation")
-    R timeStart(Date startBegin, Date startOver){
+    R timeStart(@RequestBody StartTimeVO startTimeVO){
         Time timeNow = timeService.selectNow();
-        if(ObjectUtils.isEmpty(startBegin)) {
+        if(ObjectUtils.isEmpty(startTimeVO.getStartBegin())) {
             return R.error().message("立项开始时间不可以为空！");
         }
-        if(ObjectUtils.isEmpty(startOver)) {
+        if(ObjectUtils.isEmpty(startTimeVO.getStartOver())) {
             return R.error().message("立项结束时间不可以为空！");
         }
-        timeNow.setStartBegin(startBegin);
-        timeNow.setStartOver(startOver);
+        if(startTimeVO.getStartBegin().after(startTimeVO.getStartOver())){
+            return R.error().message("立项开始时间应在立项结束时间之前！");
+        }
+        timeNow.setStartBegin(startTimeVO.getStartBegin());
+        timeNow.setStartOver(startTimeVO.getStartOver());
         boolean res2 = timeService.updateById(timeNow);
         if (res2){
             return R.ok().message("发布时间成功！");
@@ -54,16 +59,19 @@ public class TimeController {
     @ApiOperation(value = "发布中期时间信息")
     @PostMapping("timeMidterm")
     @SaCheckPermission("school-operation")
-    R timeMidterm(Date midtermBegin, Date midtermOver){
+    R timeMidterm(@RequestBody MidtermTimeVO midtermTimeVO){
         Time timeNow = timeService.selectNow();
-        if(ObjectUtils.isEmpty(midtermBegin)) {
+        if(ObjectUtils.isEmpty(midtermTimeVO.getMidtermBegin())) {
             return R.error().message("中期开始时间不可以为空！");
         }
-        if(ObjectUtils.isEmpty(midtermOver)) {
+        if(ObjectUtils.isEmpty(midtermTimeVO.getMidtermOver())) {
             return R.error().message("中期结束时间不可以为空！");
         }
-        timeNow.setMidtermBegin(midtermBegin);
-        timeNow.setMidtermOver(midtermOver);
+        if(midtermTimeVO.getMidtermBegin().after(midtermTimeVO.getMidtermOver())){
+            return R.error().message("中期开始时间应在中期结束时间之前！");
+        }
+        timeNow.setMidtermBegin(midtermTimeVO.getMidtermBegin());
+        timeNow.setMidtermOver(midtermTimeVO.getMidtermOver());
         boolean res2 = timeService.updateById(timeNow);
         if (res2){
             return R.ok().message("发布时间成功！");
@@ -74,16 +82,19 @@ public class TimeController {
     @ApiOperation(value = "发布结项时间信息")
     @PostMapping("timeEnd")
     @SaCheckPermission("school-operation")
-    R timeEnd(Date endBegin, Date endOver){
+    R timeEnd(@RequestBody EndTimeVO endTimeVO){
         Time timeNow = timeService.selectNow();
-        if(ObjectUtils.isEmpty(endBegin)) {
+        if(ObjectUtils.isEmpty(endTimeVO.getEndBegin())) {
             return R.error().message("结项开始时间不可以为空！");
         }
-        if(ObjectUtils.isEmpty(endOver)) {
+        if(ObjectUtils.isEmpty(endTimeVO.getEndOver())) {
             return R.error().message("结项结束时间不可以为空！");
         }
-        timeNow.setEndBegin(endBegin);
-        timeNow.setEndOver(endOver);
+        if(endTimeVO.getEndBegin().after(endTimeVO.getEndOver())){
+            return R.error().message("结项开始时间应在结项结束时间之前！");
+        }
+        timeNow.setEndBegin(endTimeVO.getEndBegin());
+        timeNow.setEndOver(endTimeVO.getEndOver());
         boolean res2 = timeService.updateById(timeNow);
         if (res2){
             return R.ok().message("发布时间成功！");

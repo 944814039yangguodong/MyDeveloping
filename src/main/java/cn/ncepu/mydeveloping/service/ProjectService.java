@@ -62,6 +62,17 @@ public interface ProjectService extends IService<Project> {
     Page<Project> projectPerPageByOrder(long current, long limit, String property, Project project, String memberId);
 
     /**
+     * 按property属性顺序，多条件，分页查询
+     * @param current 当前页
+     * @param limit 页面大小
+     * @param property 排序属性
+     * @param project 条件
+     * @param headId 负责人
+     * @return 查询结果项目列表
+     */
+    Page<Project> projectPerPageByOrderAndHead(long current, long limit, String property, Project project, String headId);
+
+    /**
      * 更新项目阶段
      * @param originalPhase 原阶段
      * @param originalStatus 原阶段状态

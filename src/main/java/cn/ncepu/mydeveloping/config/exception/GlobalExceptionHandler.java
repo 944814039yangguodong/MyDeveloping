@@ -27,7 +27,6 @@ public class GlobalExceptionHandler {
             return R.error().code(ResultCode.CODE_NOT_LOGIN).message("该用户没有登录: " + ee.getMessage());
         } else if (e instanceof NotRoleException) {
             // 如果是角色异常
-            NotRoleException ee = (NotRoleException) e;
             return R.error().code(ResultCode.CODE_NOT_JUR).message("当前登录用户没有角色权限");
         } else if (e instanceof NotPermissionException) {
             // 如果是权限异常

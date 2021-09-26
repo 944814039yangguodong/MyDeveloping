@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.List;
 
 import static cn.ncepu.mydeveloping.consts.Constant.*;
+import static cn.ncepu.mydeveloping.consts.FieldNameConstants.*;
 import static cn.ncepu.mydeveloping.utils.FileUtil.fileUploads;
 
 /**
@@ -48,7 +48,7 @@ public class NoticeController {
     @ApiOperation(value = "系级以上负责人发布公告")
     @PostMapping("noticeInsert")
     @SaCheckPermission("department-operation")
-    R noticeInsert(NoticeAddRequestVO noticeAddRequestVO, MultipartFile fileOne, MultipartFile fileTwo, MultipartFile fileThree) throws IOException {
+    R noticeInsert(NoticeAddRequestVO noticeAddRequestVO, MultipartFile fileOne, MultipartFile fileTwo, MultipartFile fileThree) {
         Notice notice=new Notice();
         notice.setUserId((String) StpUtil.getLoginId());
         notice.setNoticeName(noticeAddRequestVO.getNoticeName());
@@ -137,7 +137,7 @@ public class NoticeController {
     @ApiOperation(value = "属性排序分页模糊查询公告简要信息")
     @GetMapping("/public/noticeSelectPage")
     R noticeSelectPage(long current, long limit, String property, NoticeRequestVO noticeRequestVO){
-        if(property.equals("gmt_create")||property.equals("notice_name")||property.equals("notice_content")){
+        if(GMT_CREATE.equals(property)|| NOTICE_NAME.equals(property)|| NOTICE_CONTENT.equals(property)){
             Page<NoticeListResponseVO> noticePage =
                     noticeService.noticePerPageByOrder(current,limit,property,noticeRequestVO);
             //总记录数
@@ -153,6 +153,9 @@ public class NoticeController {
     @GetMapping("/public/getNotice")
     public R getNotice(Integer noticeId){
         Notice notice = noticeService.getById(noticeId);
+        if(ObjectUtils.isEmpty(notice)){
+            return R.error().message("该公告不存在");
+        }
         NoticeInfoResponseVO noticeInfoResponseVO = new NoticeInfoResponseVO();
         BeanUtils.copyProperties(notice, noticeInfoResponseVO);
         //每次获取公告内容详情阅读数加一

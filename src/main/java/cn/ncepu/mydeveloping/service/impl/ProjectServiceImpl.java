@@ -96,6 +96,43 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
     }
 
     @Override
+    public Page<Project> projectPerPageByOrderAndHead(long current, long limit, String property, Project project, String headId) {
+        Page<Project> projectPage = new Page<>(current,limit);
+        QueryWrapper<Project> projectQueryWrapper = new QueryWrapper<>();
+        if (!ObjectUtils.isEmpty(project.getProjectName())) {
+            projectQueryWrapper.like("project_name",project.getProjectName());
+        }
+        if (!ObjectUtils.isEmpty(project.getDepartment())) {
+            projectQueryWrapper.eq("department",project.getDepartment());
+        }
+        if (!ObjectUtils.isEmpty(project.getProjectType())) {
+            projectQueryWrapper.eq("project_type",project.getProjectType());
+        }
+        if (!ObjectUtils.isEmpty(project.getProjectClass())) {
+            projectQueryWrapper.eq("project_class",project.getProjectClass());
+        }
+        if (!ObjectUtils.isEmpty(project.getProjectPhase())) {
+            projectQueryWrapper.eq("project_phase",project.getProjectPhase());
+        }
+        if (!ObjectUtils.isEmpty(project.getStartStatus())) {
+            projectQueryWrapper.eq("start_status",project.getStartStatus());
+        }
+        if (!ObjectUtils.isEmpty(project.getMidtermStatus())) {
+            projectQueryWrapper.eq("midterm_status",project.getMidtermStatus());
+        }
+        if (!ObjectUtils.isEmpty(project.getEndStatus())) {
+            projectQueryWrapper.eq("end_status",project.getEndStatus());
+        }
+        if (!ObjectUtils.isEmpty(headId)) {
+            projectQueryWrapper.eq("head_id",headId);
+        }
+
+        projectQueryWrapper.orderByDesc(property);
+        projectMapper.selectPage(projectPage,projectQueryWrapper);
+        return projectPage;
+    }
+
+    @Override
     public boolean updatePhase(Integer originalPhase, Integer originalStatus, Integer newPhase) {
         //修改值
         Project project = new Project();

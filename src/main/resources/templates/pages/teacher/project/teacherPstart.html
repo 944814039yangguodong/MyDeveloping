@@ -95,6 +95,7 @@
                     <th>系别</th>
                     <th>项目类型</th>
                     <th>申报时间</th>
+                    <th>项目阶段</th>
                     <th>项目状态</th>
                     <th></th>
                     <th></th>
@@ -111,6 +112,7 @@
                     <td>{{list[0].projectClassName}}</td>
                     <td>{{list[0].startTime}}</td>
                     <td>{{list[0].projectPhaseName}}</td>
+                    <td>{{list[0].projectStatusName}}</td>
                     <td><a @click="toInfo(0)" style="cursor: pointer">详情</a></td>
                     <td><a @click="toJudge(0)" style="cursor: pointer">打分</a></td>
                 </tr>
@@ -124,6 +126,7 @@
                     <td>{{list[1].projectClassName}}</td>
                     <td>{{list[1].startTime}}</td>
                     <td>{{list[1].projectPhaseName}}</td>
+                    <td>{{list[1].projectStatusName}}</td>
                     <td><a @click="toInfo(1)" style="cursor: pointer">详情</a></td>
                     <td><a @click="toJudge(1)" style="cursor: pointer">打分</a></td>
                 </tr>
@@ -137,6 +140,7 @@
                     <td>{{list[2].projectClassName}}</td>
                     <td>{{list[2].startTime}}</td>
                     <td>{{list[2].projectPhaseName}}</td>
+                    <td>{{list[2].projectStatusName}}</td>
                     <td><a @click="toInfo(2)" style="cursor: pointer">详情</a></td>
                     <td><a @click="toJudge(2)" style="cursor: pointer">打分</a></td>
                 </tr>
@@ -150,6 +154,7 @@
                     <td>{{list[3].projectClassName}}</td>
                     <td>{{list[3].startTime}}</td>
                     <td>{{list[3].projectPhaseName}}</td>
+                    <td>{{list[3].projectStatusName}}</td>
                     <td><a @click="toInfo(3)" style="cursor: pointer">详情</a></td>
                     <td><a @click="toJudge(3)" style="cursor: pointer">打分</a></td>
                 </tr>
@@ -163,6 +168,7 @@
                     <td>{{list[4].projectClassName}}</td>
                     <td>{{list[4].startTime}}</td>
                     <td>{{list[4].projectPhaseName}}</td>
+                    <td>{{list[4].projectStatusName}}</td>
                     <td><a @click="toInfo(4)" style="cursor: pointer">详情</a></td>
                     <td><a @click="toJudge(4)" style="cursor: pointer">打分</a></td>
                 </tr>
@@ -223,13 +229,13 @@
                     <div class="layui-inline">
                         <label class="layui-form-label">分数</label>
                         <div class="layui-input-inline">
-                            <input v-model="judgeGradeOne" class="layui-input" placeholder="分数1" style="width: 114px">
+                            <input v-model="judgeGradeOne" class="layui-input" placeholder="分数1" oninput = "value=value.replace(/[^\d]/g,'')" style="width: 114px">
                         </div>
                         <div class="layui-input-inline">
-                            <input v-model="judgeGradeTwo" class="layui-input" placeholder="分数2" style="width: 114px">
+                            <input v-model="judgeGradeTwo" class="layui-input" placeholder="分数2" oninput = "value=value.replace(/[^\d]/g,'')" style="width: 114px">
                         </div>
                         <div class="layui-input-inline">
-                            <input v-model="judgeGradeThree" class="layui-input" placeholder="分数3" style="width: 114px">
+                            <input v-model="judgeGradeThree" class="layui-input" placeholder="分数3" oninput = "value=value.replace(/[^\d]/g,'')" style="width: 114px">
                         </div>
                     </div>
                 </div>
@@ -250,7 +256,7 @@
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">项目不通过的评价</label>
                     <div class="layui-input-block" style="width: 514px">
-                        <textarea placeholder="请输入内容" v-model="failureDetails" class="layui-textarea" style="height: 150px" maxlength="200"></textarea>
+                        <textarea placeholder="若不通过，请输入内容" v-model="failureDetails" class="layui-textarea" style="height: 150px" maxlength="200"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -274,11 +280,11 @@
         data: {
             total:0,
             list: [
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null},
-                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null}
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null}
             ],
             current:1,
             limit:5,
@@ -374,21 +380,88 @@
                                     switch (response.data.data.rows[i].projectPhase){
                                         case 0:
                                             that.list[i].projectPhaseName="立项申请";
+                                            switch (response.data.data.rows[i].startStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="等待审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="立项成功";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="立项驳回";
+                                                    break;
+                                            }
                                             break;
                                         case 1:
                                             that.list[i].projectPhaseName="中期检查";
+                                            switch (response.data.data.rows[i].midtermStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="未中期审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="中期审核";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="中期审核通过";
+                                                    break;
+                                                case 3:
+                                                    that.list[i].projectStatusName="中期审核未通过";
+                                                    break;
+                                            }
                                             break;
                                         case 2:
                                             that.list[i].projectPhaseName="结项审核";
+                                            switch (response.data.data.rows[i].endStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="未结项审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="结项审核";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="结项审核通过";
+                                                    break;
+                                                case 3:
+                                                    that.list[i].projectStatusName="延期结项";
+                                                    break;
+                                                case 4:
+                                                    that.list[i].projectStatusName="延期项目审核";
+                                                    break;
+                                                case 5:
+                                                    that.list[i].projectStatusName="结项审核未通过";
+                                                    break;
+                                            }
                                             break;
                                         case 3:
                                             that.list[i].projectPhaseName="延期结项";
+                                            switch (response.data.data.rows[i].endStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="未结项审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="结项审核";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="结项审核通过";
+                                                    break;
+                                                case 3:
+                                                    that.list[i].projectStatusName="延期结项";
+                                                    break;
+                                                case 4:
+                                                    that.list[i].projectStatusName="延期项目审核";
+                                                    break;
+                                                case 5:
+                                                    that.list[i].projectStatusName="结项审核未通过";
+                                                    break;
+                                            }
                                             break;
                                         case 4:
                                             that.list[i].projectPhaseName="已结项";
+                                            that.list[i].projectStatusName="";
                                             break;
                                         case 5:
                                             that.list[i].projectPhaseName="已取消";
+                                            that.list[i].projectStatusName="";
                                             break;
                                     }
                                 }else {
@@ -406,6 +479,9 @@
                             }
                             that.total=response.data.data.total;
                             that.pageCount=Math.ceil(that.total/that.limit);
+                            if(that.pageCount===0){
+                                that.pageCount=1;
+                            }
                         }else{
                             console.log(response);
                         }
@@ -454,9 +530,9 @@
                 axios.post('http://'+IP+'/api/project/startEvaluation',formData)
                     .then(function (response) {
                         if(response.data.success===true){
-                            alert(response.data.message);
+                            layer.alert(response.data.message);
                         }else{
-                            alert(response.data.message);
+                            layer.alert(response.data.message);
                         }
                     })
                     .catch(function (error) {
@@ -472,9 +548,9 @@
                 axios.post('http://'+IP+'/api/project/startEvaluation',formData)
                     .then(function (response) {
                         if(response.data.success===true){
-                            alert(response.data.message);
+                            layer.alert(response.data.message);
                         }else{
-                            alert(response.data.message);
+                            layer.alert(response.data.message);
                         }
                     })
                     .catch(function (error) {

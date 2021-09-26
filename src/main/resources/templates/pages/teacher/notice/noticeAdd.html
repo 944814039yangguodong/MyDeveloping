@@ -188,9 +188,13 @@
         },
         methods:{
             noticeSubmit:function(){
-                let arr = [];
-                this.Content.split('\n').forEach(item=>arr.push(`<p>${item.trim()}</p>`));
-                this.noticeContentLocal = arr.join('<br>');
+                if(this.Content!==""){
+                    let arr = [];
+                    this.Content.split('\n').forEach(item=>arr.push(`<p>${item.trim()}</p>`));
+                    this.noticeContentLocal = arr.join('<br>');
+                }else{
+                    this.noticeContentLocal = this.Content;
+                }
                 let formData = new FormData();
                 formData.append('noticeName', this.noticeNameLocal);
                 formData.append('noticeContent', this.noticeContentLocal);
@@ -212,6 +216,7 @@
             noticeClear:function(){
                 this.noticeNameLocal="";
                 this.noticeContentLocal="";
+                this.Content="";
                 this.fileOneLocal=null;
                 this.fileTwoLocal=null;
                 this.fileThreeLocal=null;

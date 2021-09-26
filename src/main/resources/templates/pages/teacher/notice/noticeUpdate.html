@@ -251,13 +251,14 @@
         methods:{
             noticeReSubmit:function(){
                 let formData = new FormData();
-                formData.append('noticeID', requestPathP);
+                formData.append('noticeId', requestPathP);
                 formData.append('noticeName', this.noticeName);
                 formData.append('noticeContent', this.noticeContent);
                 formData.append('fileOne', this.fileOneLocal);
                 formData.append('fileTwo', this.fileTwoLocal);
                 formData.append('fileThree', this.fileThreeLocal);
                 const that = this;
+                console.log('noticeID'+ requestPathP);
                 axios.post('http://'+IP+'/api/notice/noticeModify', formData)
                     .then(function (response) {
                         if(response.data.success===true){

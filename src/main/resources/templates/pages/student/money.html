@@ -61,6 +61,174 @@
     </div>
     <!-- 内容主体区域 -->
     <div class="layui-body" >
+        <section v-show="submitProjectId==''">
+            <table id="table" class="layui-table" lay-skin="line">
+                <colgroup>
+                    <col width="60">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>项目名称</th>
+                    <th>项目编号</th>
+                    <th>指导老师</th>
+                    <th>负责人</th>
+                    <th>项目类型</th>
+                    <th>组内成员</th>
+                    <th>项目阶段</th>
+                    <th>报销表单</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-show="isNull(0)">
+                    <td>1</td>
+                    <td>{{list[0].projectName}}</td>
+                    <td>{{list[0].projectId}}</td>
+                    <td>{{list[0].teacherName}}</td>
+                    <td>{{list[0].headName}}</td>
+                    <td>{{list[0].projectClassName}}</td>
+                    <td>{{list[0].members}}</td>
+                    <td>{{list[0].projectPhaseName}}</td>
+                    <td>
+                        <a @click="toSubmit(0)" style="cursor: pointer">提交</a>
+                    </td>
+                </tr>
+                <tr v-show="isNull(1)">
+                    <td>2</td>
+                    <td>{{list[1].projectName}}</td>
+                    <td>{{list[1].projectId}}</td>
+                    <td>{{list[1].teacherName}}</td>
+                    <td>{{list[1].headName}}</td>
+                    <td>{{list[1].projectClassName}}</td>
+                    <td>{{list[1].members}}</td>
+                    <td>{{list[1].projectPhaseName}}</td>
+                    <td>
+                        <a @click="toSubmit(1)" style="cursor: pointer">提交</a>
+                    </td>
+                </tr>
+                <tr v-show="isNull(2)">
+                    <td>3</td>
+                    <td>{{list[2].projectName}}</td>
+                    <td>{{list[2].projectId}}</td>
+                    <td>{{list[2].teacherName}}</td>
+                    <td>{{list[2].headName}}</td>
+                    <td>{{list[2].projectClassName}}</td>
+                    <td>{{list[2].members}}</td>
+                    <td>{{list[2].projectPhaseName}}</td>
+                    <td>
+                        <a @click="toSubmit(2)" style="cursor: pointer">提交</a>
+                    </td>
+                </tr>
+                <tr v-show="isNull(3)">
+                    <td>4</td>
+                    <td>{{list[3].projectName}}</td>
+                    <td>{{list[3].projectId}}</td>
+                    <td>{{list[3].teacherName}}</td>
+                    <td>{{list[3].headName}}</td>
+                    <td>{{list[3].projectClassName}}</td>
+                    <td>{{list[3].members}}</td>
+                    <td>{{list[3].projectPhaseName}}</td>
+                    <td>
+                        <a @click="toSubmit(3)" style="cursor: pointer">提交</a>
+                    </td>
+                </tr>
+                <tr v-show="isNull(4)">
+                    <td>5</td>
+                    <td>{{list[4].projectName}}</td>
+                    <td>{{list[4].projectId}}</td>
+                    <td>{{list[4].teacherName}}</td>
+                    <td>{{list[4].headName}}</td>
+                    <td>{{list[4].projectClassName}}</td>
+                    <td>{{list[4].members}}</td>
+                    <td>{{list[4].projectPhaseName}}</td>
+                    <td>
+                        <a @click="toSubmit(4)" style="cursor: pointer">提交</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="float:right">
+                <button @click="previous" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+                <label style="text-align: center;margin: 5px">{{current}}/{{pageCount}}</label>
+                <button @click="next" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+            </div>
+        </section>
+
+        <section v-show="submitProjectId!=''">
+            <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">项目名称</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitProjectName" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">项目编号</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitProjectId" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">负责人</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitHeadName" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">学号</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitHeadId" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">指导老师</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitTeacherName" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">工号</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitTeacherId" class="layui-input" disabled="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-form-item" >
+                        <div class="layui-inline">
+                            <label class="layui-form-label">报销表单</label>
+                            <div class="layui-input-inline">
+                                <input type="file" @change="getFileOne($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-word-aux" style="margin-left: 50px">*请按照规定上传指定文件，如需上传多个额外文件，请将文件压缩为压缩包后上传</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">报销总金额</label>
+                            <div class="layui-input-inline">
+                                <input v-model="submitAmount" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <label @click="submit" class="layui-btn">提交</label>
+                    </div>
+                </div>
+                <div style="height: 500px"></div>
+            </form>
+        </section>
     </div>
     <!-- 底部固定区域 -->
     <div class="layui-footer" style="text-align: center">
@@ -71,6 +239,18 @@
     var app = new Vue({
         el: '#app',
         data: {
+            total:0,
+            list: [
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null,members:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null,members:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null,members:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null,members:null},
+                {projectName:null,projectId:null,teacherId:null,teacherName:null,headId:null,headName:null,department:null,projectClass:null,projectClassName:null,startTime:null,projectPhase:null,projectPhaseName:null,projectStatusName:null,members:null}
+            ],
+            current:1,
+            limit:5,
+            property:"gmt_create",
+            pageCount:1,
             userInfo:{
                 userId:null,
                 userName:"姓名",
@@ -78,6 +258,15 @@
                 department:null,
                 major:null
             },
+            submitProjectId:'',
+            submitTableFile:null,
+            submitAmount:null,
+            submitProjectName:null,
+            submitProjectClassName:null,
+            submitHeadName:null,
+            submitHeadId:null,
+            submitTeacherName:null,
+            submitTeacherId:null
         },
         mounted:function (){
             var that = this;
@@ -92,8 +281,244 @@
                 .catch(function (error) {
                     console.log(error);
                 });
+            this.getData();
         },
         methods:{
+            getData:function (){
+                var that = this;
+                axios.get('http://'+IP+'/api/project/projectSelectByHead',{
+                    params:{
+                        current:that.current,
+                        limit:that.limit,
+                        property:that.property,
+                        projectPhase:2,
+                        endStatus:2
+                    }
+                })
+                    .then(function (response) {
+                        if(response.data.success===true){
+                            console.log(response);
+                            for(var i=0;i<that.limit;i++){
+                                if(response.data.data.rows.length>i){
+                                    that.list[i].projectName = response.data.data.rows[i].projectName;
+                                    that.list[i].projectId = response.data.data.rows[i].projectId;
+                                    that.list[i].teacherId = response.data.data.rows[i].teacherId;
+                                    that.list[i].headId = response.data.data.rows[i].headId;
+                                    that.list[i].department = response.data.data.rows[i].department;
+                                    that.list[i].projectClass = response.data.data.rows[i].projectClass;
+                                    that.list[i].startTime = response.data.data.rows[i].startTime;
+                                    that.list[i].projectPhase = response.data.data.rows[i].projectPhase;
+                                    that.list[i].teacherName = response.data.data.rows[i].teacherName;
+                                    that.list[i].headName = response.data.data.rows[i].headName;
+                                    that.list[i].members = "";
+                                    if(response.data.data.rows[i].secondName!==""&&response.data.data.rows[i].secondId!==""){
+                                        if(response.data.data.rows[i].secondName!==null&&response.data.data.rows[i].secondId!==null){
+                                            that.list[i].members = response.data.data.rows[i].secondName;
+                                        }else{
+                                            that.list[i].members = "成员二姓名（未填）";
+                                        }
+                                    }
+                                    if(response.data.data.rows[i].thirdName!==""&&response.data.data.rows[i].thirdId!==""){
+                                        if(response.data.data.rows[i].thirdName!==null&&response.data.data.rows[i].thirdId!==null){
+                                            that.list[i].members += "," + response.data.data.rows[i].thirdName;
+                                        }else{
+                                            that.list[i].members += "," + "成员三姓名（未填）";
+                                        }
+                                    }
+                                    if(response.data.data.rows[i].fourthName!==""&&response.data.data.rows[i].fourthId!==""){
+                                        if(response.data.data.rows[i].fourthName!==null&&response.data.data.rows[i].fourthId!==null){
+                                            that.list[i].members += "," + response.data.data.rows[i].fourthName;
+                                        }else{
+                                            that.list[i].members += "," + "成员四姓名（未填）";
+                                        }
+                                    }
+                                    if(response.data.data.rows[i].fifthName!==""&&response.data.data.rows[i].fifthId!==""){
+                                        if(response.data.data.rows[i].fifthName!==null&&response.data.data.rows[i].fifthId!==null){
+                                            that.list[i].members += "," + response.data.data.rows[i].fifthName;
+                                        }else{
+                                            that.list[i].members += "," + "成员五姓名（未填）";
+                                        }
+                                    }
+                                    switch (response.data.data.rows[i].projectClass){
+                                        case 0:
+                                            that.list[i].projectClassName="校级";
+                                            break;
+                                        case 1:
+                                            that.list[i].projectClassName="省级";
+                                            break;
+                                        case 2:
+                                            that.list[i].projectClassName="国家级";
+                                            break;
+                                    }
+                                    switch (response.data.data.rows[i].projectPhase){
+                                        case 0:
+                                            that.list[i].projectPhaseName="立项申请";
+                                            switch (response.data.data.rows[i].startStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="等待审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="立项成功";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="立项驳回";
+                                                    break;
+                                            }
+                                            break;
+                                        case 1:
+                                            that.list[i].projectPhaseName="中期检查";
+                                            switch (response.data.data.rows[i].midtermStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="未中期审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="中期审核";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="中期审核通过";
+                                                    break;
+                                                case 3:
+                                                    that.list[i].projectStatusName="中期审核未通过";
+                                                    break;
+                                            }
+                                            break;
+                                        case 2:
+                                            that.list[i].projectPhaseName="结项审核";
+                                            switch (response.data.data.rows[i].endStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="未结项审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="结项审核";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="结项审核通过";
+                                                    break;
+                                                case 3:
+                                                    that.list[i].projectStatusName="延期结项";
+                                                    break;
+                                                case 4:
+                                                    that.list[i].projectStatusName="延期项目审核";
+                                                    break;
+                                                case 5:
+                                                    that.list[i].projectStatusName="结项审核未通过";
+                                                    break;
+                                            }
+                                            break;
+                                        case 3:
+                                            that.list[i].projectPhaseName="延期结项";
+                                            switch (response.data.data.rows[i].endStatus){
+                                                case 0:
+                                                    that.list[i].projectStatusName="未结项审核";
+                                                    break;
+                                                case 1:
+                                                    that.list[i].projectStatusName="结项审核";
+                                                    break;
+                                                case 2:
+                                                    that.list[i].projectStatusName="结项审核通过";
+                                                    break;
+                                                case 3:
+                                                    that.list[i].projectStatusName="延期结项";
+                                                    break;
+                                                case 4:
+                                                    that.list[i].projectStatusName="延期项目审核";
+                                                    break;
+                                                case 5:
+                                                    that.list[i].projectStatusName="结项审核未通过";
+                                                    break;
+                                            }
+                                            break;
+                                        case 4:
+                                            that.list[i].projectPhaseName="已结项";
+                                            that.list[i].projectStatusName="";
+                                            break;
+                                        case 5:
+                                            that.list[i].projectPhaseName="已取消";
+                                            that.list[i].projectStatusName="";
+                                            break;
+                                    }
+                                }else {
+                                    that.list[i].projectName = null;
+                                    that.list[i].projectId = null;
+                                    that.list[i].teacherId = null;
+                                    that.list[i].headId = null;
+                                    that.list[i].department = null;
+                                    that.list[i].projectClass = null;
+                                    that.list[i].startTime = null;
+                                    that.list[i].projectPhase = null;
+                                    that.list[i].teacherName = null;
+                                    that.list[i].headName = null;
+                                }
+                            }
+                            that.total=response.data.data.total;
+                            that.pageCount=Math.ceil(that.total/that.limit);
+                            if(that.pageCount===0){
+                                that.pageCount=1;
+                            }
+                        }else{
+                            console.log(response);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            isNull:function (index){
+                if(this.list[index].projectId===null)
+                    return false;
+                else
+                    return true;
+            },
+            previous:function (){
+                if(this.current>1)
+                    this.current--;
+                this.getData();
+            },
+            next:function (){
+                if(this.current<this.pageCount)
+                    this.current++;
+                this.getData();
+            },
+            toInfo:function (index){
+                window.open('/project/projectInfoPage/'+this.list[index].projectId);
+            },
+            toSubmit:function (index){
+                this.submitProjectId=this.list[index].projectId;
+                this.submitProjectName=this.list[index].projectName;
+                this.submitProjectClassName=this.list[index].projectClassName;
+                this.submitHeadName=this.list[index].headName;
+                this.submitHeadId=this.list[index].headId;
+                this.submitTeacherName=this.list[index].teacherName;
+                this.submitTeacherId=this.list[index].teacherId;
+            },
+            submit:function (){
+                if(this.submitAmount===null){
+                    layer.alert("报销金额不能为空！");
+                    return;
+                }
+                if(isNaN(this.submitAmount)){
+                    layer.alert("报销金额不符合要求！");
+                    return;
+                }
+                let formData = new FormData();
+                formData.append('projectId',this.submitProjectId);
+                formData.append('tableFile',this.submitTableFile);
+                formData.append('amount',this.submitAmount);
+                axios.post('http://'+IP+'/api/project/financeSubmit',formData)
+                    .then(function (response) {
+                        if(response.data.success===true){
+                            layer.alert(response.data.message);
+                        }else{
+                            layer.alert(response.data.message);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            getFileOne(event) {
+                this.submitTableFile = event.target.files[0];
+            },
         }
     })
 </script>

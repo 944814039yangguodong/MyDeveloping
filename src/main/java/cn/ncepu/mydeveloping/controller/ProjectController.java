@@ -228,7 +228,70 @@ public class ProjectController {
     @ApiOperation(value = "申请结项/延期结项")
     @PostMapping("projectEnd")
     @SaCheckPermission("student-operation")
-    R projectEnd(String projectId, PendVO pendVO,List<PaperAddVO> paperList, MultipartFile reportFile, MultipartFile conclusionFile, MultipartFile tableFile, MultipartFile fileFile, MultipartFile pptFile, MultipartFile summaryFile, MultipartFile additionalFile){
+    R projectEnd(String projectId, PendVO pendVO, MultipartFile reportFile, MultipartFile conclusionFile, MultipartFile tableFile, MultipartFile fileFile, MultipartFile pptFile, MultipartFile summaryFile, MultipartFile additionalFile){
+        Project project = projectService.getById(projectId);
+        BeanUtils.copyProperties(pendVO,project);
+        //文件上传
+        String userFolder = (String) StpUtil.getLoginId();
+        String fileClass= "end";
+        if(reportFile!=null){
+            String newFileName =ROOT_PATH + fileUploads(reportFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndReport");
+            project.setEndReport(newFileName);
+        } else {
+            return R.error().message("华北电力大学大学生创新创业训练计划结题报告书不得为空！");
+        }
+        if(conclusionFile!=null){
+            String newFileName =ROOT_PATH + fileUploads(conclusionFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ConclusionReport");
+            project.setConclusionReport(newFileName);
+        } else {
+            return R.error().message("大学生创新性实验计划项目研究总结报告不得为空！");
+        }
+        if(tableFile!=null){
+            String newFileName =ROOT_PATH + fileUploads(tableFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"OutcomeTable");
+            project.setOutcomeTable(newFileName);
+        } else {
+            return R.error().message("成果信息表不得为空！");
+        }
+        if(fileFile!=null){
+            String newFileName =ROOT_PATH + fileUploads(fileFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"OutcomeFile");
+            project.setOutcomeFile(newFileName);
+        } else {
+            return R.error().message("成果展示文件不得为空！");
+        }
+        if(pptFile!=null){
+            String newFileName =ROOT_PATH + fileUploads(pptFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndPpt");
+            project.setEndPpt(newFileName);
+        } else {
+            return R.error().message("答辩PPT不得为空！");
+        }
+        if(summaryFile!=null){
+            String newFileName =ROOT_PATH + fileUploads(summaryFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"PersonalSummary");
+            project.setPersonalSummary(newFileName);
+        } else {
+            return R.error().message("个人总结不得为空！");
+        }
+        if(additionalFile!=null){
+            String newFileName =ROOT_PATH + fileUploads(additionalFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndAdditionalFile");
+            project.setEndAdditionalFile(newFileName);
+        }
+        if(project.getEndStatus().equals(END_WAITING)) {
+            //设置结项状态为结项审核
+            project.setEndStatus(END_REVIEW);
+        } else {
+            //若为延期结项则改结项状态为延期项目审核
+            project.setEndStatus(END_EXTENSION_REVIEW);
+        }
+        boolean res = projectService.updateById(project);
+        if (res){
+            return R.ok().message("申请结项成功！");
+        }
+        return R.error().message("申请结项失败！");
+    }
+
+    @ApiOperation(value = "申请结项/延期结项(多论文)")
+    @PostMapping("projectEndMultiPaper")
+    @SaCheckPermission("student-operation")
+    R projectEndMultiPaper(String projectId, PendVO pendVO,List<PaperAddVO> paperList, MultipartFile reportFile, MultipartFile conclusionFile, MultipartFile tableFile, MultipartFile fileFile, MultipartFile pptFile, MultipartFile summaryFile, MultipartFile additionalFile){
         Project project = projectService.getById(projectId);
         BeanUtils.copyProperties(pendVO,project);
         //文件上传
@@ -457,16 +520,21 @@ public class ProjectController {
     @PostMapping("financeSubmit")
     @SaCheckPermission("student-operation")
     R financeSubmit(String projectId, BigDecimal amount, MultipartFile tableFile){
+        if(ObjectUtils.isEmpty(projectId)){
+            return R.error().message("项目id不得为空！");
+        }
         Project project = projectService.getById(projectId);
+        if(ObjectUtils.isEmpty(amount)){
+            return R.error().message("总金额不得为空！");
+        }
+        if(ObjectUtils.isEmpty(tableFile)){
+            return R.error().message("财务报销单不得为空！");
+        }
         //文件上传
         String userFolder = (String) StpUtil.getLoginId();
         String fileClass= "finance";
-        if(tableFile!=null){
-            String newFileName =ROOT_PATH + fileUploads(tableFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ReimbursementTable");
-            project.setReimbursementTable(newFileName);
-        } else {
-            return R.error().message("财务报销单不得为空！");
-        }
+        String newFileName =ROOT_PATH + fileUploads(tableFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ReimbursementTable");
+        project.setReimbursementTable(newFileName);
         project.setReimbursementAmount(amount);
         boolean res = projectService.updateById(project);
         if (res){
@@ -679,6 +747,42 @@ public class ProjectController {
             return R.ok().message("操作成功！");
         } else {
             return R.error().message("没有项目被改变！");
+        }
+    }
+
+    @ApiOperation(value = "中期结束单个项目升级操作")
+    @PostMapping("projectPromoteOne")
+    @SaCheckPermission("school-operation")
+    R projectPromoteOne(String projectId){
+        Project project = projectService.getById(projectId);
+        if(project.getProjectClass().equals(CLASS_SCHOOL)){
+            projectService.updateClassToProvince(projectId);
+            return R.ok().message("成功升级为省级！");
+        }else if(project.getProjectClass().equals(CLASS_PROVINCE)) {
+            projectService.updateClassToNation(projectId);
+            return R.ok().message("成功升级为国家级！");
+        }else if(project.getProjectClass().equals(CLASS_NATION)) {
+            return R.error().message("该项目已为国家级，无法升级！");
+        }else {
+            return R.error().message("操作失败！");
+        }
+    }
+
+    @ApiOperation(value = "中期结束单个项目降级操作")
+    @PostMapping("projectDemotionOne")
+    @SaCheckPermission("school-operation")
+    R projectDemotionOne(String projectId){
+        Project project = projectService.getById(projectId);
+        if(project.getProjectClass().equals(CLASS_SCHOOL)){
+            return R.ok().message("该项目已为校级，无法降级！");
+        }else if(project.getProjectClass().equals(CLASS_PROVINCE)) {
+            projectService.updateClassToSchool(projectId);
+            return R.ok().message("成功降级为校级！");
+        }else if(project.getProjectClass().equals(CLASS_NATION)) {
+            projectService.updateClassToProvince(projectId);
+            return R.error().message("成功降级为省级！");
+        }else {
+            return R.error().message("操作失败！");
         }
     }
 

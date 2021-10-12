@@ -93,17 +93,17 @@
                         that.noticeAttachmentOne = response.data.data.noticeInfo.noticeAttachmentOne;
                         that.noticeAttachmentTwo = response.data.data.noticeInfo.noticeAttachmentTwo;
                         that.noticeAttachmentThree = response.data.data.noticeInfo.noticeAttachmentThree;
-                        if(that.noticeAttachmentOne != null && that.noticeAttachmentOne != ""){
+                        if(that.noticeAttachmentOne != null && that.noticeAttachmentOne !== ""){
                             var str1 = that.noticeAttachmentOne.split("/");
                             that.nameOne = str1[str1.length-1];
                             that.one = true;
                         }
-                        if(that.noticeAttachmentTwo != null && that.noticeAttachmentTwo != ""){
+                        if(that.noticeAttachmentTwo != null && that.noticeAttachmentTwo !== ""){
                             var str2 = that.noticeAttachmentTwo.split("/");
                             that.nameTwo = str2[str2.length-1];
                             that.two = true;
                         }
-                        if(that.noticeAttachmentThree != null && that.noticeAttachmentThree != ""){
+                        if(that.noticeAttachmentThree != null && that.noticeAttachmentThree !== ""){
                             var str3 = that.noticeAttachmentThree.split("/");
                             that.nameThree = str3[str3.length-1];
                             that.three = true;

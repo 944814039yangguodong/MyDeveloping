@@ -1,7 +1,5 @@
 package cn.ncepu.mydeveloping.consts;
 
-import com.sun.org.apache.xpath.internal.objects.XString;
-
 import java.text.SimpleDateFormat;
 
 /**

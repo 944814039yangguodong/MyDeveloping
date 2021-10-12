@@ -288,7 +288,7 @@
             ],
             current:1,
             limit:5,
-            property:"start_time",
+            property:"gmt_create",
             pageCount:1,
             userInfo:{
                 userId:null,
@@ -520,9 +520,17 @@
                 this.judgeTeacherName=this.list[index].teacherName;
             },
             calculateGrade:function (){
+                if(this.judgeGradeOne===null||this.judgeGradeTwo===null||this.judgeGradeThree===null){
+                    layer.alert("分数不可为空！");
+                    return;
+                }
                 this.judgeGrade=Math.round((parseInt(this.judgeGradeOne)+parseInt(this.judgeGradeTwo)+parseInt(this.judgeGradeThree))/3);
             },
             approve:function (){
+                if(this.judgeGrade===null){
+                    layer.alert("分数不可为空！");
+                    return;
+                }
                 let formData = new FormData();
                 formData.append('projectId', this.judgeProjectId);
                 formData.append('isApproved', true);
@@ -540,6 +548,10 @@
                     });
             },
             reject:function (){
+                if(this.judgeGrade===null){
+                    layer.alert("分数不可为空！");
+                    return;
+                }
                 let formData = new FormData();
                 formData.append('projectId', this.judgeProjectId);
                 formData.append('isApproved', false);

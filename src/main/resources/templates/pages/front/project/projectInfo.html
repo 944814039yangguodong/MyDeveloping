@@ -631,7 +631,7 @@
         patentName:"",
         authorizedTime:null,
         patentNumber:null,
-        physicalWorksName:null,
+        physicalWorksName:"",
         worksFirstAuthor:null,
         endReport:null,
         conclusionReport:null,
@@ -665,6 +665,15 @@
                 if(response.data.success===true){
                   console.log(response);
                   that.projectInfo=response.data.data.projectInfo;
+                  if(response.data.data.projectInfo.paperTitle==="null"){
+                    that.projectInfo.paperTitle="";
+                  }
+                  if(response.data.data.projectInfo.patentName==="null"){
+                    that.projectInfo.patentName="";
+                  }
+                  if(response.data.data.projectInfo.physicalWorksName==="null"){
+                    that.projectInfo.physicalWorksName="";
+                  }
                   switch (response.data.data.projectInfo.projectType){
                     case 0:
                       that.projectTypeName="创新训练";
@@ -765,63 +774,78 @@
                   }
                   if(that.projectInfo.startApplication != null){
                     var str1 = that.projectInfo.startApplication.split("/");
-                    that.file0 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file0 = str1[str1.length-1];
                   }
                   if(that.projectInfo.startPpt != null){
                     var str1 = that.projectInfo.startPpt.split("/");
-                    that.file1 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file1 = str1[str1.length-1];
                   }
                   if(that.projectInfo.startAdditionalFile != null){
                     var str1 = that.projectInfo.startAdditionalFile.split("/");
-                    that.file2 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file2 = str1[str1.length-1];
                   }
                   if(that.projectInfo.midtermReport != null){
                     var str1 = that.projectInfo.midtermReport.split("/");
-                    that.file3 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file3 = str1[str1.length-1];
                   }
                   if(that.projectInfo.midtermChange != null){
                     var str1 = that.projectInfo.midtermChange.split("/");
-                    that.file4 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file4 = str1[str1.length-1];
                   }
                   if(that.projectInfo.midtermPpt != null){
                     var str1 = that.projectInfo.midtermPpt.split("/");
-                    that.file5 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file5 = str1[str1.length-1];
                   }
                   if(that.projectInfo.midtermAdditionalFile != null){
                     var str1 = that.projectInfo.midtermAdditionalFile.split("/");
-                    that.file6 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file6 = str1[str1.length-1];
                   }
                   if(that.projectInfo.endReport != null){
                     var str1 = that.projectInfo.endReport.split("/");
-                    that.file7 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file7 = str1[str1.length-1];
                   }
                   if(that.projectInfo.conclusionReport != null){
                     var str1 = that.projectInfo.conclusionReport.split("/");
-                    that.file8 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file8 = str1[str1.length-1];
                   }
                   if(that.projectInfo.outcomeTable != null){
                     var str1 = that.projectInfo.outcomeTable.split("/");
-                    that.file9 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file9 = str1[str1.length-1];
                   }
                   if(that.projectInfo.outcomeFile != null){
                     var str1 = that.projectInfo.outcomeFile.split("/");
-                    that.file10 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file10 = str1[str1.length-1];
                   }
                   if(that.projectInfo.personalSummary != null){
                     var str1 = that.projectInfo.personalSummary.split("/");
-                    that.file11 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file11 = str1[str1.length-1];
                   }
                   if(that.projectInfo.endPpt != null){
                     var str1 = that.projectInfo.endPpt.split("/");
-                    that.file12 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file12 = str1[str1.length-1];
                   }
                   if(that.projectInfo.extensionApplication != null){
                     var str1 = that.projectInfo.extensionApplication.split("/");
-                    that.file13 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file13 = str1[str1.length-1];
                   }
                   if(that.projectInfo.endAdditionalFile != null){
                     var str1 = that.projectInfo.endAdditionalFile.split("/");
-                    that.file14 = str1[str1.length-1];
+                    if(str1[str1.length-1] != "null")
+                      that.file14 = str1[str1.length-1];
                   }
                 }else{
                   console.log(response);

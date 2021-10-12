@@ -2,7 +2,6 @@ package cn.ncepu.mydeveloping.service.impl;
 
 import cn.ncepu.mydeveloping.mapper.ProjectMapper;
 import cn.ncepu.mydeveloping.pojo.entity.Project;
-import cn.ncepu.mydeveloping.pojo.entity.User;
 import cn.ncepu.mydeveloping.service.ProjectService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -192,5 +191,35 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
                 .eq("midterm_status", MIDTERM_SUCCESS)
                 .orderByDesc("midterm_grade");
         return projectMapper.selectList(projectQueryWrapper);
+    }
+
+    @Override
+    public boolean updateClassToProvince(String projectId) {
+        QueryWrapper<Project> projectQueryWrapper = new QueryWrapper<>();
+        projectQueryWrapper.eq("project_id",projectId);
+        Project project = projectMapper.selectOne(projectQueryWrapper);
+        project.setProjectClass(CLASS_PROVINCE);
+        int res = projectMapper.updateById(project);
+        return res != 0;
+    }
+
+    @Override
+    public boolean updateClassToNation(String projectId) {
+        QueryWrapper<Project> projectQueryWrapper = new QueryWrapper<>();
+        projectQueryWrapper.eq("project_id",projectId);
+        Project project = projectMapper.selectOne(projectQueryWrapper);
+        project.setProjectClass(CLASS_NATION);
+        int res = projectMapper.updateById(project);
+        return res != 0;
+    }
+
+    @Override
+    public boolean updateClassToSchool(String projectId) {
+        QueryWrapper<Project> projectQueryWrapper = new QueryWrapper<>();
+        projectQueryWrapper.eq("project_id",projectId);
+        Project project = projectMapper.selectOne(projectQueryWrapper);
+        project.setProjectClass(CLASS_SCHOOL);
+        int res = projectMapper.updateById(project);
+        return res != 0;
     }
 }

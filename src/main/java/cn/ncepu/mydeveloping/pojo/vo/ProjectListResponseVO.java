@@ -92,4 +92,11 @@ public class ProjectListResponseVO {
 
     @ApiModelProperty(value = "项目日志审阅数，初始为0，不可为负，每提交一次加一，每查阅一次减一")
     private Integer logNotReadCount;
+
+    @ApiModelProperty(value = "中期评分")
+    private Integer midtermGrade;
+
+    @ApiModelProperty(value = "项目报销表单文件存储路径")
+    private String reimbursementTable;
+
 }

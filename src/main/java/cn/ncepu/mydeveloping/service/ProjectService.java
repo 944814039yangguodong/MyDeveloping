@@ -1,7 +1,6 @@
 package cn.ncepu.mydeveloping.service;
 
 import cn.ncepu.mydeveloping.pojo.entity.Project;
-import cn.ncepu.mydeveloping.pojo.entity.User;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -95,4 +94,25 @@ public interface ProjectService extends IService<Project> {
      * @return 查询结果项目列表
      */
     List<Project> selectTop(Integer top);
+
+    /**
+     * 项目级别至省级
+     * @param projectId 项目id
+     * @return 是否成功
+     */
+    boolean updateClassToProvince(String projectId);
+
+    /**
+     * 项目级别至国家级
+     * @param projectId 项目id
+     * @return 是否成功
+     */
+    boolean updateClassToNation(String projectId);
+
+    /**
+     * 项目级别至校级
+     * @param projectId 项目id
+     * @return 是否成功
+     */
+    boolean updateClassToSchool(String projectId);
 }

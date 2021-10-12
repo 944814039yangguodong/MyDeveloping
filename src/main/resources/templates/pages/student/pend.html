@@ -210,9 +210,78 @@
                 </div>
 
                 <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">论文名称</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitPaperTitle" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">发表刊物名称</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitPublicationName" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">检索类型</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitRetrievalType" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">检索号</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitRetrievalNumber" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">论文第一作者</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitPaperFirstAuthor" class="layui-input" >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">专利名称</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitPatentName" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">专利授权时间</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitAuthorizedTime" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">专利号</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitPatentNumber" class="layui-input" >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">实物作品名称</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitPhysicalWorksName" class="layui-input" >
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">作品第一作者</label>
+                        <div class="layui-input-inline">
+                            <input v-model="submitWorksFirstAuthor" class="layui-input" >
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
                     <div class="layui-form-item" >
                         <div class="layui-inline">
-                            <label class="layui-form-label">中期报告</label>
+                            <label class="layui-form-label">华北电力大学大学生创新创业训练计划结题报告书</label>
                             <div class="layui-input-inline">
                                 <input type="file" @change="getFileOne($event)" style="border-radius: 5px;border:solid grey;width: 514px">
                             </div>
@@ -220,7 +289,7 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">中期答辩PPT</label>
+                            <label class="layui-form-label">大学生创新性实验计划项目研究总结报告</label>
                             <div class="layui-input-inline">
                                 <input type="file" @change="getFileTwo($event)" style="border-radius: 5px;border:solid grey;width: 514px">
                             </div>
@@ -228,7 +297,7 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">成员变动申请表</label>
+                            <label class="layui-form-label">成果信息表</label>
                             <div class="layui-input-inline">
                                 <input type="file" @change="getFileThree($event)" style="border-radius: 5px;border:solid grey;width: 514px">
                             </div>
@@ -236,9 +305,33 @@
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">额外文件</label>
+                            <label class="layui-form-label">成果展示文件</label>
                             <div class="layui-input-inline">
                                 <input type="file" @change="getFileFour($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">答辩PPT</label>
+                            <div class="layui-input-inline">
+                                <input type="file" @change="getFileFive($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">个人总结</label>
+                            <div class="layui-input-inline">
+                                <input type="file" @change="getFileSix($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">额外文件</label>
+                            <div class="layui-input-inline">
+                                <input type="file" @change="getFileSeven($event)" style="border-radius: 5px;border:solid grey;width: 514px">
                             </div>
                         </div>
                     </div>
@@ -275,7 +368,7 @@
             ],
             current:1,
             limit:5,
-            property:"start_time",
+            property:"gmt_create",
             pageCount:1,
             userInfo:{
                 userId:null,
@@ -285,11 +378,24 @@
                 major:null
             },
             submitProjectId:'',
-            submitReportFile:null,
-            submitPptFile:null,
-            submitChangeFile:null,
-            submitAdditionalFile:null,
+            submitPaperTitle:null,
+            submitPublicationName:null,
+            submitRetrievalType:null,
+            submitRetrievalNumber:null,
+            submitPaperFirstAuthor:null,
+            submitPatentName:null,
+            submitAuthorizedTime:null,
+            submitPatentNumber:null,
+            submitPhysicalWorksName:null,
+            submitWorksFirstAuthor:null,
 
+            submitReportFile:null,
+            submitConclusionFile:null,
+            submitTableFile:null,
+            submitFileFile:null,
+            submitPptFile:null,
+            submitSummaryFile:null,
+            submitAdditionalFile:null,
 
             submitProjectName:null,
             submitProjectClassName:null,
@@ -526,11 +632,24 @@
             submit:function (){
                 let formData = new FormData();
                 formData.append('projectId',this.submitProjectId);
+                formData.append('paperTitle',this.submitPaperTitle);
+                formData.append('publicationName',this.submitPublicationName);
+                formData.append('retrievalType',this.submitRetrievalType);
+                formData.append('retrievalNumber',this.submitRetrievalNumber);
+                formData.append('paperFirstAuthor',this.submitPaperFirstAuthor);
+                formData.append('patentName',this.submitPatentName);
+                formData.append('authorizedTime',this.submitAuthorizedTime);
+                formData.append('patentNumber',this.submitPatentNumber);
+                formData.append('physicalWorksName',this.submitPhysicalWorksName);
+                formData.append('worksFirstAuthor',this.submitWorksFirstAuthor);
                 formData.append('reportFile',this.submitReportFile);
+                formData.append('conclusionFile',this.submitConclusionFile);
+                formData.append('tableFile',this.submitTableFile);
+                formData.append('fileFile',this.submitFileFile);
                 formData.append('pptFile',this.submitPptFile);
-                formData.append('changeFile',this.submitChangeFile);
+                formData.append('summaryFile',this.submitSummaryFile);
                 formData.append('additionalFile',this.submitAdditionalFile);
-                axios.post('http://'+IP+'/api/project/projectMidterm',formData)
+                axios.post('http://'+IP+'/api/project/projectEnd',formData)
                     .then(function (response) {
                         if(response.data.success===true){
                             layer.alert(response.data.message);
@@ -546,12 +665,21 @@
                 this.submitReportFile = event.target.files[0];
             },
             getFileTwo(event) {
-                this.submitPptFile = event.target.files[0];
+                this.submitConclusionFile = event.target.files[0];
             },
             getFileThree(event) {
-                this.submitChangeFile = event.target.files[0];
+                this.submitTableFile = event.target.files[0];
             },
             getFileFour(event) {
+                this.submitFileFile = event.target.files[0];
+            },
+            getFileFive(event) {
+                this.submitPptFile = event.target.files[0];
+            },
+            getFileSix(event) {
+                this.submitSummaryFile = event.target.files[0];
+            },
+            getFileSeven(event) {
                 this.submitAdditionalFile = event.target.files[0];
             }
         }

@@ -25,6 +25,7 @@ import java.util.List;
 
 import static cn.ncepu.mydeveloping.consts.Constant.*;
 import static cn.ncepu.mydeveloping.consts.FieldNameConstants.*;
+import static cn.ncepu.mydeveloping.utils.FileUtil.delete;
 import static cn.ncepu.mydeveloping.utils.FileUtil.fileUploads;
 
 /**
@@ -116,14 +117,23 @@ public class NoticeController {
         String userFolder = (String) StpUtil.getLoginId();
         String fileClass= "notice";
         if(fileOne!=null){
+            if(!delete(notice.getNoticeAttachmentOne())){
+                return R.error().message("删除原文件1失败！");
+            }
             String newFileName =ROOT_PATH + fileUploads(fileOne,SDF,ROOT_PATH,logger,userFolder,fileClass,"附件1");
             notice.setNoticeAttachmentOne(newFileName);
         }
         if(fileTwo!=null){
+            if(!delete(notice.getNoticeAttachmentTwo())){
+                return R.error().message("删除原文件2失败！");
+            }
             String newFileName =ROOT_PATH + fileUploads(fileTwo,SDF,ROOT_PATH,logger,userFolder,fileClass,"附件2");
             notice.setNoticeAttachmentTwo(newFileName);
         }
         if(fileThree!=null){
+            if(!delete(notice.getNoticeAttachmentThree())){
+                return R.error().message("删除原文件3失败！");
+            }
             String newFileName =ROOT_PATH + fileUploads(fileThree,SDF,ROOT_PATH,logger,userFolder,fileClass,"附件3");
             notice.setNoticeAttachmentThree(newFileName);
         }

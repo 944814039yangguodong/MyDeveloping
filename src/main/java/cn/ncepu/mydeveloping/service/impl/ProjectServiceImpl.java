@@ -222,4 +222,27 @@ public class ProjectServiceImpl extends ServiceImpl<ProjectMapper, Project> impl
         int res = projectMapper.updateById(project);
         return res != 0;
     }
+
+    @Override
+    public Project getByFile(String filePath) {
+        QueryWrapper<Project> noticeQueryWrapper =
+                new QueryWrapper<>();
+        noticeQueryWrapper.eq("reimbursement_table",filePath)
+                .or().eq("start_application",filePath)
+                .or().eq("start_ppt",filePath)
+                .or().eq("start_additional_file",filePath)
+                .or().eq("midterm_report",filePath)
+                .or().eq("midterm_change",filePath)
+                .or().eq("midterm_ppt",filePath)
+                .or().eq("midterm_additional_file",filePath)
+                .or().eq("end_report",filePath)
+                .or().eq("conclusion_report",filePath)
+                .or().eq("outcome_table",filePath)
+                .or().eq("outcome_file",filePath)
+                .or().eq("personal_summary",filePath)
+                .or().eq("end_ppt",filePath)
+                .or().eq("extension_application",filePath)
+                .or().eq("end_additional_file",filePath);
+        return projectMapper.selectOne(noticeQueryWrapper);
+    }
 }

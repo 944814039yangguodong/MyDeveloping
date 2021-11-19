@@ -1,5 +1,6 @@
 package cn.ncepu.mydeveloping.utils;
 
+import cn.ncepu.mydeveloping.service.FileService;
 import org.slf4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 

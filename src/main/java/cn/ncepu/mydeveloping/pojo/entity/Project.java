@@ -1,9 +1,6 @@
 package cn.ncepu.mydeveloping.pojo.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -93,75 +90,99 @@ public class Project implements Serializable {
     private String headPhone;
 
     @ApiModelProperty(value = "成员二的学生编号")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String secondId;
 
     @ApiModelProperty(value = "成员二的姓名")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String secondName;
 
     @ApiModelProperty(value = "成员二的院系")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String secondDepartment;
 
     @ApiModelProperty(value = "成员二的专业")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String secondMajor;
 
     @ApiModelProperty(value = "成员二的分工")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String secondJob;
 
     @ApiModelProperty(value = "成员二的联系电话")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String secondPhone;
 
     @ApiModelProperty(value = "成员三的学生编号")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String thirdId;
 
     @ApiModelProperty(value = "成员三的姓名")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String thirdName;
 
     @ApiModelProperty(value = "成员三的院系")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String thirdDepartment;
 
     @ApiModelProperty(value = "成员三的专业")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String thirdMajor;
 
     @ApiModelProperty(value = "成员三的分工")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String thirdJob;
 
     @ApiModelProperty(value = "成员三的联系电话")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String thirdPhone;
 
     @ApiModelProperty(value = "成员四的学生编号")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fourthId;
 
     @ApiModelProperty(value = "成员四的姓名")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fourthName;
 
     @ApiModelProperty(value = "成员四的院系")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fourthDepartment;
 
     @ApiModelProperty(value = "成员四的专业")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fourthMajor;
 
     @ApiModelProperty(value = "成员四的分工")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fourthJob;
 
     @ApiModelProperty(value = "成员四的联系电话")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fourthPhone;
 
     @ApiModelProperty(value = "成员五的学生编号")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fifthId;
 
     @ApiModelProperty(value = "成员五的姓名")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fifthName;
 
     @ApiModelProperty(value = "成员五的院系")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fifthDepartment;
 
     @ApiModelProperty(value = "成员五的专业")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fifthMajor;
 
     @ApiModelProperty(value = "成员五的分工")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fifthJob;
 
     @ApiModelProperty(value = "成员五的联系电话")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String fifthPhone;
 
     @ApiModelProperty(value = "企业导师姓名")
@@ -183,6 +204,7 @@ public class Project implements Serializable {
     private String enterpriseTutorPhone;
 
     @ApiModelProperty(value = "项目报销表单文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String reimbursementTable;
 
     @ApiModelProperty(value = "项目报销总金额，初始为0")
@@ -201,12 +223,15 @@ public class Project implements Serializable {
     private Integer startStatus;
 
     @ApiModelProperty(value = "立项申请表文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String startApplication;
 
     @ApiModelProperty(value = "立项答辩PPT文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String startPpt;
 
     @ApiModelProperty(value = "立项额外文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String startAdditionalFile;
 
     @ApiModelProperty(value = "立项评分")
@@ -222,15 +247,19 @@ public class Project implements Serializable {
     private Integer midtermStatus;
 
     @ApiModelProperty(value = "中期报告文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String midtermReport;
 
     @ApiModelProperty(value = "成员变动申请表文件存储路径，0代表已删除")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String midtermChange;
 
     @ApiModelProperty(value = "中期答辩PPT文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String midtermPpt;
 
     @ApiModelProperty(value = "中期额外文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String midtermAdditionalFile;
 
     @ApiModelProperty(value = "中期评分")
@@ -276,27 +305,35 @@ public class Project implements Serializable {
     private String worksFirstAuthor;
 
     @ApiModelProperty(value = "华北电力大学大学生创新创业训练计划结题报告书文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String endReport;
 
     @ApiModelProperty(value = "大学生创新性实验计划项目研究总结报告文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String conclusionReport;
 
     @ApiModelProperty(value = "成果信息表文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String outcomeTable;
 
     @ApiModelProperty(value = "成果展示文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String outcomeFile;
 
     @ApiModelProperty(value = "个人总结文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String personalSummary;
 
     @ApiModelProperty(value = "结项答辩PPT文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String endPpt;
 
     @ApiModelProperty(value = "延期申请表文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String extensionApplication;
 
     @ApiModelProperty(value = "结项额外文件存储路径")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String endAdditionalFile;
 
     @ApiModelProperty(value = "结项评分")

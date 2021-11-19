@@ -61,4 +61,11 @@ public interface NoticeService extends IService<Notice> {
      * @return 查询结果公告简要信息列表
      */
     Page<NoticeListResponseVO> noticePerPageByOrder(long current, long limit, String property, NoticeRequestVO noticeRequestVO);
+
+    /**
+     * 根据文件路径查询公告
+     * @param filePath 附件路径
+     * @return 查询结果
+     */
+    Notice getByFile(String filePath);
 }

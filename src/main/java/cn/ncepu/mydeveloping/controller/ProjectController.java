@@ -2,11 +2,13 @@ package cn.ncepu.mydeveloping.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.ncepu.mydeveloping.pojo.entity.File;
 import cn.ncepu.mydeveloping.pojo.entity.Paper;
 import cn.ncepu.mydeveloping.pojo.entity.Project;
 import cn.ncepu.mydeveloping.pojo.entity.User;
 import cn.ncepu.mydeveloping.pojo.vo.*;
 import cn.ncepu.mydeveloping.result.R;
+import cn.ncepu.mydeveloping.service.FileService;
 import cn.ncepu.mydeveloping.service.ProjectService;
 import cn.ncepu.mydeveloping.service.UserService;
 import cn.ncepu.mydeveloping.service.PaperService;
@@ -48,6 +50,8 @@ public class ProjectController {
     UserService userService;
     @Resource
     PaperService paperService;
+    @Resource
+    FileService fileService;
 
     private static final Logger logger = LoggerFactory.getLogger(ProjectController.class);
 
@@ -168,18 +172,36 @@ public class ProjectController {
         if(applicationFile!=null){
             String newFileName =ROOT_PATH + fileUploads(applicationFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"StartApplication");
             project.setStartApplication(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(pstartVO.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("StartApplication");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("立项申请表不得为空！");
         }
         if(pptFile!=null){
             String newFileName =ROOT_PATH + fileUploads(pptFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"StartPpt");
             project.setStartPpt(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(pstartVO.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("StartPpt");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("答辩PPT不得为空！");
         }
         if(additionalFile!=null){
             String newFileName =ROOT_PATH + fileUploads(additionalFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"StartAdditionalFile");
             project.setStartAdditionalFile(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(pstartVO.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("StartAdditionalFile");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         }
         boolean res = projectService.save(project);
         if (res){
@@ -199,22 +221,46 @@ public class ProjectController {
         if(reportFile!=null){
             String newFileName =ROOT_PATH + fileUploads(reportFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"MidtermReport");
             project.setMidtermReport(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("MidtermReport");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("中期报告不得为空！");
         }
         if(pptFile!=null){
             String newFileName =ROOT_PATH + fileUploads(pptFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"MidtermPpt");
             project.setMidtermPpt(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("MidtermPpt");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("答辩PPT不得为空！");
         }
         if(changeFile!=null){
             String newFileName =ROOT_PATH + fileUploads(changeFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"MidtermChange");
             project.setMidtermChange(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("MidtermChange");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         }
         if(additionalFile!=null){
             String newFileName =ROOT_PATH + fileUploads(additionalFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"MidtermAdditionalFile");
             project.setMidtermAdditionalFile(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("MidtermAdditionalFile");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         }
         //设置初始中期状态为中期审核
         project.setMidtermStatus(MIDTERM_REVIEW);
@@ -237,42 +283,84 @@ public class ProjectController {
         if(reportFile!=null){
             String newFileName =ROOT_PATH + fileUploads(reportFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndReport");
             project.setEndReport(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("EndReport");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("华北电力大学大学生创新创业训练计划结题报告书不得为空！");
         }
         if(conclusionFile!=null){
             String newFileName =ROOT_PATH + fileUploads(conclusionFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ConclusionReport");
             project.setConclusionReport(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("ConclusionReport");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("大学生创新性实验计划项目研究总结报告不得为空！");
         }
         if(tableFile!=null){
             String newFileName =ROOT_PATH + fileUploads(tableFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"OutcomeTable");
             project.setOutcomeTable(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("OutcomeTable");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("成果信息表不得为空！");
         }
         if(fileFile!=null){
             String newFileName =ROOT_PATH + fileUploads(fileFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"OutcomeFile");
             project.setOutcomeFile(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("OutcomeFile");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("成果展示文件不得为空！");
         }
         if(pptFile!=null){
             String newFileName =ROOT_PATH + fileUploads(pptFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndPpt");
             project.setEndPpt(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("EndPpt");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("答辩PPT不得为空！");
         }
         if(summaryFile!=null){
             String newFileName =ROOT_PATH + fileUploads(summaryFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"PersonalSummary");
             project.setPersonalSummary(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("PersonalSummary");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("个人总结不得为空！");
         }
         if(additionalFile!=null){
             String newFileName =ROOT_PATH + fileUploads(additionalFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"EndAdditionalFile");
             project.setEndAdditionalFile(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("EndAdditionalFile");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         }
         if(project.getEndStatus().equals(END_WAITING)) {
             //设置结项状态为结项审核
@@ -370,6 +458,12 @@ public class ProjectController {
         if(extensionFile!=null){
             String newFileName =ROOT_PATH + fileUploads(extensionFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ExtensionApplication");
             project.setExtensionApplication(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(project.getProjectName());
+            saveFile.setFileType("1");
+            saveFile.setFileName("ExtensionApplication");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         } else {
             return R.error().message("延期申请表不得为空！");
         }
@@ -434,7 +528,8 @@ public class ProjectController {
             project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
-        }else if(project.getFourthId().equals(memberId)){
+        }
+        else if(project.getFourthId().equals(memberId)){
             project.setFourthId(project.getFifthId());
             project.setFourthName(project.getFifthName());
             project.setFourthDepartment(project.getFifthDepartment());
@@ -447,14 +542,16 @@ public class ProjectController {
             project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
-        }else if(project.getFifthId().equals(memberId)){
+        }
+        else if(project.getFifthId().equals(memberId)){
             project.setFifthId("");
             project.setFifthName("");
             project.setFifthDepartment("");
             project.setFifthMajor("");
             project.setFifthJob("");
             project.setFifthPhone("");
-        }else {
+        }
+        else {
             return R.error().message("该成员不存在！");
         }
         if(projectService.updateById(project)) {
@@ -470,33 +567,37 @@ public class ProjectController {
         Project project = projectService.getById(projectId);
         if("".equals(project.getSecondId())){
             project.setSecondId(memberId);
-            project.setSecondId(name);
-            project.setSecondId(department);
-            project.setSecondId(major);
+            project.setSecondName(name);
+            project.setSecondDepartment(department);
+            project.setSecondMajor(major);
             project.setSecondJob(job);
             project.setSecondPhone(phone);
-        }else if("".equals(project.getThirdId())){
+        }
+        else if("".equals(project.getThirdId())){
             project.setThirdId(memberId);
-            project.setThirdId(name);
-            project.setThirdId(department);
-            project.setThirdId(major);
+            project.setThirdName(name);
+            project.setThirdDepartment(department);
+            project.setThirdMajor(major);
             project.setThirdJob(job);
             project.setThirdPhone(phone);
-        }else if("".equals(project.getFourthId())){
+        }
+        else if("".equals(project.getFourthId())){
             project.setFourthId(memberId);
-            project.setFourthId(name);
-            project.setFourthId(department);
-            project.setFourthId(major);
+            project.setFourthName(name);
+            project.setFourthDepartment(department);
+            project.setFourthMajor(major);
             project.setFourthJob(job);
             project.setFourthPhone(phone);
-        }else if("".equals(project.getFifthId())){
+        }
+        else if("".equals(project.getFifthId())){
             project.setFifthId(memberId);
-            project.setFifthId(name);
-            project.setFifthId(department);
-            project.setFifthId(major);
+            project.setFifthName(name);
+            project.setFifthDepartment(department);
+            project.setFifthMajor(major);
             project.setFifthJob(job);
             project.setFifthPhone(phone);
-        }else {
+        }
+        else {
             return R.error().message("成员数量已达到上限！");
         }
         projectService.updateById(project);
@@ -536,6 +637,12 @@ public class ProjectController {
         String newFileName =ROOT_PATH + fileUploads(tableFile,SDF,ROOT_PATH,logger,userFolder,fileClass,"ReimbursementTable");
         project.setReimbursementTable(newFileName);
         project.setReimbursementAmount(amount);
+        File saveFile = new File();
+        saveFile.setOwnerName(project.getProjectName());
+        saveFile.setFileType("1");
+        saveFile.setFileName("ReimbursementTable");
+        saveFile.setFilePath(newFileName);
+        fileService.save(saveFile);
         boolean res = projectService.updateById(project);
         if (res){
             return R.ok().message("提交财务报销单成功！");

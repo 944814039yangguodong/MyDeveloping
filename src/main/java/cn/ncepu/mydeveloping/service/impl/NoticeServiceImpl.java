@@ -2,7 +2,6 @@ package cn.ncepu.mydeveloping.service.impl;
 
 import cn.ncepu.mydeveloping.pojo.entity.Notice;
 import cn.ncepu.mydeveloping.mapper.NoticeMapper;
-import cn.ncepu.mydeveloping.pojo.entity.User;
 import cn.ncepu.mydeveloping.pojo.vo.NoticeListResponseVO;
 import cn.ncepu.mydeveloping.pojo.vo.NoticeRequestVO;
 import cn.ncepu.mydeveloping.service.NoticeService;
@@ -67,14 +66,20 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
         if (!ObjectUtils.isEmpty(noticeRequestVO.getUserId())) {
             noticeQueryWrapper.like("user_id",noticeRequestVO.getUserId());
         }
-//        if (!ObjectUtils.isEmpty(noticeRequestVO.getNoticeContent()))
-//            noticeQueryWrapper.like("notice_content",noticeRequestVO.getNoticeContent());
-//        if (!ObjectUtils.isEmpty(noticeRequestVO.getGmtCreate()))
-//            noticeQueryWrapper.like("gmt_create",noticeRequestVO.getGmtCreate());
         noticeQueryWrapper.orderByDesc(property);
         noticeMapper.selectPage(noticePage,noticeQueryWrapper);
         BeanUtils.copyProperties(noticePage,infoPage);
         return infoPage;
+    }
+
+    @Override
+    public Notice getByFile(String filePath) {
+        QueryWrapper<Notice> noticeQueryWrapper =
+                new QueryWrapper<>();
+        noticeQueryWrapper.eq("notice_attachment_one",filePath)
+                .or().eq("notice_attachment_two",filePath)
+                .or().eq("notice_attachment_three",filePath);
+        return noticeMapper.selectOne(noticeQueryWrapper);
     }
 
 }

@@ -80,6 +80,125 @@
     </div>
     <!-- 内容主体区域 -->
     <div class="layui-body" >
+        <section>
+            <div style="display: flex;margin-top: 10px;margin-bottom: 5px;margin-right:5px;float:right">
+                <button @click="clearAll" class="layui-btn layui-btn-primary">重置</button>
+                <button @click="multiDownload" class="layui-btn layui-btn-primary">批量下载</button>
+                <button @click="multiDelete" class="layui-btn layui-btn-primary" style="margin-right: 50px">批量删除</button>
+                <input type="text" placeholder="文件名称查找" v-model="fileNameSearch" class="layui-input" style="width: 200px">
+                <input type="text" placeholder="文件所属主体查找" v-model="ownerNameSearch" class="layui-input" style="width: 200px">
+                <select v-model="fileTypeSearch" class="layui-input" style="width: 200px">
+                    <option value="" selected="selected">文件类型查找</option>
+                    <option value="0">公告附件</option>
+                    <option value="1">项目附件</option>
+                </select>
+                <button @click="getData" class="layui-btn layui-btn-primary">搜索</button>
+            </div>
+            <table id="table" class="layui-table" lay-skin="line">
+                <colgroup>
+                    <col >
+                    <col >
+                    <col >
+                    <col >
+                    <col >
+                    <col >
+                    <col >
+                    <col >
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>选择</th>
+                    <th>文件序号</th>
+                    <th>所属主体名称</th>
+                    <th>文件类型</th>
+                    <th>文件名称</th>
+                    <th>文件路径</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-show="isNull(0)">
+                    <td>
+                        <input type="checkbox" name="choose" value="0" lay-skin="primary">
+                    </td>
+                    <td>{{list[0].fileId}}</td>
+                    <td>{{list[0].ownerName}}</td>
+                    <td>{{list[0].fileTypeName}}</td>
+                    <td>{{list[0].fileName}}</td>
+                    <td>{{list[0].filePath}}</td>
+                    <td><a @click="toDownload(0)" style="cursor: pointer">下载</a></td>
+                    <td><a @click="toDelete(0)" style="cursor: pointer">删除</a></td>
+                </tr>
+                <tr v-show="isNull(1)">
+                    <td>
+                        <input type="checkbox" name="choose" value="1" lay-skin="primary">
+                    </td>
+                    <td>{{list[1].fileId}}</td>
+                    <td>{{list[1].ownerName}}</td>
+                    <td>{{list[1].fileTypeName}}</td>
+                    <td>{{list[1].fileName}}</td>
+                    <td>{{list[1].filePath}}</td>
+                    <td><a @click="toDownload(1)" style="cursor: pointer">下载</a></td>
+                    <td><a @click="toDelete(1)" style="cursor: pointer">删除</a></td>
+                </tr>
+                <tr v-show="isNull(2)">
+                    <td>
+                        <input type="checkbox" name="choose" value="2" lay-skin="primary">
+                    </td>
+                    <td>{{list[2].fileId}}</td>
+                    <td>{{list[2].ownerName}}</td>
+                    <td>{{list[2].fileTypeName}}</td>
+                    <td>{{list[2].fileName}}</td>
+                    <td>{{list[2].filePath}}</td>
+                    <td><a @click="toDownload(2)" style="cursor: pointer">下载</a></td>
+                    <td><a @click="toDelete(2)" style="cursor: pointer">删除</a></td>
+                </tr>
+                <tr v-show="isNull(3)">
+                    <td>
+                        <input type="checkbox" name="choose" value="3" lay-skin="primary">
+                    </td>
+                    <td>{{list[3].fileId}}</td>
+                    <td>{{list[3].ownerName}}</td>
+                    <td>{{list[3].fileTypeName}}</td>
+                    <td>{{list[3].fileName}}</td>
+                    <td>{{list[3].filePath}}</td>
+                    <td><a @click="toDownload(3)" style="cursor: pointer">下载</a></td>
+                    <td><a @click="toDelete(3)" style="cursor: pointer">删除</a></td>
+                </tr>
+                <tr v-show="isNull(4)">
+                    <td>
+                        <input type="checkbox" name="choose" value="4" lay-skin="primary">
+                    </td>
+                    <td>{{list[4].fileId}}</td>
+                    <td>{{list[4].ownerName}}</td>
+                    <td>{{list[4].fileTypeName}}</td>
+                    <td>{{list[4].fileName}}</td>
+                    <td>{{list[4].filePath}}</td>
+                    <td><a @click="toDownload(4)" style="cursor: pointer">下载</a></td>
+                    <td><a @click="toDelete(4)" style="cursor: pointer">删除</a></td>
+                </tr>
+                <tr v-show="isNull(5)">
+                    <td>
+                        <input type="checkbox" name="choose" value="5" lay-skin="primary">
+                    </td>
+                    <td>{{list[5].fileId}}</td>
+                    <td>{{list[5].ownerName}}</td>
+                    <td>{{list[5].fileTypeName}}</td>
+                    <td>{{list[5].fileName}}</td>
+                    <td>{{list[5].filePath}}</td>
+                    <td><a @click="toDownload(5)" style="cursor: pointer">下载</a></td>
+                    <td><a @click="toDelete(5)" style="cursor: pointer">删除</a></td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="float:right">
+                <button @click="previous" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+                <label style="text-align: center;margin: 5px">{{current}}/{{pageCount}}</label>
+                <button @click="next" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+            </div>
+            <div style="height: 500px"></div>
+        </section>
     </div>
     <!-- 底部固定区域 -->
     <div class="layui-footer" style="text-align: center">
@@ -90,6 +209,21 @@
     var app = new Vue({
         el: '#app',
         data: {
+            total:0,
+            list: [
+                {fileId:null,ownerName:"",fileTypeName:"",fileName:"",filePath:""},
+                {fileId:null,ownerName:"",fileTypeName:"",fileName:"",filePath:""},
+                {fileId:null,ownerName:"",fileTypeName:"",fileName:"",filePath:""},
+                {fileId:null,ownerName:"",fileTypeName:"",fileName:"",filePath:""},
+                {fileId:null,ownerName:"",fileTypeName:"",fileName:"",filePath:""},
+                {fileId:null,ownerName:"",fileTypeName:"",fileName:"",filePath:""}
+            ],
+            current:1,
+            limit:6,
+            pageCount:1,
+            ownerNameSearch:"",
+            fileTypeSearch:"",
+            fileNameSearch:"",
             userInfo:{
                 userId:null,
                 userName:"姓名",
@@ -122,8 +256,143 @@
                 .catch(function (error) {
                     console.log(error);
                 });
+            that.getData();
         },
         methods:{
+            clearAll:function(){
+                var items = document.getElementsByName("choose");
+                for (var i = 0; i < items.length; i++) {
+                    items[i].checked=false;
+                }
+            },
+            chooseAll:function() {
+                var arr = new Array();
+                var items = document.getElementsByName("choose");
+                for (i = 0; i < items.length; i++) {
+                    if (items[i].checked) {
+                        arr.push(items[i].value);
+                        console.log(arr);
+                    }
+                }
+                alert("选择的个数为：" + arr.length);
+            },
+            toDownload:function (index){
+                window.location.href='/api/file/download?path='+this.list[index].filePath;
+            },
+            multiDownload:function (){
+                var arr = new Array();
+                var items = document.getElementsByName("choose");
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].checked) {
+                        items[i].checked=false;
+                        arr.push(items[i].value);
+                        const iframe = document.createElement("iframe");
+                        iframe.style.display = "none"; // 防止影响页面
+                        iframe.style.height = 0; // 防止影响页面
+                        iframe.src = '/api/file/download?path='+this.list[items[i].value].filePath;
+                        document.body.appendChild(iframe); // 这一行必须，iframe挂在到dom树上才会发请求
+                        // 5分钟之后删除（onload方法对于下载链接不起作用）
+                        setTimeout(()=>{
+                            iframe.remove();
+                        }, 5 * 60 * 1000);
+                    }
+                }
+                alert("选择的为：" + arr);
+                this.clearAll();
+            },
+            toDelete:function (index){
+                var that=this;
+                axios.delete('http://'+IP+'/api/file/removeFile',{
+                    params:{
+                        fileId:that.list[index].fileId
+                    }
+                })
+                    .then(function (response) {
+                        if(response.data.success===true){
+                            layer.alert(response.data.message);
+                        }else{
+                            layer.alert(response.data.message);
+                            console.log(response);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            multiDelete:function (){
+                var that=this;
+                var items = document.getElementsByName("choose");
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].checked) {
+                        items[i].checked=false;
+                        that.toDelete(i);
+                    }
+                }
+                this.clearAll();
+            },
+            previous:function (){
+                if(this.current>1)
+                    this.current--;
+                this.getData();
+                this.clearAll();
+            },
+            next:function (){
+                if(this.current<this.pageCount)
+                    this.current++;
+                this.getData();
+                this.clearAll();
+            },
+            getData:function (){
+                var that = this;
+                axios.get('http://'+IP+'/api/file/selectFile',{
+                    params:{
+                        current:that.current,
+                        limit:that.limit,
+                        ownerName:that.ownerNameSearch,
+                        fileType: that.fileTypeSearch,
+                        fileName: that.fileNameSearch,
+                    }
+                })
+                    .then(function (response) {
+                        if(response.data.success===true){
+                            for(var i=0;i<that.limit;i++){
+                                if(response.data.data.rows.length>i){
+                                    that.list[i].fileId = response.data.data.rows[i].fileId;
+                                    that.list[i].ownerName = response.data.data.rows[i].ownerName;
+                                    that.list[i].fileName = response.data.data.rows[i].fileName;
+                                    that.list[i].filePath = response.data.data.rows[i].filePath;
+                                    if(response.data.data.rows[i].fileType==="0"){
+                                        that.list[i].fileTypeName = "公告附件";
+                                    }else{
+                                        that.list[i].fileTypeName = "项目附件";
+                                    }
+                                }else {
+                                    that.list[i].fileId = null;
+                                    that.list[i].ownerName = null;
+                                    that.list[i].fileName = null;
+                                    that.list[i].filePath = null;
+                                    that.list[i].fileTypeName = null;
+                                }
+                            }
+                            that.total=response.data.data.total;
+                            that.pageCount=Math.ceil(that.total/that.limit);
+                            if(that.pageCount===0){
+                                that.pageCount=1;
+                            }
+                        }else{
+                            console.log(response);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            },
+            isNull:function (index){
+                if(this.list[index].fileId===null)
+                    return false;
+                else
+                    return true;
+            }
         }
     })
 </script>

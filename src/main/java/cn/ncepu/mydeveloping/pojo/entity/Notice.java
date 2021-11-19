@@ -1,10 +1,8 @@
 package cn.ncepu.mydeveloping.pojo.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.*;
+
 import java.util.Date;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,12 +41,15 @@ public class Notice implements Serializable {
     private Long noticeReadCount;
 
     @ApiModelProperty(value = "公告附件1文件路径，0代表已删除")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String noticeAttachmentOne;
 
     @ApiModelProperty(value = "公告附件2文件路径，0代表已删除")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String noticeAttachmentTwo;
 
     @ApiModelProperty(value = "公告附件3文件路径，0代表已删除")
+    @TableField(updateStrategy = FieldStrategy.NOT_NULL)
     private String noticeAttachmentThree;
 
     @ApiModelProperty(value = "创建该行时的时间戳")

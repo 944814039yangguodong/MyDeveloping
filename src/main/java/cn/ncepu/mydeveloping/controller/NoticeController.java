@@ -3,12 +3,14 @@ package cn.ncepu.mydeveloping.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.ncepu.mydeveloping.pojo.entity.File;
 import cn.ncepu.mydeveloping.pojo.entity.Notice;
 import cn.ncepu.mydeveloping.pojo.vo.NoticeAddRequestVO;
 import cn.ncepu.mydeveloping.pojo.vo.NoticeListResponseVO;
 import cn.ncepu.mydeveloping.pojo.vo.NoticeRequestVO;
 import cn.ncepu.mydeveloping.pojo.vo.NoticeInfoResponseVO;
 import cn.ncepu.mydeveloping.result.R;
+import cn.ncepu.mydeveloping.service.FileService;
 import cn.ncepu.mydeveloping.service.NoticeService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.annotations.Api;
@@ -44,6 +46,9 @@ public class NoticeController {
     @Resource
     NoticeService noticeService;
 
+    @Resource
+    FileService fileService;
+
     private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 
     @ApiOperation(value = "系级以上负责人发布公告")
@@ -69,14 +74,32 @@ public class NoticeController {
         if(fileOne!=null){
             String newFileName =ROOT_PATH + fileUploads(fileOne,SDF,ROOT_PATH,logger,userFolder,fileClass,"附件1");
             notice.setNoticeAttachmentOne(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(noticeAddRequestVO.getNoticeName());
+            saveFile.setFileType("0");
+            saveFile.setFileName("附件1");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         }
         if(fileTwo!=null){
             String newFileName =ROOT_PATH + fileUploads(fileTwo,SDF,ROOT_PATH,logger,userFolder,fileClass,"附件2");
             notice.setNoticeAttachmentTwo(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(noticeAddRequestVO.getNoticeName());
+            saveFile.setFileType("0");
+            saveFile.setFileName("附件2");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         }
         if(fileThree!=null){
             String newFileName =ROOT_PATH + fileUploads(fileThree,SDF,ROOT_PATH,logger,userFolder,fileClass,"附件3");
             notice.setNoticeAttachmentThree(newFileName);
+            File saveFile = new File();
+            saveFile.setOwnerName(noticeAddRequestVO.getNoticeName());
+            saveFile.setFileType("0");
+            saveFile.setFileName("附件3");
+            saveFile.setFilePath(newFileName);
+            fileService.save(saveFile);
         }
         boolean res = noticeService.save(notice);
         if (res){

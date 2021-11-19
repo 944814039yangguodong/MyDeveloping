@@ -23,9 +23,4 @@ public class NoticeRequestVO {
     @ApiModelProperty(value = "公告名称")
     private String noticeName;
 
-//    @ApiModelProperty(value = "公告内容")
-//    private String noticeContent;
-
-//    @ApiModelProperty(value = "创建时间")
-//    private Date gmtCreate;
 }

@@ -1,7 +1,7 @@
 # 服务端口
 spring:
   profiles:
-    active: dev
+    active: prod
   #数据库连接池
   datasource:
     hikari:

@@ -51,7 +51,6 @@
     methods:{
       loginSubmit:function(){
         var that = this;
-        console.log(that.userIdLocal+" "+that.userPasswordLocal+" "+that.userTypeLocal+" "+that.successLocal);
         axios.post('http://'+IP+'/api/user/login',{
           userId: that.userIdLocal,
           userPassword: that.userPasswordLocal

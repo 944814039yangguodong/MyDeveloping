@@ -115,4 +115,11 @@ public interface ProjectService extends IService<Project> {
      * @return 是否成功
      */
     boolean updateClassToSchool(String projectId);
+
+    /**
+     * 根据附件路径查询项目
+     * @param filePath 文件路径
+     * @return 查询结果
+     */
+    Project getByFile(String filePath);
 }

@@ -61,201 +61,211 @@
     </div>
     <!-- 内容主体区域 -->
     <div class="layui-body" >
-        <section v-show="submitProjectId==''">
-            <table id="table" class="layui-table" lay-skin="line">
-                <colgroup>
-                    <col width="60">
-                </colgroup>
-                <thead>
-                <tr>
-                    <th>序号</th>
-                    <th>项目名称</th>
-                    <th>项目编号</th>
-                    <th>指导老师</th>
-                    <th>负责人</th>
-                    <th>项目类型</th>
-                    <th>组内成员</th>
-                    <th>项目状态</th>
-                    <th>中期审核</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-show="isNull(0)">
-                    <td>1</td>
-                    <td>{{list[0].projectName}}</td>
-                    <td>{{list[0].projectId}}</td>
-                    <td>{{list[0].teacherName}}</td>
-                    <td>{{list[0].headName}}</td>
-                    <td>{{list[0].projectClassName}}</td>
-                    <td>{{list[0].members}}</td>
-                    <td>{{list[0].projectStatusName}}</td>
-                    <td>
-                        <a v-if="list[0].projectStatusName=='未中期审核'" @click="toSubmit(0)" style="cursor: pointer">提交中期报告</a>
-                        <a v-if="list[0].projectStatusName=='中期审核'||list[0].projectStatusName=='中期审核通过'" >已提交</a>
-                        <a v-if="list[0].projectStatusName=='中期审核未通过'" @click="toInfo(0)" style="cursor: pointer">详情</a>
-                    </td>
-                </tr>
-                <tr v-show="isNull(1)">
-                    <td>2</td>
-                    <td>{{list[1].projectName}}</td>
-                    <td>{{list[1].projectId}}</td>
-                    <td>{{list[1].teacherName}}</td>
-                    <td>{{list[1].headName}}</td>
-                    <td>{{list[1].projectClassName}}</td>
-                    <td>{{list[1].members}}</td>
-                    <td>{{list[1].projectStatusName}}</td>
-                    <td>
-                        <a v-if="list[1].projectStatusName=='未中期审核'" @click="toSubmit(1)" style="cursor: pointer">提交中期报告</a>
-                        <a v-if="list[1].projectStatusName=='中期审核'||list[1].projectStatusName=='中期审核通过'" >已提交</a>
-                        <a v-if="list[1].projectStatusName=='中期审核未通过'" @click="toInfo(1)" style="cursor: pointer">详情</a>
-                    </td>
-                </tr>
-                <tr v-show="isNull(2)">
-                    <td>3</td>
-                    <td>{{list[2].projectName}}</td>
-                    <td>{{list[2].projectId}}</td>
-                    <td>{{list[2].teacherName}}</td>
-                    <td>{{list[2].headName}}</td>
-                    <td>{{list[2].projectClassName}}</td>
-                    <td>{{list[2].members}}</td>
-                    <td>{{list[2].projectStatusName}}</td>
-                    <td>
-                        <a v-if="list[2].projectStatusName=='未中期审核'" @click="toSubmit(2)" style="cursor: pointer">提交中期报告</a>
-                        <a v-if="list[2].projectStatusName=='中期审核'||list[2].projectStatusName=='中期审核通过'" >已提交</a>
-                        <a v-if="list[2].projectStatusName=='中期审核未通过'" @click="toInfo(2)" style="cursor: pointer">详情</a>
-                    </td>
-                </tr>
-                <tr v-show="isNull(3)">
-                    <td>4</td>
-                    <td>{{list[3].projectName}}</td>
-                    <td>{{list[3].projectId}}</td>
-                    <td>{{list[3].teacherName}}</td>
-                    <td>{{list[3].headName}}</td>
-                    <td>{{list[3].projectClassName}}</td>
-                    <td>{{list[3].members}}</td>
-                    <td>{{list[3].projectStatusName}}</td>
-                    <td>
-                        <a v-if="list[3].projectStatusName=='未中期审核'" @click="toSubmit(3)" style="cursor: pointer">提交中期报告</a>
-                        <a v-if="list[3].projectStatusName=='中期审核'||list[3].projectStatusName=='中期审核通过'" >已提交</a>
-                        <a v-if="list[3].projectStatusName=='中期审核未通过'" @click="toInfo(3)" style="cursor: pointer">详情</a>
-                    </td>
-                </tr>
-                <tr v-show="isNull(4)">
-                    <td>5</td>
-                    <td>{{list[4].projectName}}</td>
-                    <td>{{list[4].projectId}}</td>
-                    <td>{{list[4].teacherName}}</td>
-                    <td>{{list[4].headName}}</td>
-                    <td>{{list[4].projectClassName}}</td>
-                    <td>{{list[4].members}}</td>
-                    <td>{{list[4].projectStatusName}}</td>
-                    <td>
-                        <a v-if="list[4].projectStatusName=='未中期审核'" @click="toSubmit(4)" style="cursor: pointer">提交中期报告</a>
-                        <a v-if="list[4].projectStatusName=='中期审核'||list[4].projectStatusName=='中期审核通过'" >已提交</a>
-                        <a v-if="list[4].projectStatusName=='中期审核未通过'" @click="toInfo(4)" style="cursor: pointer">详情</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div style="float:right">
-                <button @click="previous" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
-                <label style="text-align: center;margin: 5px">{{current}}/{{pageCount}}</label>
-                <button @click="next" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
-            </div>
-        </section>
+        <div v-show="!inTime">
+            不在规定时间段内
+        </div>
+        <div v-show="inTime">
+            <section v-show="submitProjectId==''">
+                <table id="table" class="layui-table" lay-skin="line">
+                    <colgroup>
+                        <col width="60">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>项目名称</th>
+                        <th>项目编号</th>
+                        <th>指导老师</th>
+                        <th>负责人</th>
+                        <th>项目类型</th>
+                        <th>组内成员</th>
+                        <th>项目状态</th>
+                        <th>中期审核</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-show="isNull(0)">
+                        <td>1</td>
+                        <td>{{list[0].projectName}}</td>
+                        <td>{{list[0].projectId}}</td>
+                        <td>{{list[0].teacherName}}</td>
+                        <td>{{list[0].headName}}</td>
+                        <td>{{list[0].projectClassName}}</td>
+                        <td>{{list[0].members}}</td>
+                        <td>{{list[0].projectStatusName}}</td>
+                        <td>
+                            <a v-if="list[0].projectStatusName=='未中期审核'" @click="toSubmit(0)" style="cursor: pointer">提交中期报告</a>
+                            <a v-if="list[0].projectStatusName=='中期审核'||list[0].projectStatusName=='中期审核通过'" >已提交</a>
+                            <a v-if="list[0].projectStatusName=='中期审核未通过'" @click="toInfo(0)" style="cursor: pointer">详情</a>
+                        </td>
+                    </tr>
+                    <tr v-show="isNull(1)">
+                        <td>2</td>
+                        <td>{{list[1].projectName}}</td>
+                        <td>{{list[1].projectId}}</td>
+                        <td>{{list[1].teacherName}}</td>
+                        <td>{{list[1].headName}}</td>
+                        <td>{{list[1].projectClassName}}</td>
+                        <td>{{list[1].members}}</td>
+                        <td>{{list[1].projectStatusName}}</td>
+                        <td>
+                            <a v-if="list[1].projectStatusName=='未中期审核'" @click="toSubmit(1)" style="cursor: pointer">提交中期报告</a>
+                            <a v-if="list[1].projectStatusName=='中期审核'||list[1].projectStatusName=='中期审核通过'" >已提交</a>
+                            <a v-if="list[1].projectStatusName=='中期审核未通过'" @click="toInfo(1)" style="cursor: pointer">详情</a>
+                        </td>
+                    </tr>
+                    <tr v-show="isNull(2)">
+                        <td>3</td>
+                        <td>{{list[2].projectName}}</td>
+                        <td>{{list[2].projectId}}</td>
+                        <td>{{list[2].teacherName}}</td>
+                        <td>{{list[2].headName}}</td>
+                        <td>{{list[2].projectClassName}}</td>
+                        <td>{{list[2].members}}</td>
+                        <td>{{list[2].projectStatusName}}</td>
+                        <td>
+                            <a v-if="list[2].projectStatusName=='未中期审核'" @click="toSubmit(2)" style="cursor: pointer">提交中期报告</a>
+                            <a v-if="list[2].projectStatusName=='中期审核'||list[2].projectStatusName=='中期审核通过'" >已提交</a>
+                            <a v-if="list[2].projectStatusName=='中期审核未通过'" @click="toInfo(2)" style="cursor: pointer">详情</a>
+                        </td>
+                    </tr>
+                    <tr v-show="isNull(3)">
+                        <td>4</td>
+                        <td>{{list[3].projectName}}</td>
+                        <td>{{list[3].projectId}}</td>
+                        <td>{{list[3].teacherName}}</td>
+                        <td>{{list[3].headName}}</td>
+                        <td>{{list[3].projectClassName}}</td>
+                        <td>{{list[3].members}}</td>
+                        <td>{{list[3].projectStatusName}}</td>
+                        <td>
+                            <a v-if="list[3].projectStatusName=='未中期审核'" @click="toSubmit(3)" style="cursor: pointer">提交中期报告</a>
+                            <a v-if="list[3].projectStatusName=='中期审核'||list[3].projectStatusName=='中期审核通过'" >已提交</a>
+                            <a v-if="list[3].projectStatusName=='中期审核未通过'" @click="toInfo(3)" style="cursor: pointer">详情</a>
+                        </td>
+                    </tr>
+                    <tr v-show="isNull(4)">
+                        <td>5</td>
+                        <td>{{list[4].projectName}}</td>
+                        <td>{{list[4].projectId}}</td>
+                        <td>{{list[4].teacherName}}</td>
+                        <td>{{list[4].headName}}</td>
+                        <td>{{list[4].projectClassName}}</td>
+                        <td>{{list[4].members}}</td>
+                        <td>{{list[4].projectStatusName}}</td>
+                        <td>
+                            <a v-if="list[4].projectStatusName=='未中期审核'" @click="toSubmit(4)" style="cursor: pointer">提交中期报告</a>
+                            <a v-if="list[4].projectStatusName=='中期审核'||list[4].projectStatusName=='中期审核通过'" >已提交</a>
+                            <a v-if="list[4].projectStatusName=='中期审核未通过'" @click="toInfo(4)" style="cursor: pointer">详情</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div style="float:right">
+                    <button @click="previous" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+                    <label style="text-align: center;margin: 5px">{{current}}/{{pageCount}}</label>
+                    <button @click="next" type="button" class="layui-btn layui-btn-primary layui-border"><i class="layui-icon"></i></button>
+                </div>
+            </section>
 
-        <section v-show="submitProjectId!=''">
-            <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">项目名称</label>
-                        <div class="layui-input-inline">
-                            <input v-model="submitProjectName" class="layui-input" disabled="">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">项目编号</label>
-                        <div class="layui-input-inline">
-                            <input v-model="submitProjectId" class="layui-input" disabled="">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">负责人</label>
-                        <div class="layui-input-inline">
-                            <input v-model="submitHeadName" class="layui-input" disabled="">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">学号</label>
-                        <div class="layui-input-inline">
-                            <input v-model="submitHeadId" class="layui-input" disabled="">
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-inline">
-                        <label class="layui-form-label">指导老师</label>
-                        <div class="layui-input-inline">
-                            <input v-model="submitTeacherName" class="layui-input" disabled="">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <label class="layui-form-label">工号</label>
-                        <div class="layui-input-inline">
-                            <input v-model="submitTeacherId" class="layui-input" disabled="">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <div class="layui-form-item" >
+            <section v-show="submitProjectId!=''">
+                <form class="layui-form" style="margin-top: 30px;margin-right: 30px">
+                    <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">中期报告</label>
+                            <label class="layui-form-label">项目名称</label>
                             <div class="layui-input-inline">
-                                <input type="file" @change="getFileOne($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                                <input v-model="submitProjectName" class="layui-input" disabled="">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">项目编号</label>
+                            <div class="layui-input-inline">
+                                <input v-model="submitProjectId" class="layui-input" disabled="">
                             </div>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">中期答辩PPT</label>
+                            <label class="layui-form-label">负责人</label>
                             <div class="layui-input-inline">
-                                <input type="file" @change="getFileTwo($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                                <input v-model="submitHeadName" class="layui-input" disabled="">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">学号</label>
+                            <div class="layui-input-inline">
+                                <input v-model="submitHeadId" class="layui-input" disabled="">
                             </div>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">成员变动申请表</label>
+                            <label class="layui-form-label">指导老师</label>
                             <div class="layui-input-inline">
-                                <input type="file" @change="getFileThree($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                                <input v-model="submitTeacherName" class="layui-input" disabled="">
                             </div>
                         </div>
-                    </div>
-                    <div class="layui-form-item">
                         <div class="layui-inline">
-                            <label class="layui-form-label">额外文件</label>
+                            <label class="layui-form-label">工号</label>
                             <div class="layui-input-inline">
-                                <input type="file" @change="getFileFour($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                                <input v-model="submitTeacherId" class="layui-input" disabled="">
                             </div>
                         </div>
                     </div>
+
                     <div class="layui-form-item">
-                        <label class="layui-word-aux" style="margin-left: 50px">*请按照规定上传指定文件，如需上传多个额外文件，请将文件压缩为压缩包后上传</label>
+                        <div class="layui-input-block">
+                            <label @click="toMemberChange" class="layui-btn">变更成员</label>
+                        </div>
                     </div>
-                </div>
 
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <label @click="submit" class="layui-btn">提交</label>
+                    <div class="layui-form-item">
+                        <div class="layui-form-item" >
+                            <div class="layui-inline">
+                                <label class="layui-form-label">中期报告</label>
+                                <div class="layui-input-inline">
+                                    <input type="file" @change="getFileOne($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">中期答辩PPT</label>
+                                <div class="layui-input-inline">
+                                    <input type="file" @change="getFileTwo($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">成员变动申请表</label>
+                                <div class="layui-input-inline">
+                                    <input type="file" @change="getFileThree($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">额外文件</label>
+                                <div class="layui-input-inline">
+                                    <input type="file" @change="getFileFour($event)" style="border-radius: 5px;border:solid grey;width: 514px">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-word-aux" style="margin-left: 50px">*请按照规定上传指定文件，如需上传多个额外文件，请将文件压缩为压缩包后上传</label>
+                        </div>
                     </div>
-                </div>
-                <div style="height: 500px"></div>
-            </form>
-        </section>
 
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <label @click="submit" class="layui-btn">提交</label>
+                        </div>
+                    </div>
+                    <div style="height: 500px"></div>
+                </form>
+            </section>
+        </div>
     </div>
     <!-- 底部固定区域 -->
     <div class="layui-footer" style="text-align: center">
@@ -285,6 +295,7 @@
                 department:null,
                 major:null
             },
+            //submitProjectId:'1',
             submitProjectId:'',
             submitReportFile:null,
             submitPptFile:null,
@@ -295,10 +306,27 @@
             submitHeadName:null,
             submitHeadId:null,
             submitTeacherName:null,
-            submitTeacherId:null
+            submitTeacherId:null,
+            inTime:false,
+            //inTime:true,
         },
         mounted:function (){
             var that = this;
+            axios.get('http://'+IP+'/api/time/timeSelect')
+                .then(function (response) {
+                    if(response.data.success===true){
+                        var date = new Date();
+                        var now = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+                        if(now>=response.data.data.time.midtermBegin&&now<=response.data.data.time.midtermOver){
+                            that.inTime=true;
+                        }
+                    }else{
+                        console.log(response);
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             axios.get('http://'+IP+'/api/user/getUserInfo')
                 .then(function (response) {
                     if(response.data.success===true){
@@ -325,7 +353,6 @@
                 })
                     .then(function (response) {
                         if(response.data.success===true){
-                            console.log(response);
                             for(var i=0;i<that.limit;i++){
                                 if(response.data.data.rows.length>i){
                                     that.list[i].projectName = response.data.data.rows[i].projectName;
@@ -549,7 +576,10 @@
             },
             getFileFour(event) {
                 this.submitAdditionalFile = event.target.files[0];
-            }
+            },
+            toMemberChange:function (){
+                window.location.href='/student/memberChangePage/'+this.submitProjectId;
+            },
         }
     })
 </script>

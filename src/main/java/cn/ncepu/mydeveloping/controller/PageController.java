@@ -198,4 +198,9 @@ public class PageController {
         return "pages/student/userPassword";
     }
 
+    @RequestMapping("/student/memberChangePage/{projectId}")
+    String memberChangePage(){
+        return "pages/student/memberChange";
+    }
+
 }

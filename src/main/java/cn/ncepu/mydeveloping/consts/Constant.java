@@ -133,8 +133,8 @@ public  class Constant {
     /**
      * Linux服务器和window本地ROOT_PATH
      */
-    //public static final String ROOT_PATH = "D:/myFiles/";
-    public static final String ROOT_PATH = "/myFiles/";
+    public static final String ROOT_PATH = "D:/myFiles/";
+    //public static final String ROOT_PATH = "/myFiles/";
     /**
      * 时间格式SDF
      */
